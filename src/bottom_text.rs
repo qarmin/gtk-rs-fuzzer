@@ -1,4 +1,115 @@
+pub const IGNORED_FUNCTIONS: [&str; 34] = [
+    "with_entry",             // ComboBox, ComboBoxText
+    "toplevels",              // Window
+    "list_toplevels",         // Window
+    "default_icon_name",      // Window
+    "emit_activate",          // MenuButton, ColorButton, AppChooserButton
+    "is_primary",             // MenuButton
+    "is_indent_for_icon",     // TreeExpander
+    "default",                // RecentManager
+    "must_always_show_arrow", // MenuButton
+    "get",                    // AcrivateAction - probably this is static function
+    "shows_arrow",            // DropDown
+    "current_drop",           // DropTarget
+    "emit_escape",            // https://github.com/gtk-rs/gtk4-rs/issues/870
+    // TODO
+    "emit_stop_search",
+    "emit_previous_match",
+    "emit_next_match",
+    "emit_unselect_all",
+    "emit_toggle_cursor_row",
+    "emit_select_all",
+    "emit_activate_cursor_row",
+    "emit_close",
+    "emit_select_cursor_item",
+    "emit_toggle_cursor_item",
+    "emit_unselect_all",
+    "emit_select_all",
+    "emit_activate_cursor_item",
+    "emit_unselect_all",
+    "emit_toggle_cursor_child",
+    "emit_select_all",
+    "emit_activate_cursor_child",
+    "drag_dest_item",
+    "im_context",
+    "insert_prefix",
+    "emit_escape",
+];
+
+pub const IGNORED_CLASSES: [&str; 69] = [
+    "ATContext",
+    "AssistantPage",
+    "BoolFilter",
+    "BuilderListItemFactory",
+    "ColorChooserDialog",
+    "ColumnView",
+    "ColumnViewColumn",
+    "DragIcon",
+    "DropTargetAsync",
+    "Expander",
+    "FileChooserWidget",
+    "FilterListModel",
+    "FixedLayoutChild",
+    "FlattenListModel",
+    "GridLayoutChild",
+    "GridView",
+    "IconPaintable",
+    "KeyvalTrigger",
+    "Label",
+    "LinkButton",
+    "ListItem",
+    "ListStore",
+    "ListView",
+    "LockButton",
+    "MapListModel",
+    "MessageDialog",
+    "MnemonicAction",
+    "MnemonicTrigger",
+    "MultiSelection",
+    "NamedAction",
+    "NeverTrigger",
+    "NoSelection",
+    "NotebookPage",
+    "NothingAction",
+    "OverlayLayoutChild",
+    "PadController",
+    "PageSetupUnixDialog",
+    "Paned",
+    "PopoverMenu",
+    "PopoverMenuBar",
+    "PrintContext",
+    "PrintJob",
+    "PrintUnixDialog",
+    "Printer",
+    "SelectionFilterModel",
+    "Settings",
+    "Shortcut",
+    "ShortcutsGroup",
+    "ShortcutsShortcut",
+    "ShortcutsWindow",
+    "SignalAction",
+    "SingleSelection",
+    "SizeGroup",
+    "SliceListModel",
+    "SortListModel",
+    "SpinButton",
+    "StackPage",
+    "StringFilter",
+    "StringObject",
+    "StringSorter",
+    "TreeListModel",
+    "TreeListRow",
+    "TreeListRowSorter",
+    "TreeSelection",
+    "TreeStore",
+    "Viewport",
+    "Widget",
+    "WidgetPaintable",
+    "WindowControls",
+];
+
 pub const BOTTOM_TEXT: &str = r#####"
+
 pub fn take_string() -> String {
     if random_int() % 2 == 0 {
         return "".to_string();
@@ -32,7 +143,11 @@ pub fn stek_orientation() -> Orientation {
         false => Orientation::Vertical,
     }
 }
+pub fn stek_glib_type() -> glib::Type {
+    [glib::Type::BOOL].choose(&mut rand::thread_rng()).unwrap().clone()
+}
 
+//// Too hard
 // pub fn gget_atcontext() -> ATContext {
 //     ATContext::new()
 // }
@@ -42,15 +157,15 @@ pub fn gget_aboutdialog() -> AboutDialog {
 pub fn gget_actionbar() -> ActionBar {
     ActionBar::new()
 }
-// pub fn gget_activateaction() -> ActivateAction {
-//     ActivateAction::new()
-// }
+pub fn gget_activateaction() -> ActivateAction {
+    ActivateAction::get()
+}
 pub fn gget_appchooserbutton() -> AppChooserButton {
     AppChooserButton::new(&take_string())
 }
-// pub fn gget_appchooserdialog() -> AppChooserDialog {
-//     AppChooserDialog::new()
-// }
+pub fn gget_appchooserdialog() -> AppChooserDialog {
+    AppChooserDialog::default()
+}
 pub fn gget_appchooserwidget() -> AppChooserWidget {
     AppChooserWidget::new(&take_string())
 }
@@ -60,15 +175,17 @@ pub fn gget_aspectframe() -> AspectFrame {
 pub fn gget_assistant() -> Assistant {
     Assistant::new()
 }
+// // TOO HARD
 // pub fn gget_assistantpage() -> AssistantPage {
 //     AssistantPage::new()
 // }
 pub fn gget_bookmarklist() -> BookmarkList {
     BookmarkList::new(Some(&take_string()), Some(&take_string()))
 }
-// pub fn gget_boolfilter() -> BoolFilter {
-//     BoolFilter::new()
-// }
+pub fn gget_boolfilter() -> BoolFilter {
+    let expression: Option<Expression> = None;
+    BoolFilter::new(expression)
+}
 pub fn gget_boxlayout() -> BoxLayout {
     BoxLayout::new(stek_orientation())
 }
@@ -76,7 +193,8 @@ pub fn gget_builder() -> Builder {
     Builder::new()
 }
 // pub fn gget_builderlistitemfactory() -> BuilderListItemFactory {
-//     BuilderListItemFactory::new()
+//     let builder_scope : Option<BuilderScope> = None;
+//     BuilderListItemFactory::new(builder_scope,)
 // }
 pub fn gget_calendar() -> Calendar {
     Calendar::new()
@@ -108,36 +226,42 @@ pub fn gget_centerlayout() -> CenterLayout {
 pub fn gget_colorbutton() -> ColorButton {
     ColorButton::new()
 }
-// pub fn gget_colorchooserdialog() -> ColorChooserDialog {
-//     ColorChooserDialog::new()
-// }
+pub fn gget_colorchooserdialog() -> ColorChooserDialog {
+    ColorChooserDialog::default()
+}
 pub fn gget_colorchooserwidget() -> ColorChooserWidget {
     ColorChooserWidget::new()
 }
-// pub fn gget_columnview() -> ColumnView {
-//     ColumnView::new(None)
-// }
-// pub fn gget_columnviewcolumn() -> ColumnViewColumn {
-//     ColumnViewColumn::new(Some(&take_string()), None)
-// }
+pub fn gget_columnview() -> ColumnView {
+    let sm: Option<&SelectionModel> = None;
+    ColumnView::new(sm)
+}
+pub fn gget_columnviewcolumn() -> ColumnViewColumn {
+    let thing: Option<&ListItemFactory> = None;
+    ColumnViewColumn::new(Some(&take_string()), thing)
+}
 pub fn gget_combobox() -> ComboBox {
     ComboBox::new()
 }
 pub fn gget_comboboxtext() -> ComboBoxText {
     ComboBoxText::new()
 }
-// pub fn gget_constraint() -> Constraint {
-//     Constraint::new()
-// }
+pub fn gget_constraint() -> Constraint {
+    let thing: Option<&ConstraintTarget> = None;
+    let thing2: ConstraintAttribute = ConstraintAttribute::None;
+    let thing3: ConstraintRelation = ConstraintRelation::Eq;
+    Constraint::new_constant(thing, thing2, thing3, take_f64(), take_i32())
+}
 pub fn gget_constraintlayout() -> ConstraintLayout {
     ConstraintLayout::new()
 }
 pub fn gget_cssprovider() -> CssProvider {
     CssProvider::new()
 }
-// pub fn gget_directorylist() -> DirectoryList {
-//     DirectoryList::new()
-// }
+pub fn gget_directorylist() -> DirectoryList {
+    let thing: Option<&gio::File> = None;
+    DirectoryList::new(Some(&take_string()), thing)
+}
 // pub fn gget_dragicon() -> DragIcon {
 //     DragIcon::new()
 // }
@@ -147,18 +271,20 @@ pub fn gget_dragsource() -> DragSource {
 pub fn gget_dropcontrollermotion() -> DropControllerMotion {
     DropControllerMotion::new()
 }
-// pub fn gget_dropdown() -> DropDown {
-//     DropDown::new()
-// }
-// pub fn gget_droptarget() -> DropTarget {
-//     DropTarget::new()
-// }
+pub fn gget_dropdown() -> DropDown {
+    let thing: Option<&Expression> = None;
+    let thing2: Option<&gio::ListModel> = None;
+    DropDown::new(thing2, thing)
+}
+pub fn gget_droptarget() -> DropTarget {
+    DropTarget::new(stek_glib_type(), DragAction::COPY)
+}
 // pub fn gget_droptargetasync() -> DropTargetAsync {
 //     DropTargetAsync::new()
 // }
-// pub fn gget_editablelabel() -> EditableLabel {
-//     EditableLabel::new()
-// }
+pub fn gget_editablelabel() -> EditableLabel {
+    EditableLabel::new(&take_string())
+}
 pub fn gget_entrycompletion() -> EntryCompletion {
     EntryCompletion::new()
 }

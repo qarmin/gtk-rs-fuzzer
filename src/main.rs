@@ -1,6 +1,6 @@
 mod bottom_text;
 
-use crate::bottom_text::BOTTOM_TEXT;
+use crate::bottom_text::{BOTTOM_TEXT, IGNORED_CLASSES, IGNORED_FUNCTIONS};
 use std::collections::BTreeMap;
 use std::fs;
 use std::fs::OpenOptions;
@@ -11,6 +11,8 @@ const PATH_TO_GTK_RS: &str = "/home/rafal/Pobrane/gtk4-rs-master/gtk4/src";
 const PATH_TO_GTK_RS_AUTO: &str = "/home/rafal/Pobrane/gtk4-rs-master/gtk4/src/auto";
 
 const PATH_TO_PROJECT_FILE: &str = "/home/rafal/Pulpit/gtk_rs_fuzzer/Project/src/ziemniak.rs";
+
+const NUMBER_OF_REPEATS: u32 = 100; // How many time repeat function executing to be sure that this function cause problems
 
 fn main() {
     let (class_info, class_functions) = collect_things();
@@ -26,7 +28,9 @@ fn create_project_file(class_info: BTreeMap<String, Vec<String>>, class_function
         file,
         "use gtk4::prelude::*;
 use gtk4::*;
-use glib::{{random_int, random_int_range}};
+use glib::{{random_int, random_int_range,random_double_range}};
+use gdk4::DragAction;
+use rand::prelude::SliceRandom;
 
 pub fn execute_things(){{
 
@@ -58,14 +62,12 @@ pub fn execute_things(){{
 
                     // STATIC function do nothing
                 } else {
-                    st_save.push(format!(
-                        "\t\tlet _object{} = gget_{}();//ZZZZ {} YYYY gget_{}",
-                        object_number,
-                        name_of_class.to_ascii_lowercase(),
-                        name_of_class,
-                        name_of_class.to_ascii_lowercase()
-                    ));
-                    st_save.push(format!("\t\t_object{}.{}();", object_number, function));
+                    st_save.push(format!("\t\tfor _i in 0..{}{{", NUMBER_OF_REPEATS));
+                    st_save.push(format!("\t\t\tlet _object{} = gget_{}();", object_number, name_of_class.to_ascii_lowercase(),));
+                    st_save.push(format!("\t\t\tprintln!(\"Trying to execute {}.{}()\");", name_of_class, function,));
+                    st_save.push(format!("\t\t\t_object{}.{}();", object_number, function));
+                    st_save.push(format!("\t\t\tprintln!(\"Executed {}.{}()\");", name_of_class, function,));
+                    st_save.push("\t\t}".to_string());
                 }
                 object_number += 1;
             }
@@ -274,14 +276,34 @@ fn collect_things() -> (BTreeMap<String, Vec<String>>, BTreeMap<String, BTreeMap
     for (name_of_class, function_list) in &class_functions {
         println!("Class {}", name_of_class);
         counter_class += 1;
-        for (function, arguments) in function_list {
-            println!("Function {}, arguments {:?}", function, arguments);
+        for (_function, arguments) in function_list {
+            // println!("Function {}, arguments {:?}", function, arguments);
             counter_methods += 1;
             counter_arguments += arguments.len();
         }
     }
-    println!("Class: {}, Methods: {}, Arguments: {}", counter_class, counter_methods, counter_arguments);
     println!("All classes {}", all_class_number);
+    println!("Class: {}, Methods: {}, Arguments: {}", counter_class, counter_methods, counter_arguments);
+
+    for ignored in IGNORED_CLASSES {
+        counter_class -= 1;
+        class_info.remove(ignored);
+        if let Some(removed) = class_functions.remove(ignored) {
+            for (_function, arguments) in removed {
+                counter_methods -= 1;
+                counter_arguments -= arguments.len();
+            }
+        };
+    }
+    for ignored in IGNORED_FUNCTIONS {
+        for (name_of_class, functions) in &mut class_functions {
+            if let Some(removed) = functions.remove(ignored) {
+                counter_methods -= 1;
+                counter_arguments -= removed.len();
+            }
+        }
+    }
+    println!("After ignoring: Class: {}, Methods: {}, Arguments: {}", counter_class, counter_methods, counter_arguments);
 
     (class_info, class_functions)
 }

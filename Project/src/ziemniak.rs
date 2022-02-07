@@ -1,1731 +1,2105 @@
-use glib::{random_double_range, random_int, random_int_range};
 use gtk4::prelude::*;
 use gtk4::*;
+use glib::{random_int, random_int_range,random_double_range};
+use gdk4::DragAction;
+use rand::prelude::SliceRandom;
 
-pub fn execute_things() {
-    // ATContext
-    {
-        let _object0 = gget_atcontext(); //ZZZZ ATContext YYYY gget_atcontext
-        _object0.accessible();
-        let _object1 = gget_atcontext(); //ZZZZ ATContext YYYY gget_atcontext
-        _object1.accessible_role();
-        let _object2 = gget_atcontext(); //ZZZZ ATContext YYYY gget_atcontext
-        _object2.display();
-    }
-    // AboutDialog
-    {
-        let _object4 = gget_aboutdialog(); //ZZZZ AboutDialog YYYY gget_aboutdialog
-        _object4.logo();
-        let _object6 = gget_aboutdialog(); //ZZZZ AboutDialog YYYY gget_aboutdialog
-        _object6.wraps_license();
-    }
-    // ActionBar
-    {
-        let _object8 = gget_actionbar(); //ZZZZ ActionBar YYYY gget_actionbar
-        _object8.center_widget();
-        let _object9 = gget_actionbar(); //ZZZZ ActionBar YYYY gget_actionbar
-        _object9.is_revealed();
-    }
-    // ActivateAction
-    {
-        let _object11 = gget_activateaction(); //ZZZZ ActivateAction YYYY gget_activateaction
-        _object11.get();
-    }
-    // Adjustment
-    {}
-    // AlternativeTrigger
-    {}
-    // AnyFilter
-    {}
-    // AppChooserButton
-    {
-        let _object17 = gget_appchooserbutton(); //ZZZZ AppChooserButton YYYY gget_appchooserbutton
-        _object17.append_separator();
-        let _object19 = gget_appchooserbutton(); //ZZZZ AppChooserButton YYYY gget_appchooserbutton
-        _object19.emit_activate();
-        let _object20 = gget_appchooserbutton(); //ZZZZ AppChooserButton YYYY gget_appchooserbutton
-        _object20.is_modal();
-        let _object22 = gget_appchooserbutton(); //ZZZZ AppChooserButton YYYY gget_appchooserbutton
-        _object22.shows_default_item();
-        let _object23 = gget_appchooserbutton(); //ZZZZ AppChooserButton YYYY gget_appchooserbutton
-        _object23.shows_dialog_item();
-    }
-    // AppChooserDialog
-    {
-        let _object25 = gget_appchooserdialog(); //ZZZZ AppChooserDialog YYYY gget_appchooserdialog
-        _object25.gfile();
-        let _object27 = gget_appchooserdialog(); //ZZZZ AppChooserDialog YYYY gget_appchooserdialog
-        _object27.widget();
-    }
-    // AppChooserWidget
-    {
-        let _object30 = gget_appchooserwidget(); //ZZZZ AppChooserWidget YYYY gget_appchooserwidget
-        _object30.shows_all();
-        let _object31 = gget_appchooserwidget(); //ZZZZ AppChooserWidget YYYY gget_appchooserwidget
-        _object31.shows_default();
-        let _object32 = gget_appchooserwidget(); //ZZZZ AppChooserWidget YYYY gget_appchooserwidget
-        _object32.shows_fallback();
-        let _object33 = gget_appchooserwidget(); //ZZZZ AppChooserWidget YYYY gget_appchooserwidget
-        _object33.shows_other();
-        let _object34 = gget_appchooserwidget(); //ZZZZ AppChooserWidget YYYY gget_appchooserwidget
-        _object34.shows_recommended();
-    }
-    // Application
-    {}
-    // ApplicationWindow
-    {}
-    // AspectFrame
-    {
-        let _object40 = gget_aspectframe(); //ZZZZ AspectFrame YYYY gget_aspectframe
-        _object40.is_obey_child();
-    }
-    // Assistant
-    {
-        let _object43 = gget_assistant(); //ZZZZ Assistant YYYY gget_assistant
-        _object43.commit();
-        let _object44 = gget_assistant(); //ZZZZ Assistant YYYY gget_assistant
-        _object44.current_page();
-        let _object45 = gget_assistant(); //ZZZZ Assistant YYYY gget_assistant
-        _object45.emit_escape();
-        let _object46 = gget_assistant(); //ZZZZ Assistant YYYY gget_assistant
-        _object46.n_pages();
-        let _object48 = gget_assistant(); //ZZZZ Assistant YYYY gget_assistant
-        _object48.next_page();
-        let _object49 = gget_assistant(); //ZZZZ Assistant YYYY gget_assistant
-        _object49.pages();
-        let _object50 = gget_assistant(); //ZZZZ Assistant YYYY gget_assistant
-        _object50.previous_page();
-        let _object51 = gget_assistant(); //ZZZZ Assistant YYYY gget_assistant
-        _object51.update_buttons_state();
-    }
-    // AssistantPage
-    {
-        let _object52 = gget_assistantpage(); //ZZZZ AssistantPage YYYY gget_assistantpage
-        _object52.child();
-        let _object53 = gget_assistantpage(); //ZZZZ AssistantPage YYYY gget_assistantpage
-        _object53.is_complete();
-        let _object54 = gget_assistantpage(); //ZZZZ AssistantPage YYYY gget_assistantpage
-        _object54.page_type();
-        let _object55 = gget_assistantpage(); //ZZZZ AssistantPage YYYY gget_assistantpage
-        _object55.title();
-    }
-    // BinLayout
-    {}
-    // BookmarkList
-    {
-        let _object57 = gget_bookmarklist(); //ZZZZ BookmarkList YYYY gget_bookmarklist
-        _object57.attributes();
-        let _object58 = gget_bookmarklist(); //ZZZZ BookmarkList YYYY gget_bookmarklist
-        _object58.filename();
-        let _object59 = gget_bookmarklist(); //ZZZZ BookmarkList YYYY gget_bookmarklist
-        _object59.is_loading();
-    }
-    // BoolFilter
-    {
-        let _object61 = gget_boolfilter(); //ZZZZ BoolFilter YYYY gget_boolfilter
-        _object61.inverts();
-    }
-    // Box
-    {}
-    // BoxLayout
-    {
-        let _object66 = gget_boxlayout(); //ZZZZ BoxLayout YYYY gget_boxlayout
-        _object66.is_homogeneous();
-    }
-    // Builder
-    {
-        let _object69 = gget_builder(); //ZZZZ Builder YYYY gget_builder
-        _object69.objects();
-        let _object70 = gget_builder(); //ZZZZ Builder YYYY gget_builder
-        _object70.scope();
-        let _object71 = gget_builder(); //ZZZZ Builder YYYY gget_builder
-        _object71.translation_domain();
-    }
-    // BuilderListItemFactory
-    {
-        let _object72 = gget_builderlistitemfactory(); //ZZZZ BuilderListItemFactory YYYY gget_builderlistitemfactory
-        _object72.bytes();
-        let _object73 = gget_builderlistitemfactory(); //ZZZZ BuilderListItemFactory YYYY gget_builderlistitemfactory
-        _object73.resource();
-        let _object74 = gget_builderlistitemfactory(); //ZZZZ BuilderListItemFactory YYYY gget_builderlistitemfactory
-        _object74.scope();
-    }
-    // Button
-    {}
-    // Calendar
-    {
-        let _object78 = gget_calendar(); //ZZZZ Calendar YYYY gget_calendar
-        _object78.clear_marks();
-        let _object79 = gget_calendar(); //ZZZZ Calendar YYYY gget_calendar
-        _object79.date();
-        let _object81 = gget_calendar(); //ZZZZ Calendar YYYY gget_calendar
-        _object81.shows_day_names();
-        let _object82 = gget_calendar(); //ZZZZ Calendar YYYY gget_calendar
-        _object82.shows_heading();
-        let _object83 = gget_calendar(); //ZZZZ Calendar YYYY gget_calendar
-        _object83.shows_week_numbers();
-    }
-    // CellAreaBox
-    {}
-    // CellRendererAccel
-    {
-        let _object86 = gget_cellrendereraccel(); //ZZZZ CellRendererAccel YYYY gget_cellrendereraccel
-        _object86.accel_mods();
-    }
-    // CellRendererCombo
-    {}
-    // CellRendererPixbuf
-    {
-        let _object92 = gget_cellrendererpixbuf(); //ZZZZ CellRendererPixbuf YYYY gget_cellrendererpixbuf
-        _object92.gicon();
-        let _object94 = gget_cellrendererpixbuf(); //ZZZZ CellRendererPixbuf YYYY gget_cellrendererpixbuf
-        _object94.pixbuf_expander_closed();
-        let _object95 = gget_cellrendererpixbuf(); //ZZZZ CellRendererPixbuf YYYY gget_cellrendererpixbuf
-        _object95.pixbuf_expander_open();
-        let _object96 = gget_cellrendererpixbuf(); //ZZZZ CellRendererPixbuf YYYY gget_cellrendererpixbuf
-        _object96.texture();
-    }
-    // CellRendererProgress
-    {
-        let _object98 = gget_cellrendererprogress(); //ZZZZ CellRendererProgress YYYY gget_cellrendererprogress
-        _object98.is_inverted();
-    }
-    // CellRendererSpin
-    {}
-    // CellRendererSpinner
-    {
-        let _object103 = gget_cellrendererspinner(); //ZZZZ CellRendererSpinner YYYY gget_cellrendererspinner
-        _object103.is_active();
-    }
-    // CellRendererText
-    {}
-    // CellRendererToggle
-    {
-        let _object108 = gget_cellrenderertoggle(); //ZZZZ CellRendererToggle YYYY gget_cellrenderertoggle
-        _object108.is_activatable();
-        let _object109 = gget_cellrenderertoggle(); //ZZZZ CellRendererToggle YYYY gget_cellrenderertoggle
-        _object109.is_active();
-        let _object110 = gget_cellrenderertoggle(); //ZZZZ CellRendererToggle YYYY gget_cellrenderertoggle
-        _object110.is_inconsistent();
-        let _object111 = gget_cellrenderertoggle(); //ZZZZ CellRendererToggle YYYY gget_cellrenderertoggle
-        _object111.is_radio();
-    }
-    // CellView
-    {
-        let _object114 = gget_cellview(); //ZZZZ CellView YYYY gget_cellview
-        _object114.displayed_row();
-        let _object115 = gget_cellview(); //ZZZZ CellView YYYY gget_cellview
-        _object115.draws_sensitive();
-        let _object116 = gget_cellview(); //ZZZZ CellView YYYY gget_cellview
-        _object116.fits_model();
-    }
-    // CenterBox
-    {
-        let _object119 = gget_centerbox(); //ZZZZ CenterBox YYYY gget_centerbox
-        _object119.center_widget();
-        let _object120 = gget_centerbox(); //ZZZZ CenterBox YYYY gget_centerbox
-        _object120.end_widget();
-        let _object122 = gget_centerbox(); //ZZZZ CenterBox YYYY gget_centerbox
-        _object122.start_widget();
-    }
-    // CenterLayout
-    {
-        let _object123 = gget_centerlayout(); //ZZZZ CenterLayout YYYY gget_centerlayout
-        _object123.baseline_position();
-        let _object124 = gget_centerlayout(); //ZZZZ CenterLayout YYYY gget_centerlayout
-        _object124.center_widget();
-        let _object125 = gget_centerlayout(); //ZZZZ CenterLayout YYYY gget_centerlayout
-        _object125.end_widget();
-        let _object127 = gget_centerlayout(); //ZZZZ CenterLayout YYYY gget_centerlayout
-        _object127.orientation();
-        let _object128 = gget_centerlayout(); //ZZZZ CenterLayout YYYY gget_centerlayout
-        _object128.start_widget();
-    }
-    // CheckButton
-    {}
-    // ColorButton
-    {
-        let _object132 = gget_colorbutton(); //ZZZZ ColorButton YYYY gget_colorbutton
-        _object132.emit_activate();
-        let _object133 = gget_colorbutton(); //ZZZZ ColorButton YYYY gget_colorbutton
-        _object133.is_modal();
-        let _object135 = gget_colorbutton(); //ZZZZ ColorButton YYYY gget_colorbutton
-        _object135.shows_editor();
-    }
-    // ColorChooserDialog
-    {
-        let _object138 = gget_colorchooserdialog(); //ZZZZ ColorChooserDialog YYYY gget_colorchooserdialog
-        _object138.shows_editor();
-    }
-    // ColorChooserWidget
-    {
-        let _object141 = gget_colorchooserwidget(); //ZZZZ ColorChooserWidget YYYY gget_colorchooserwidget
-        _object141.shows_editor();
-    }
-    // ColumnView
-    {
-        let _object143 = gget_columnview(); //ZZZZ ColumnView YYYY gget_columnview
-        _object143.columns();
-        let _object144 = gget_columnview(); //ZZZZ ColumnView YYYY gget_columnview
-        _object144.enables_rubberband();
-        let _object145 = gget_columnview(); //ZZZZ ColumnView YYYY gget_columnview
-        _object145.is_reorderable();
-        let _object146 = gget_columnview(); //ZZZZ ColumnView YYYY gget_columnview
-        _object146.is_single_click_activate();
-        let _object148 = gget_columnview(); //ZZZZ ColumnView YYYY gget_columnview
-        _object148.shows_column_separators();
-        let _object149 = gget_columnview(); //ZZZZ ColumnView YYYY gget_columnview
-        _object149.shows_row_separators();
-        let _object150 = gget_columnview(); //ZZZZ ColumnView YYYY gget_columnview
-        _object150.sorter();
-    }
-    // ColumnViewColumn
-    {
-        let _object152 = gget_columnviewcolumn(); //ZZZZ ColumnViewColumn YYYY gget_columnviewcolumn
-        _object152.column_view();
-        let _object153 = gget_columnviewcolumn(); //ZZZZ ColumnViewColumn YYYY gget_columnviewcolumn
-        _object153.expands();
-        let _object154 = gget_columnviewcolumn(); //ZZZZ ColumnViewColumn YYYY gget_columnviewcolumn
-        _object154.header_menu();
-        let _object155 = gget_columnviewcolumn(); //ZZZZ ColumnViewColumn YYYY gget_columnviewcolumn
-        _object155.is_resizable();
-        let _object156 = gget_columnviewcolumn(); //ZZZZ ColumnViewColumn YYYY gget_columnviewcolumn
-        _object156.is_visible();
-    }
-    // ComboBox
-    {
-        let _object160 = gget_combobox(); //ZZZZ ComboBox YYYY gget_combobox
-        _object160.with_entry();
-    }
-    // ComboBoxText
-    {
-        let _object161 = gget_comboboxtext(); //ZZZZ ComboBoxText YYYY gget_comboboxtext
-        _object161.active_text();
-        let _object164 = gget_comboboxtext(); //ZZZZ ComboBoxText YYYY gget_comboboxtext
-        _object164.remove_all();
-        let _object165 = gget_comboboxtext(); //ZZZZ ComboBoxText YYYY gget_comboboxtext
-        _object165.with_entry();
-    }
-    // Constraint
-    {
-        let _object167 = gget_constraint(); //ZZZZ Constraint YYYY gget_constraint
-        _object167.is_attached();
-        let _object168 = gget_constraint(); //ZZZZ Constraint YYYY gget_constraint
-        _object168.is_constant();
-        let _object169 = gget_constraint(); //ZZZZ Constraint YYYY gget_constraint
-        _object169.is_required();
-    }
-    // ConstraintGuide
-    {}
-    // ConstraintLayout
-    {
-        let _object174 = gget_constraintlayout(); //ZZZZ ConstraintLayout YYYY gget_constraintlayout
-        _object174.observe_constraints();
-        let _object175 = gget_constraintlayout(); //ZZZZ ConstraintLayout YYYY gget_constraintlayout
-        _object175.observe_guides();
-        let _object176 = gget_constraintlayout(); //ZZZZ ConstraintLayout YYYY gget_constraintlayout
-        _object176.remove_all_constraints();
-    }
-    // CssProvider
-    {
-        let _object178 = gget_cssprovider(); //ZZZZ CssProvider YYYY gget_cssprovider
-        _object178.to_str();
-    }
-    // Dialog
-    {}
-    // DirectoryList
-    {
-        let _object181 = gget_directorylist(); //ZZZZ DirectoryList YYYY gget_directorylist
-        _object181.attributes();
-        let _object182 = gget_directorylist(); //ZZZZ DirectoryList YYYY gget_directorylist
-        _object182.error();
-        let _object183 = gget_directorylist(); //ZZZZ DirectoryList YYYY gget_directorylist
-        _object183.file();
-        let _object184 = gget_directorylist(); //ZZZZ DirectoryList YYYY gget_directorylist
-        _object184.is_loading();
-        let _object185 = gget_directorylist(); //ZZZZ DirectoryList YYYY gget_directorylist
-        _object185.is_monitored();
-    }
-    // DragIcon
-    {
-        let _object186 = gget_dragicon(); //ZZZZ DragIcon YYYY gget_dragicon
-        _object186.child();
-    }
-    // DragSource
-    {
-        let _object187 = gget_dragsource(); //ZZZZ DragSource YYYY gget_dragsource
-        _object187.actions();
-        let _object189 = gget_dragsource(); //ZZZZ DragSource YYYY gget_dragsource
-        _object189.content();
-        let _object190 = gget_dragsource(); //ZZZZ DragSource YYYY gget_dragsource
-        _object190.drag();
-        let _object191 = gget_dragsource(); //ZZZZ DragSource YYYY gget_dragsource
-        _object191.drag_cancel();
-    }
-    // DrawingArea
-    {}
-    // DropControllerMotion
-    {
-        let _object196 = gget_dropcontrollermotion(); //ZZZZ DropControllerMotion YYYY gget_dropcontrollermotion
-        _object196.contains_pointer();
-        let _object197 = gget_dropcontrollermotion(); //ZZZZ DropControllerMotion YYYY gget_dropcontrollermotion
-        _object197.drop();
-        let _object198 = gget_dropcontrollermotion(); //ZZZZ DropControllerMotion YYYY gget_dropcontrollermotion
-        _object198.is_pointer();
-    }
-    // DropDown
-    {
-        let _object201 = gget_dropdown(); //ZZZZ DropDown YYYY gget_dropdown
-        _object201.emit_activate();
-        let _object202 = gget_dropdown(); //ZZZZ DropDown YYYY gget_dropdown
-        _object202.enables_search();
-        let _object203 = gget_dropdown(); //ZZZZ DropDown YYYY gget_dropdown
-        _object203.model();
-        let _object205 = gget_dropdown(); //ZZZZ DropDown YYYY gget_dropdown
-        _object205.selected_item();
-        let _object206 = gget_dropdown(); //ZZZZ DropDown YYYY gget_dropdown
-        _object206.shows_arrow();
-    }
-    // DropTarget
-    {
-        let _object207 = gget_droptarget(); //ZZZZ DropTarget YYYY gget_droptarget
-        _object207.actions();
-        let _object209 = gget_droptarget(); //ZZZZ DropTarget YYYY gget_droptarget
-        _object209.current_drop();
-        let _object210 = gget_droptarget(); //ZZZZ DropTarget YYYY gget_droptarget
-        _object210.drop();
-        let _object211 = gget_droptarget(); //ZZZZ DropTarget YYYY gget_droptarget
-        _object211.formats();
-        let _object212 = gget_droptarget(); //ZZZZ DropTarget YYYY gget_droptarget
-        _object212.is_preload();
-        let _object214 = gget_droptarget(); //ZZZZ DropTarget YYYY gget_droptarget
-        _object214.reject();
-        let _object215 = gget_droptarget(); //ZZZZ DropTarget YYYY gget_droptarget
-        _object215.value();
-    }
-    // DropTargetAsync
-    {
-        let _object216 = gget_droptargetasync(); //ZZZZ DropTargetAsync YYYY gget_droptargetasync
-        _object216.actions();
-        let _object218 = gget_droptargetasync(); //ZZZZ DropTargetAsync YYYY gget_droptargetasync
-        _object218.formats();
-    }
-    // EditableLabel
-    {
-        let _object221 = gget_editablelabel(); //ZZZZ EditableLabel YYYY gget_editablelabel
-        _object221.is_editing();
-        let _object223 = gget_editablelabel(); //ZZZZ EditableLabel YYYY gget_editablelabel
-        _object223.start_editing();
-    }
-    // EmojiChooser
-    {}
-    // Entry
-    {}
-    // EntryBuffer
-    {}
-    // EntryCompletion
-    {
-        let _object231 = gget_entrycompletion(); //ZZZZ EntryCompletion YYYY gget_entrycompletion
-        _object231.complete();
-        let _object232 = gget_entrycompletion(); //ZZZZ EntryCompletion YYYY gget_entrycompletion
-        _object232.completion_prefix();
-        let _object233 = gget_entrycompletion(); //ZZZZ EntryCompletion YYYY gget_entrycompletion
-        _object233.insert_prefix();
-        let _object234 = gget_entrycompletion(); //ZZZZ EntryCompletion YYYY gget_entrycompletion
-        _object234.is_inline_completion();
-        let _object235 = gget_entrycompletion(); //ZZZZ EntryCompletion YYYY gget_entrycompletion
-        _object235.is_inline_selection();
-        let _object236 = gget_entrycompletion(); //ZZZZ EntryCompletion YYYY gget_entrycompletion
-        _object236.is_popup_completion();
-        let _object237 = gget_entrycompletion(); //ZZZZ EntryCompletion YYYY gget_entrycompletion
-        _object237.is_popup_set_width();
-        let _object238 = gget_entrycompletion(); //ZZZZ EntryCompletion YYYY gget_entrycompletion
-        _object238.is_popup_single_match();
-    }
-    // EventControllerFocus
-    {
-        let _object241 = gget_eventcontrollerfocus(); //ZZZZ EventControllerFocus YYYY gget_eventcontrollerfocus
-        _object241.contains_focus();
-        let _object242 = gget_eventcontrollerfocus(); //ZZZZ EventControllerFocus YYYY gget_eventcontrollerfocus
-        _object242.is_focus();
-    }
-    // EventControllerKey
-    {
-        let _object245 = gget_eventcontrollerkey(); //ZZZZ EventControllerKey YYYY gget_eventcontrollerkey
-        _object245.group();
-        let _object246 = gget_eventcontrollerkey(); //ZZZZ EventControllerKey YYYY gget_eventcontrollerkey
-        _object246.im_context();
-    }
-    // EventControllerLegacy
-    {}
-    // EventControllerMotion
-    {
-        let _object251 = gget_eventcontrollermotion(); //ZZZZ EventControllerMotion YYYY gget_eventcontrollermotion
-        _object251.contains_pointer();
-        let _object252 = gget_eventcontrollermotion(); //ZZZZ EventControllerMotion YYYY gget_eventcontrollermotion
-        _object252.is_pointer();
-    }
-    // EventControllerScroll
-    {}
-    // EveryFilter
-    {}
-    // Expander
-    {
-        let _object258 = gget_expander(); //ZZZZ Expander YYYY gget_expander
-        _object258.emit_activate();
-        let _object259 = gget_expander(); //ZZZZ Expander YYYY gget_expander
-        _object259.is_expanded();
-        let _object261 = gget_expander(); //ZZZZ Expander YYYY gget_expander
-        _object261.resizes_toplevel();
-        let _object262 = gget_expander(); //ZZZZ Expander YYYY gget_expander
-        _object262.uses_markup();
-        let _object263 = gget_expander(); //ZZZZ Expander YYYY gget_expander
-        _object263.uses_underline();
-    }
-    // FileChooserDialog
-    {}
-    // FileChooserNative
-    {}
-    // FileChooserWidget
-    {
-        let _object269 = gget_filechooserwidget(); //ZZZZ FileChooserWidget YYYY gget_filechooserwidget
-        _object269.emit_desktop_folder();
-        let _object270 = gget_filechooserwidget(); //ZZZZ FileChooserWidget YYYY gget_filechooserwidget
-        _object270.emit_down_folder();
-        let _object271 = gget_filechooserwidget(); //ZZZZ FileChooserWidget YYYY gget_filechooserwidget
-        _object271.emit_home_folder();
-        let _object272 = gget_filechooserwidget(); //ZZZZ FileChooserWidget YYYY gget_filechooserwidget
-        _object272.emit_location_popup_on_paste();
-        let _object273 = gget_filechooserwidget(); //ZZZZ FileChooserWidget YYYY gget_filechooserwidget
-        _object273.emit_location_toggle_popup();
-        let _object274 = gget_filechooserwidget(); //ZZZZ FileChooserWidget YYYY gget_filechooserwidget
-        _object274.emit_places_shortcut();
-        let _object275 = gget_filechooserwidget(); //ZZZZ FileChooserWidget YYYY gget_filechooserwidget
-        _object275.emit_recent_shortcut();
-        let _object276 = gget_filechooserwidget(); //ZZZZ FileChooserWidget YYYY gget_filechooserwidget
-        _object276.emit_search_shortcut();
-        let _object277 = gget_filechooserwidget(); //ZZZZ FileChooserWidget YYYY gget_filechooserwidget
-        _object277.emit_show_hidden();
-        let _object278 = gget_filechooserwidget(); //ZZZZ FileChooserWidget YYYY gget_filechooserwidget
-        _object278.emit_up_folder();
-        let _object279 = gget_filechooserwidget(); //ZZZZ FileChooserWidget YYYY gget_filechooserwidget
-        _object279.is_search_mode();
-        let _object281 = gget_filechooserwidget(); //ZZZZ FileChooserWidget YYYY gget_filechooserwidget
-        _object281.subtitle();
-    }
-    // FileFilter
-    {
-        let _object282 = gget_filefilter(); //ZZZZ FileFilter YYYY gget_filefilter
-        _object282.add_pixbuf_formats();
-        let _object283 = gget_filefilter(); //ZZZZ FileFilter YYYY gget_filefilter
-        _object283.attributes();
-        let _object284 = gget_filefilter(); //ZZZZ FileFilter YYYY gget_filefilter
-        _object284.name();
-        let _object286 = gget_filefilter(); //ZZZZ FileFilter YYYY gget_filefilter
-        _object286.to_gvariant();
-    }
-    // FilterListModel
-    {
-        let _object288 = gget_filterlistmodel(); //ZZZZ FilterListModel YYYY gget_filterlistmodel
-        _object288.is_incremental();
-        let _object289 = gget_filterlistmodel(); //ZZZZ FilterListModel YYYY gget_filterlistmodel
-        _object289.model();
-        let _object291 = gget_filterlistmodel(); //ZZZZ FilterListModel YYYY gget_filterlistmodel
-        _object291.pending();
-    }
-    // Fixed
-    {}
-    // FixedLayout
-    {}
-    // FixedLayoutChild
-    {
-        let _object295 = gget_fixedlayoutchild(); //ZZZZ FixedLayoutChild YYYY gget_fixedlayoutchild
-        _object295.transform();
-    }
-    // FlattenListModel
-    {
-        let _object296 = gget_flattenlistmodel(); //ZZZZ FlattenListModel YYYY gget_flattenlistmodel
-        _object296.model();
-    }
-    // FlowBox
-    {
-        let _object297 = gget_flowbox(); //ZZZZ FlowBox YYYY gget_flowbox
-        _object297.accepts_unpaired_release();
-        let _object298 = gget_flowbox(); //ZZZZ FlowBox YYYY gget_flowbox
-        _object298.activates_on_single_click();
-        let _object300 = gget_flowbox(); //ZZZZ FlowBox YYYY gget_flowbox
-        _object300.emit_activate_cursor_child();
-        let _object301 = gget_flowbox(); //ZZZZ FlowBox YYYY gget_flowbox
-        _object301.emit_select_all();
-        let _object302 = gget_flowbox(); //ZZZZ FlowBox YYYY gget_flowbox
-        _object302.emit_toggle_cursor_child();
-        let _object303 = gget_flowbox(); //ZZZZ FlowBox YYYY gget_flowbox
-        _object303.emit_unselect_all();
-        let _object304 = gget_flowbox(); //ZZZZ FlowBox YYYY gget_flowbox
-        _object304.invalidate_filter();
-        let _object305 = gget_flowbox(); //ZZZZ FlowBox YYYY gget_flowbox
-        _object305.invalidate_sort();
-        let _object306 = gget_flowbox(); //ZZZZ FlowBox YYYY gget_flowbox
-        _object306.is_homogeneous();
-        let _object308 = gget_flowbox(); //ZZZZ FlowBox YYYY gget_flowbox
-        _object308.select_all();
-        let _object309 = gget_flowbox(); //ZZZZ FlowBox YYYY gget_flowbox
-        _object309.selected_children();
-        let _object310 = gget_flowbox(); //ZZZZ FlowBox YYYY gget_flowbox
-        _object310.unselect_all();
-    }
-    // FlowBoxChild
-    {}
-    // FontButton
-    {
-        let _object314 = gget_fontbutton(); //ZZZZ FontButton YYYY gget_fontbutton
-        _object314.emit_activate();
-        let _object315 = gget_fontbutton(); //ZZZZ FontButton YYYY gget_fontbutton
-        _object315.is_modal();
-        let _object317 = gget_fontbutton(); //ZZZZ FontButton YYYY gget_fontbutton
-        _object317.uses_font();
-        let _object318 = gget_fontbutton(); //ZZZZ FontButton YYYY gget_fontbutton
-        _object318.uses_size();
-    }
-    // FontChooserDialog
-    {}
-    // FontChooserWidget
-    {
-        let _object323 = gget_fontchooserwidget(); //ZZZZ FontChooserWidget YYYY gget_fontchooserwidget
-        _object323.tweak_action();
-    }
-    // Frame
-    {}
-    // GLArea
-    {}
-    // GestureClick
-    {}
-    // GestureDrag
-    {}
-    // GestureLongPress
-    {}
-    // GesturePan
-    {}
-    // GestureRotate
-    {
-        let _object336 = gget_gesturerotate(); //ZZZZ GestureRotate YYYY gget_gesturerotate
-        _object336.angle_delta();
-    }
-    // GestureStylus
-    {
-        let _object339 = gget_gesturestylus(); //ZZZZ GestureStylus YYYY gget_gesturestylus
-        _object339.backlog();
-        let _object341 = gget_gesturestylus(); //ZZZZ GestureStylus YYYY gget_gesturestylus
-        _object341.device_tool();
-    }
-    // GestureSwipe
-    {
-        let _object345 = gget_gestureswipe(); //ZZZZ GestureSwipe YYYY gget_gestureswipe
-        _object345.velocity();
-    }
-    // GestureZoom
-    {
-        let _object348 = gget_gesturezoom(); //ZZZZ GestureZoom YYYY gget_gesturezoom
-        _object348.scale_delta();
-    }
-    // Grid
-    {}
-    // GridLayout
-    {
-        let _object352 = gget_gridlayout(); //ZZZZ GridLayout YYYY gget_gridlayout
-        _object352.is_column_homogeneous();
-        let _object353 = gget_gridlayout(); //ZZZZ GridLayout YYYY gget_gridlayout
-        _object353.is_row_homogeneous();
-    }
-    // GridLayoutChild
-    {
-        let _object355 = gget_gridlayoutchild(); //ZZZZ GridLayoutChild YYYY gget_gridlayoutchild
-        _object355.column();
-        let _object356 = gget_gridlayoutchild(); //ZZZZ GridLayoutChild YYYY gget_gridlayoutchild
-        _object356.column_span();
-        let _object357 = gget_gridlayoutchild(); //ZZZZ GridLayoutChild YYYY gget_gridlayoutchild
-        _object357.row();
-        let _object358 = gget_gridlayoutchild(); //ZZZZ GridLayoutChild YYYY gget_gridlayoutchild
-        _object358.row_span();
-    }
-    // GridView
-    {
-        let _object360 = gget_gridview(); //ZZZZ GridView YYYY gget_gridview
-        _object360.enables_rubberband();
-        let _object361 = gget_gridview(); //ZZZZ GridView YYYY gget_gridview
-        _object361.is_single_click_activate();
-    }
-    // HeaderBar
-    {
-        let _object365 = gget_headerbar(); //ZZZZ HeaderBar YYYY gget_headerbar
-        _object365.shows_title_buttons();
-    }
-    // IMContextSimple
-    {}
-    // IMMulticontext
-    {}
-    // IconPaintable
-    {
-        let _object370 = gget_iconpaintable(); //ZZZZ IconPaintable YYYY gget_iconpaintable
-        _object370.file();
-        let _object371 = gget_iconpaintable(); //ZZZZ IconPaintable YYYY gget_iconpaintable
-        _object371.icon_name();
-        let _object372 = gget_iconpaintable(); //ZZZZ IconPaintable YYYY gget_iconpaintable
-        _object372.is_symbolic();
-    }
-    // IconTheme
-    {
-        let _object374 = gget_icontheme(); //ZZZZ IconTheme YYYY gget_icontheme
-        _object374.display();
-        let _object375 = gget_icontheme(); //ZZZZ IconTheme YYYY gget_icontheme
-        _object375.icon_names();
-    }
-    // IconView
-    {
-        let _object377 = gget_iconview(); //ZZZZ IconView YYYY gget_iconview
-        _object377.activates_on_single_click();
-        let _object379 = gget_iconview(); //ZZZZ IconView YYYY gget_iconview
-        _object379.cursor();
-        let _object380 = gget_iconview(); //ZZZZ IconView YYYY gget_iconview
-        _object380.drag_dest_item();
-        let _object381 = gget_iconview(); //ZZZZ IconView YYYY gget_iconview
-        _object381.emit_activate_cursor_item();
-        let _object382 = gget_iconview(); //ZZZZ IconView YYYY gget_iconview
-        _object382.emit_select_all();
-        let _object383 = gget_iconview(); //ZZZZ IconView YYYY gget_iconview
-        _object383.emit_select_cursor_item();
-        let _object384 = gget_iconview(); //ZZZZ IconView YYYY gget_iconview
-        _object384.emit_toggle_cursor_item();
-        let _object385 = gget_iconview(); //ZZZZ IconView YYYY gget_iconview
-        _object385.emit_unselect_all();
-        let _object386 = gget_iconview(); //ZZZZ IconView YYYY gget_iconview
-        _object386.is_reorderable();
-        let _object388 = gget_iconview(); //ZZZZ IconView YYYY gget_iconview
-        _object388.select_all();
-        let _object389 = gget_iconview(); //ZZZZ IconView YYYY gget_iconview
-        _object389.selected_items();
-        let _object390 = gget_iconview(); //ZZZZ IconView YYYY gget_iconview
-        _object390.unselect_all();
-        let _object391 = gget_iconview(); //ZZZZ IconView YYYY gget_iconview
-        _object391.unset_model_drag_dest();
-        let _object392 = gget_iconview(); //ZZZZ IconView YYYY gget_iconview
-        _object392.unset_model_drag_source();
-        let _object393 = gget_iconview(); //ZZZZ IconView YYYY gget_iconview
-        _object393.visible_range();
-    }
-    // Image
-    {
-        let _object395 = gget_image(); //ZZZZ Image YYYY gget_image
-        _object395.clear();
-        let _object396 = gget_image(); //ZZZZ Image YYYY gget_image
-        _object396.gicon();
-        let _object398 = gget_image(); //ZZZZ Image YYYY gget_image
-        _object398.paintable();
-        let _object399 = gget_image(); //ZZZZ Image YYYY gget_image
-        _object399.storage_type();
-        let _object400 = gget_image(); //ZZZZ Image YYYY gget_image
-        _object400.uses_fallback();
-    }
-    // InfoBar
-    {
-        let _object402 = gget_infobar(); //ZZZZ InfoBar YYYY gget_infobar
-        _object402.emit_close();
-        let _object403 = gget_infobar(); //ZZZZ InfoBar YYYY gget_infobar
-        _object403.is_revealed();
-        let _object405 = gget_infobar(); //ZZZZ InfoBar YYYY gget_infobar
-        _object405.shows_close_button();
-    }
-    // KeyvalTrigger
-    {
-        let _object406 = gget_keyvaltrigger(); //ZZZZ KeyvalTrigger YYYY gget_keyvaltrigger
-        _object406.keyval();
-        let _object407 = gget_keyvaltrigger(); //ZZZZ KeyvalTrigger YYYY gget_keyvaltrigger
-        _object407.modifiers();
-    }
-    // Label
-    {
-        let _object408 = gget_label(); //ZZZZ Label YYYY gget_label
-        _object408.attributes();
-        let _object410 = gget_label(); //ZZZZ Label YYYY gget_label
-        _object410.current_uri();
-        let _object411 = gget_label(); //ZZZZ Label YYYY gget_label
-        _object411.ellipsize();
-        let _object412 = gget_label(); //ZZZZ Label YYYY gget_label
-        _object412.emit_activate_current_link();
-        let _object413 = gget_label(); //ZZZZ Label YYYY gget_label
-        _object413.emit_copy_clipboard();
-        let _object414 = gget_label(); //ZZZZ Label YYYY gget_label
-        _object414.extra_menu();
-        let _object415 = gget_label(); //ZZZZ Label YYYY gget_label
-        _object415.is_selectable();
-        let _object416 = gget_label(); //ZZZZ Label YYYY gget_label
-        _object416.is_single_line_mode();
-        let _object417 = gget_label(); //ZZZZ Label YYYY gget_label
-        _object417.layout();
-        let _object418 = gget_label(); //ZZZZ Label YYYY gget_label
-        _object418.layout_offsets();
-        let _object420 = gget_label(); //ZZZZ Label YYYY gget_label
-        _object420.selection_bounds();
-        let _object421 = gget_label(); //ZZZZ Label YYYY gget_label
-        _object421.text();
-        let _object422 = gget_label(); //ZZZZ Label YYYY gget_label
-        _object422.uses_markup();
-        let _object423 = gget_label(); //ZZZZ Label YYYY gget_label
-        _object423.uses_underline();
-        let _object424 = gget_label(); //ZZZZ Label YYYY gget_label
-        _object424.wrap_mode();
-        let _object425 = gget_label(); //ZZZZ Label YYYY gget_label
-        _object425.wraps();
-    }
-    // LevelBar
-    {
-        let _object427 = gget_levelbar(); //ZZZZ LevelBar YYYY gget_levelbar
-        _object427.is_inverted();
-    }
-    // LinkButton
-    {
-        let _object430 = gget_linkbutton(); //ZZZZ LinkButton YYYY gget_linkbutton
-        _object430.is_visited();
-    }
-    // ListBox
-    {
-        let _object432 = gget_listbox(); //ZZZZ ListBox YYYY gget_listbox
-        _object432.accepts_unpaired_release();
-        let _object433 = gget_listbox(); //ZZZZ ListBox YYYY gget_listbox
-        _object433.activates_on_single_click();
-        let _object434 = gget_listbox(); //ZZZZ ListBox YYYY gget_listbox
-        _object434.adjustment();
-        let _object436 = gget_listbox(); //ZZZZ ListBox YYYY gget_listbox
-        _object436.drag_unhighlight_row();
-        let _object437 = gget_listbox(); //ZZZZ ListBox YYYY gget_listbox
-        _object437.emit_activate_cursor_row();
-        let _object438 = gget_listbox(); //ZZZZ ListBox YYYY gget_listbox
-        _object438.emit_select_all();
-        let _object439 = gget_listbox(); //ZZZZ ListBox YYYY gget_listbox
-        _object439.emit_toggle_cursor_row();
-        let _object440 = gget_listbox(); //ZZZZ ListBox YYYY gget_listbox
-        _object440.emit_unselect_all();
-        let _object441 = gget_listbox(); //ZZZZ ListBox YYYY gget_listbox
-        _object441.invalidate_filter();
-        let _object442 = gget_listbox(); //ZZZZ ListBox YYYY gget_listbox
-        _object442.invalidate_headers();
-        let _object443 = gget_listbox(); //ZZZZ ListBox YYYY gget_listbox
-        _object443.invalidate_sort();
-        let _object445 = gget_listbox(); //ZZZZ ListBox YYYY gget_listbox
-        _object445.select_all();
-        let _object446 = gget_listbox(); //ZZZZ ListBox YYYY gget_listbox
-        _object446.selected_row();
-        let _object447 = gget_listbox(); //ZZZZ ListBox YYYY gget_listbox
-        _object447.selected_rows();
-        let _object448 = gget_listbox(); //ZZZZ ListBox YYYY gget_listbox
-        _object448.shows_separators();
-        let _object449 = gget_listbox(); //ZZZZ ListBox YYYY gget_listbox
-        _object449.unselect_all();
-    }
-    // ListBoxRow
-    {}
-    // ListItem
-    {
-        let _object452 = gget_listitem(); //ZZZZ ListItem YYYY gget_listitem
-        _object452.child();
-        let _object453 = gget_listitem(); //ZZZZ ListItem YYYY gget_listitem
-        _object453.is_activatable();
-        let _object454 = gget_listitem(); //ZZZZ ListItem YYYY gget_listitem
-        _object454.is_selectable();
-        let _object455 = gget_listitem(); //ZZZZ ListItem YYYY gget_listitem
-        _object455.is_selected();
-        let _object456 = gget_listitem(); //ZZZZ ListItem YYYY gget_listitem
-        _object456.item();
-        let _object457 = gget_listitem(); //ZZZZ ListItem YYYY gget_listitem
-        _object457.position();
-    }
-    // ListStore
-    {
-        let _object458 = gget_liststore(); //ZZZZ ListStore YYYY gget_liststore
-        _object458.append();
-        let _object459 = gget_liststore(); //ZZZZ ListStore YYYY gget_liststore
-        _object459.clear();
-        let _object460 = gget_liststore(); //ZZZZ ListStore YYYY gget_liststore
-        _object460.prepend();
-    }
-    // ListView
-    {
-        let _object462 = gget_listview(); //ZZZZ ListView YYYY gget_listview
-        _object462.enables_rubberband();
-        let _object463 = gget_listview(); //ZZZZ ListView YYYY gget_listview
-        _object463.is_single_click_activate();
-        let _object465 = gget_listview(); //ZZZZ ListView YYYY gget_listview
-        _object465.shows_separators();
-    }
-    // LockButton
-    {
-        let _object468 = gget_lockbutton(); //ZZZZ LockButton YYYY gget_lockbutton
-        _object468.permission();
-    }
-    // MapListModel
-    {
-        let _object469 = gget_maplistmodel(); //ZZZZ MapListModel YYYY gget_maplistmodel
-        _object469.has_map();
-        let _object470 = gget_maplistmodel(); //ZZZZ MapListModel YYYY gget_maplistmodel
-        _object470.model();
-    }
-    // MediaControls
-    {}
-    // MediaFile
-    {}
-    // MenuButton
-    {
-        let _object475 = gget_menubutton(); //ZZZZ MenuButton YYYY gget_menubutton
-        _object475.emit_activate();
-        let _object476 = gget_menubutton(); //ZZZZ MenuButton YYYY gget_menubutton
-        _object476.is_primary();
-        let _object477 = gget_menubutton(); //ZZZZ MenuButton YYYY gget_menubutton
-        _object477.menu_model();
-        let _object478 = gget_menubutton(); //ZZZZ MenuButton YYYY gget_menubutton
-        _object478.must_always_show_arrow();
-        let _object480 = gget_menubutton(); //ZZZZ MenuButton YYYY gget_menubutton
-        _object480.popdown();
-        let _object481 = gget_menubutton(); //ZZZZ MenuButton YYYY gget_menubutton
-        _object481.popup();
-        let _object482 = gget_menubutton(); //ZZZZ MenuButton YYYY gget_menubutton
-        _object482.uses_underline();
-    }
-    // MessageDialog
-    {
-        let _object484 = gget_messagedialog(); //ZZZZ MessageDialog YYYY gget_messagedialog
-        _object484.is_secondary_use_markup();
-        let _object485 = gget_messagedialog(); //ZZZZ MessageDialog YYYY gget_messagedialog
-        _object485.message_area();
-        let _object487 = gget_messagedialog(); //ZZZZ MessageDialog YYYY gget_messagedialog
-        _object487.uses_markup();
-    }
-    // MnemonicAction
-    {
-        let _object488 = gget_mnemonicaction(); //ZZZZ MnemonicAction YYYY gget_mnemonicaction
-        _object488.get();
-    }
-    // MnemonicTrigger
-    {
-        let _object489 = gget_mnemonictrigger(); //ZZZZ MnemonicTrigger YYYY gget_mnemonictrigger
-        _object489.keyval();
-    }
-    // MountOperation
-    {}
-    // MultiSelection
-    {
-        let _object492 = gget_multiselection(); //ZZZZ MultiSelection YYYY gget_multiselection
-        _object492.model();
-    }
-    // MultiSorter
-    {}
-    // NamedAction
-    {
-        let _object494 = gget_namedaction(); //ZZZZ NamedAction YYYY gget_namedaction
-        _object494.action_name();
-    }
-    // NeverTrigger
-    {
-        let _object495 = gget_nevertrigger(); //ZZZZ NeverTrigger YYYY gget_nevertrigger
-        _object495.get();
-    }
-    // NoSelection
-    {
-        let _object496 = gget_noselection(); //ZZZZ NoSelection YYYY gget_noselection
-        _object496.model();
-    }
-    // Notebook
-    {
-        let _object498 = gget_notebook(); //ZZZZ Notebook YYYY gget_notebook
-        _object498.enables_popup();
-        let _object499 = gget_notebook(); //ZZZZ Notebook YYYY gget_notebook
-        _object499.is_scrollable();
-        let _object501 = gget_notebook(); //ZZZZ Notebook YYYY gget_notebook
-        _object501.next_page();
-        let _object502 = gget_notebook(); //ZZZZ Notebook YYYY gget_notebook
-        _object502.pages();
-        let _object503 = gget_notebook(); //ZZZZ Notebook YYYY gget_notebook
-        _object503.popup_disable();
-        let _object504 = gget_notebook(); //ZZZZ Notebook YYYY gget_notebook
-        _object504.popup_enable();
-        let _object505 = gget_notebook(); //ZZZZ Notebook YYYY gget_notebook
-        _object505.prev_page();
-        let _object506 = gget_notebook(); //ZZZZ Notebook YYYY gget_notebook
-        _object506.shows_border();
-        let _object507 = gget_notebook(); //ZZZZ Notebook YYYY gget_notebook
-        _object507.shows_tabs();
-    }
-    // NotebookPage
-    {
-        let _object508 = gget_notebookpage(); //ZZZZ NotebookPage YYYY gget_notebookpage
-        _object508.child();
-        let _object509 = gget_notebookpage(); //ZZZZ NotebookPage YYYY gget_notebookpage
-        _object509.is_detachable();
-        let _object510 = gget_notebookpage(); //ZZZZ NotebookPage YYYY gget_notebookpage
-        _object510.is_reorderable();
-        let _object511 = gget_notebookpage(); //ZZZZ NotebookPage YYYY gget_notebookpage
-        _object511.is_tab_expand();
-        let _object512 = gget_notebookpage(); //ZZZZ NotebookPage YYYY gget_notebookpage
-        _object512.is_tab_fill();
-        let _object513 = gget_notebookpage(); //ZZZZ NotebookPage YYYY gget_notebookpage
-        _object513.menu();
-        let _object514 = gget_notebookpage(); //ZZZZ NotebookPage YYYY gget_notebookpage
-        _object514.menu_label();
-        let _object515 = gget_notebookpage(); //ZZZZ NotebookPage YYYY gget_notebookpage
-        _object515.position();
-        let _object516 = gget_notebookpage(); //ZZZZ NotebookPage YYYY gget_notebookpage
-        _object516.tab();
-        let _object517 = gget_notebookpage(); //ZZZZ NotebookPage YYYY gget_notebookpage
-        _object517.tab_label();
-    }
-    // NothingAction
-    {
-        let _object518 = gget_nothingaction(); //ZZZZ NothingAction YYYY gget_nothingaction
-        _object518.get();
-    }
-    // NumericSorter
-    {}
-    // Overlay
-    {}
-    // OverlayLayout
-    {}
-    // OverlayLayoutChild
-    {
-        let _object524 = gget_overlaylayoutchild(); //ZZZZ OverlayLayoutChild YYYY gget_overlaylayoutchild
-        _object524.is_clip_overlay();
-        let _object525 = gget_overlaylayoutchild(); //ZZZZ OverlayLayoutChild YYYY gget_overlaylayoutchild
-        _object525.is_measure();
-    }
-    // PadController
-    {
-        let _object526 = gget_padcontroller(); //ZZZZ PadController YYYY gget_padcontroller
-        _object526.action_group();
-        let _object529 = gget_padcontroller(); //ZZZZ PadController YYYY gget_padcontroller
-        _object529.pad();
-    }
-    // PageSetup
-    {
-        let _object530 = gget_pagesetup(); //ZZZZ PageSetup YYYY gget_pagesetup
-        _object530.copy();
-        let _object532 = gget_pagesetup(); //ZZZZ PageSetup YYYY gget_pagesetup
-        _object532.orientation();
-        let _object533 = gget_pagesetup(); //ZZZZ PageSetup YYYY gget_pagesetup
-        _object533.paper_size();
-        let _object534 = gget_pagesetup(); //ZZZZ PageSetup YYYY gget_pagesetup
-        _object534.to_gvariant();
-    }
-    // PageSetupUnixDialog
-    {
-        let _object537 = gget_pagesetupunixdialog(); //ZZZZ PageSetupUnixDialog YYYY gget_pagesetupunixdialog
-        _object537.page_setup();
-        let _object538 = gget_pagesetupunixdialog(); //ZZZZ PageSetupUnixDialog YYYY gget_pagesetupunixdialog
-        _object538.print_settings();
-    }
-    // Paned
-    {
-        let _object540 = gget_paned(); //ZZZZ Paned YYYY gget_paned
-        _object540.emit_accept_position();
-        let _object541 = gget_paned(); //ZZZZ Paned YYYY gget_paned
-        _object541.emit_cancel_position();
-        let _object542 = gget_paned(); //ZZZZ Paned YYYY gget_paned
-        _object542.emit_toggle_handle_focus();
-        let _object543 = gget_paned(); //ZZZZ Paned YYYY gget_paned
-        _object543.is_position_set();
-        let _object544 = gget_paned(); //ZZZZ Paned YYYY gget_paned
-        _object544.is_wide_handle();
-        let _object545 = gget_paned(); //ZZZZ Paned YYYY gget_paned
-        _object545.max_position();
-        let _object546 = gget_paned(); //ZZZZ Paned YYYY gget_paned
-        _object546.min_position();
-        let _object548 = gget_paned(); //ZZZZ Paned YYYY gget_paned
-        _object548.resizes_end_child();
-        let _object549 = gget_paned(); //ZZZZ Paned YYYY gget_paned
-        _object549.resizes_start_child();
-        let _object550 = gget_paned(); //ZZZZ Paned YYYY gget_paned
-        _object550.shrinks_end_child();
-        let _object551 = gget_paned(); //ZZZZ Paned YYYY gget_paned
-        _object551.shrinks_start_child();
-    }
-    // PasswordEntry
-    {
-        let _object553 = gget_passwordentry(); //ZZZZ PasswordEntry YYYY gget_passwordentry
-        _object553.emit_activate();
-        let _object554 = gget_passwordentry(); //ZZZZ PasswordEntry YYYY gget_passwordentry
-        _object554.extra_menu();
-        let _object556 = gget_passwordentry(); //ZZZZ PasswordEntry YYYY gget_passwordentry
-        _object556.shows_peek_icon();
-    }
-    // PasswordEntryBuffer
-    {}
-    // Picture
-    {
-        let _object560 = gget_picture(); //ZZZZ Picture YYYY gget_picture
-        _object560.file();
-        let _object561 = gget_picture(); //ZZZZ Picture YYYY gget_picture
-        _object561.is_keep_aspect_ratio();
-        let _object563 = gget_picture(); //ZZZZ Picture YYYY gget_picture
-        _object563.paintable();
-    }
-    // Popover
-    {}
-    // PopoverMenu
-    {
-        let _object567 = gget_popovermenu(); //ZZZZ PopoverMenu YYYY gget_popovermenu
-        _object567.menu_model();
-    }
-    // PopoverMenuBar
-    {
-        let _object570 = gget_popovermenubar(); //ZZZZ PopoverMenuBar YYYY gget_popovermenubar
-        _object570.menu_model();
-    }
-    // PrintContext
-    {
-        let _object572 = gget_printcontext(); //ZZZZ PrintContext YYYY gget_printcontext
-        _object572.cairo_context();
-        let _object573 = gget_printcontext(); //ZZZZ PrintContext YYYY gget_printcontext
-        _object573.create_pango_context();
-        let _object574 = gget_printcontext(); //ZZZZ PrintContext YYYY gget_printcontext
-        _object574.create_pango_layout();
-        let _object575 = gget_printcontext(); //ZZZZ PrintContext YYYY gget_printcontext
-        _object575.dpi_x();
-        let _object576 = gget_printcontext(); //ZZZZ PrintContext YYYY gget_printcontext
-        _object576.dpi_y();
-        let _object577 = gget_printcontext(); //ZZZZ PrintContext YYYY gget_printcontext
-        _object577.hard_margins();
-        let _object578 = gget_printcontext(); //ZZZZ PrintContext YYYY gget_printcontext
-        _object578.height();
-        let _object579 = gget_printcontext(); //ZZZZ PrintContext YYYY gget_printcontext
-        _object579.page_setup();
-        let _object580 = gget_printcontext(); //ZZZZ PrintContext YYYY gget_printcontext
-        _object580.pango_fontmap();
-        let _object581 = gget_printcontext(); //ZZZZ PrintContext YYYY gget_printcontext
-        _object581.width();
-    }
-    // PrintJob
-    {
-        let _object583 = gget_printjob(); //ZZZZ PrintJob YYYY gget_printjob
-        _object583.is_collate();
-        let _object584 = gget_printjob(); //ZZZZ PrintJob YYYY gget_printjob
-        _object584.is_reverse();
-        let _object585 = gget_printjob(); //ZZZZ PrintJob YYYY gget_printjob
-        _object585.is_rotate();
-        let _object586 = gget_printjob(); //ZZZZ PrintJob YYYY gget_printjob
-        _object586.n_up();
-        let _object587 = gget_printjob(); //ZZZZ PrintJob YYYY gget_printjob
-        _object587.n_up_layout();
-        let _object589 = gget_printjob(); //ZZZZ PrintJob YYYY gget_printjob
-        _object589.num_copies();
-        let _object590 = gget_printjob(); //ZZZZ PrintJob YYYY gget_printjob
-        _object590.page_ranges();
-        let _object591 = gget_printjob(); //ZZZZ PrintJob YYYY gget_printjob
-        _object591.page_set();
-        let _object592 = gget_printjob(); //ZZZZ PrintJob YYYY gget_printjob
-        _object592.pages();
-        let _object593 = gget_printjob(); //ZZZZ PrintJob YYYY gget_printjob
-        _object593.scale();
-        let _object594 = gget_printjob(); //ZZZZ PrintJob YYYY gget_printjob
-        _object594.status();
-        let _object595 = gget_printjob(); //ZZZZ PrintJob YYYY gget_printjob
-        _object595.surface();
-        let _object596 = gget_printjob(); //ZZZZ PrintJob YYYY gget_printjob
-        _object596.tracks_print_status();
-    }
-    // PrintOperation
-    {}
-    // PrintSettings
-    {
-        let _object599 = gget_printsettings(); //ZZZZ PrintSettings YYYY gget_printsettings
-        _object599.copy();
-        let _object600 = gget_printsettings(); //ZZZZ PrintSettings YYYY gget_printsettings
-        _object600.default_source();
-        let _object601 = gget_printsettings(); //ZZZZ PrintSettings YYYY gget_printsettings
-        _object601.dither();
-        let _object602 = gget_printsettings(); //ZZZZ PrintSettings YYYY gget_printsettings
-        _object602.duplex();
-        let _object603 = gget_printsettings(); //ZZZZ PrintSettings YYYY gget_printsettings
-        _object603.finishings();
-        let _object604 = gget_printsettings(); //ZZZZ PrintSettings YYYY gget_printsettings
-        _object604.is_collate();
-        let _object605 = gget_printsettings(); //ZZZZ PrintSettings YYYY gget_printsettings
-        _object605.is_reverse();
-        let _object606 = gget_printsettings(); //ZZZZ PrintSettings YYYY gget_printsettings
-        _object606.media_type();
-        let _object607 = gget_printsettings(); //ZZZZ PrintSettings YYYY gget_printsettings
-        _object607.n_copies();
-        let _object609 = gget_printsettings(); //ZZZZ PrintSettings YYYY gget_printsettings
-        _object609.number_up();
-        let _object610 = gget_printsettings(); //ZZZZ PrintSettings YYYY gget_printsettings
-        _object610.number_up_layout();
-        let _object611 = gget_printsettings(); //ZZZZ PrintSettings YYYY gget_printsettings
-        _object611.orientation();
-        let _object612 = gget_printsettings(); //ZZZZ PrintSettings YYYY gget_printsettings
-        _object612.output_bin();
-        let _object613 = gget_printsettings(); //ZZZZ PrintSettings YYYY gget_printsettings
-        _object613.page_ranges();
-        let _object614 = gget_printsettings(); //ZZZZ PrintSettings YYYY gget_printsettings
-        _object614.page_set();
-        let _object615 = gget_printsettings(); //ZZZZ PrintSettings YYYY gget_printsettings
-        _object615.paper_size();
-        let _object616 = gget_printsettings(); //ZZZZ PrintSettings YYYY gget_printsettings
-        _object616.print_pages();
-        let _object617 = gget_printsettings(); //ZZZZ PrintSettings YYYY gget_printsettings
-        _object617.printer();
-        let _object618 = gget_printsettings(); //ZZZZ PrintSettings YYYY gget_printsettings
-        _object618.printer_lpi();
-        let _object619 = gget_printsettings(); //ZZZZ PrintSettings YYYY gget_printsettings
-        _object619.quality();
-        let _object620 = gget_printsettings(); //ZZZZ PrintSettings YYYY gget_printsettings
-        _object620.resolution();
-        let _object621 = gget_printsettings(); //ZZZZ PrintSettings YYYY gget_printsettings
-        _object621.resolution_x();
-        let _object622 = gget_printsettings(); //ZZZZ PrintSettings YYYY gget_printsettings
-        _object622.resolution_y();
-        let _object623 = gget_printsettings(); //ZZZZ PrintSettings YYYY gget_printsettings
-        _object623.scale();
-        let _object624 = gget_printsettings(); //ZZZZ PrintSettings YYYY gget_printsettings
-        _object624.to_gvariant();
-        let _object625 = gget_printsettings(); //ZZZZ PrintSettings YYYY gget_printsettings
-        _object625.uses_color();
-    }
-    // PrintUnixDialog
-    {
-        let _object627 = gget_printunixdialog(); //ZZZZ PrintUnixDialog YYYY gget_printunixdialog
-        _object627.embeds_page_setup();
-        let _object628 = gget_printunixdialog(); //ZZZZ PrintUnixDialog YYYY gget_printunixdialog
-        _object628.is_page_setup_set();
-        let _object630 = gget_printunixdialog(); //ZZZZ PrintUnixDialog YYYY gget_printunixdialog
-        _object630.selected_printer();
-        let _object631 = gget_printunixdialog(); //ZZZZ PrintUnixDialog YYYY gget_printunixdialog
-        _object631.settings();
-        let _object632 = gget_printunixdialog(); //ZZZZ PrintUnixDialog YYYY gget_printunixdialog
-        _object632.supports_selection();
-    }
-    // Printer
-    {
-        let _object634 = gget_printer(); //ZZZZ Printer YYYY gget_printer
-        _object634.capabilities();
-        let _object635 = gget_printer(); //ZZZZ Printer YYYY gget_printer
-        _object635.default_page_size();
-        let _object636 = gget_printer(); //ZZZZ Printer YYYY gget_printer
-        _object636.description();
-        let _object637 = gget_printer(); //ZZZZ Printer YYYY gget_printer
-        _object637.hard_margins();
-        let _object638 = gget_printer(); //ZZZZ Printer YYYY gget_printer
-        _object638.has_details();
-        let _object639 = gget_printer(); //ZZZZ Printer YYYY gget_printer
-        _object639.icon_name();
-        let _object640 = gget_printer(); //ZZZZ Printer YYYY gget_printer
-        _object640.is_accepting_jobs();
-        let _object641 = gget_printer(); //ZZZZ Printer YYYY gget_printer
-        _object641.is_active();
-        let _object642 = gget_printer(); //ZZZZ Printer YYYY gget_printer
-        _object642.is_default();
-        let _object643 = gget_printer(); //ZZZZ Printer YYYY gget_printer
-        _object643.is_paused();
-        let _object644 = gget_printer(); //ZZZZ Printer YYYY gget_printer
-        _object644.job_count();
-        let _object645 = gget_printer(); //ZZZZ Printer YYYY gget_printer
-        _object645.list_papers();
-        let _object646 = gget_printer(); //ZZZZ Printer YYYY gget_printer
-        _object646.location();
-        let _object648 = gget_printer(); //ZZZZ Printer YYYY gget_printer
-        _object648.request_details();
-        let _object649 = gget_printer(); //ZZZZ Printer YYYY gget_printer
-        _object649.state_message();
-    }
-    // ProgressBar
-    {
-        let _object651 = gget_progressbar(); //ZZZZ ProgressBar YYYY gget_progressbar
-        _object651.ellipsize();
-        let _object652 = gget_progressbar(); //ZZZZ ProgressBar YYYY gget_progressbar
-        _object652.is_inverted();
-        let _object654 = gget_progressbar(); //ZZZZ ProgressBar YYYY gget_progressbar
-        _object654.pulse();
-        let _object655 = gget_progressbar(); //ZZZZ ProgressBar YYYY gget_progressbar
-        _object655.shows_text();
-    }
-    // RecentManager
-    {
-        let _object656 = gget_recentmanager(); //ZZZZ RecentManager YYYY gget_recentmanager
-        _object656.default();
-    }
-    // Revealer
-    {
-        let _object659 = gget_revealer(); //ZZZZ Revealer YYYY gget_revealer
-        _object659.is_child_revealed();
-        let _object661 = gget_revealer(); //ZZZZ Revealer YYYY gget_revealer
-        _object661.reveals_child();
-    }
-    // Scale
-    {}
-    // ScaleButton
-    {}
-    // Scrollbar
-    {}
-    // ScrolledWindow
-    {
-        let _object669 = gget_scrolledwindow(); //ZZZZ ScrolledWindow YYYY gget_scrolledwindow
-        _object669.hscrollbar();
-        let _object670 = gget_scrolledwindow(); //ZZZZ ScrolledWindow YYYY gget_scrolledwindow
-        _object670.is_kinetic_scrolling();
-        let _object671 = gget_scrolledwindow(); //ZZZZ ScrolledWindow YYYY gget_scrolledwindow
-        _object671.is_overlay_scrolling();
-        let _object673 = gget_scrolledwindow(); //ZZZZ ScrolledWindow YYYY gget_scrolledwindow
-        _object673.placement();
-        let _object674 = gget_scrolledwindow(); //ZZZZ ScrolledWindow YYYY gget_scrolledwindow
-        _object674.policy();
-        let _object675 = gget_scrolledwindow(); //ZZZZ ScrolledWindow YYYY gget_scrolledwindow
-        _object675.propagates_natural_height();
-        let _object676 = gget_scrolledwindow(); //ZZZZ ScrolledWindow YYYY gget_scrolledwindow
-        _object676.propagates_natural_width();
-        let _object677 = gget_scrolledwindow(); //ZZZZ ScrolledWindow YYYY gget_scrolledwindow
-        _object677.unset_placement();
-        let _object678 = gget_scrolledwindow(); //ZZZZ ScrolledWindow YYYY gget_scrolledwindow
-        _object678.vscrollbar();
-    }
-    // SearchBar
-    {
-        let _object680 = gget_searchbar(); //ZZZZ SearchBar YYYY gget_searchbar
-        _object680.is_search_mode();
-        let _object682 = gget_searchbar(); //ZZZZ SearchBar YYYY gget_searchbar
-        _object682.shows_close_button();
-    }
-    // SearchEntry
-    {
-        let _object684 = gget_searchentry(); //ZZZZ SearchEntry YYYY gget_searchentry
-        _object684.emit_activate();
-        let _object685 = gget_searchentry(); //ZZZZ SearchEntry YYYY gget_searchentry
-        _object685.emit_next_match();
-        let _object686 = gget_searchentry(); //ZZZZ SearchEntry YYYY gget_searchentry
-        _object686.emit_previous_match();
-        let _object687 = gget_searchentry(); //ZZZZ SearchEntry YYYY gget_searchentry
-        _object687.emit_stop_search();
-        let _object688 = gget_searchentry(); //ZZZZ SearchEntry YYYY gget_searchentry
-        _object688.key_capture_widget();
-    }
-    // SelectionFilterModel
-    {
-        let _object690 = gget_selectionfiltermodel(); //ZZZZ SelectionFilterModel YYYY gget_selectionfiltermodel
-        _object690.model();
-    }
-    // Separator
-    {}
-    // Settings
-    {
-        let _object694 = gget_settings(); //ZZZZ Settings YYYY gget_settings
-        _object694.default();
-        let _object695 = gget_settings(); //ZZZZ Settings YYYY gget_settings
-        _object695.is_gtk_alternative_button_order();
-        let _object696 = gget_settings(); //ZZZZ Settings YYYY gget_settings
-        _object696.is_gtk_alternative_sort_arrows();
-        let _object697 = gget_settings(); //ZZZZ Settings YYYY gget_settings
-        _object697.is_gtk_application_prefer_dark_theme();
-        let _object698 = gget_settings(); //ZZZZ Settings YYYY gget_settings
-        _object698.is_gtk_cursor_blink();
-        let _object699 = gget_settings(); //ZZZZ Settings YYYY gget_settings
-        _object699.is_gtk_dialogs_use_header();
-        let _object700 = gget_settings(); //ZZZZ Settings YYYY gget_settings
-        _object700.is_gtk_enable_accels();
-        let _object701 = gget_settings(); //ZZZZ Settings YYYY gget_settings
-        _object701.is_gtk_enable_animations();
-        let _object702 = gget_settings(); //ZZZZ Settings YYYY gget_settings
-        _object702.is_gtk_enable_event_sounds();
-        let _object703 = gget_settings(); //ZZZZ Settings YYYY gget_settings
-        _object703.is_gtk_enable_input_feedback_sounds();
-        let _object704 = gget_settings(); //ZZZZ Settings YYYY gget_settings
-        _object704.is_gtk_enable_primary_paste();
-        let _object705 = gget_settings(); //ZZZZ Settings YYYY gget_settings
-        _object705.is_gtk_entry_select_on_focus();
-        let _object706 = gget_settings(); //ZZZZ Settings YYYY gget_settings
-        _object706.is_gtk_error_bell();
-        let _object707 = gget_settings(); //ZZZZ Settings YYYY gget_settings
-        _object707.is_gtk_hint_font_metrics();
-        let _object708 = gget_settings(); //ZZZZ Settings YYYY gget_settings
-        _object708.is_gtk_keynav_use_caret();
-        let _object709 = gget_settings(); //ZZZZ Settings YYYY gget_settings
-        _object709.is_gtk_label_select_on_focus();
-        let _object710 = gget_settings(); //ZZZZ Settings YYYY gget_settings
-        _object710.is_gtk_overlay_scrolling();
-        let _object711 = gget_settings(); //ZZZZ Settings YYYY gget_settings
-        _object711.is_gtk_primary_button_warps_slider();
-        let _object712 = gget_settings(); //ZZZZ Settings YYYY gget_settings
-        _object712.is_gtk_recent_files_enabled();
-        let _object713 = gget_settings(); //ZZZZ Settings YYYY gget_settings
-        _object713.is_gtk_shell_shows_app_menu();
-        let _object714 = gget_settings(); //ZZZZ Settings YYYY gget_settings
-        _object714.is_gtk_shell_shows_desktop();
-        let _object715 = gget_settings(); //ZZZZ Settings YYYY gget_settings
-        _object715.is_gtk_shell_shows_menubar();
-        let _object716 = gget_settings(); //ZZZZ Settings YYYY gget_settings
-        _object716.is_gtk_split_cursor();
-    }
-    // Shortcut
-    {
-        let _object718 = gget_shortcut(); //ZZZZ Shortcut YYYY gget_shortcut
-        _object718.arguments();
-    }
-    // ShortcutAction
-    {}
-    // ShortcutController
-    {
-        let _object722 = gget_shortcutcontroller(); //ZZZZ ShortcutController YYYY gget_shortcutcontroller
-        _object722.mnemonic_modifiers();
-        let _object723 = gget_shortcutcontroller(); //ZZZZ ShortcutController YYYY gget_shortcutcontroller
-        _object723.mnemonics_modifiers();
-    }
-    // ShortcutLabel
-    {}
-    // ShortcutTrigger
-    {}
-    // ShortcutsGroup
-    {
-        let _object728 = gget_shortcutsgroup(); //ZZZZ ShortcutsGroup YYYY gget_shortcutsgroup
-        _object728.height();
-    }
-    // ShortcutsSection
-    {}
-    // ShortcutsShortcut
-    {
-        let _object733 = gget_shortcutsshortcut(); //ZZZZ ShortcutsShortcut YYYY gget_shortcutsshortcut
-        _object733.icon();
-        let _object734 = gget_shortcutsshortcut(); //ZZZZ ShortcutsShortcut YYYY gget_shortcutsshortcut
-        _object734.is_icon_set();
-        let _object735 = gget_shortcutsshortcut(); //ZZZZ ShortcutsShortcut YYYY gget_shortcutsshortcut
-        _object735.is_subtitle_set();
-    }
-    // ShortcutsWindow
-    {
-        let _object738 = gget_shortcutswindow(); //ZZZZ ShortcutsWindow YYYY gget_shortcutswindow
-        _object738.emit_close();
-        let _object739 = gget_shortcutswindow(); //ZZZZ ShortcutsWindow YYYY gget_shortcutswindow
-        _object739.emit_search();
-    }
-    // SignalAction
-    {
-        let _object741 = gget_signalaction(); //ZZZZ SignalAction YYYY gget_signalaction
-        _object741.signal_name();
-    }
-    // SignalListItemFactory
-    {}
-    // SingleSelection
-    {
-        let _object744 = gget_singleselection(); //ZZZZ SingleSelection YYYY gget_singleselection
-        _object744.is_autoselect();
-        let _object745 = gget_singleselection(); //ZZZZ SingleSelection YYYY gget_singleselection
-        _object745.model();
-        let _object747 = gget_singleselection(); //ZZZZ SingleSelection YYYY gget_singleselection
-        _object747.selected_item();
-    }
-    // SizeGroup
-    {
-        let _object748 = gget_sizegroup(); //ZZZZ SizeGroup YYYY gget_sizegroup
-        _object748.mode();
-        let _object749 = gget_sizegroup(); //ZZZZ SizeGroup YYYY gget_sizegroup
-        _object749.widgets();
-    }
-    // SliceListModel
-    {
-        let _object751 = gget_slicelistmodel(); //ZZZZ SliceListModel YYYY gget_slicelistmodel
-        _object751.model();
-    }
-    // Snapshot
-    {
-        let _object753 = gget_snapshot(); //ZZZZ Snapshot YYYY gget_snapshot
-        _object753.gl_shader_pop_texture();
-        let _object755 = gget_snapshot(); //ZZZZ Snapshot YYYY gget_snapshot
-        _object755.pop();
-        let _object756 = gget_snapshot(); //ZZZZ Snapshot YYYY gget_snapshot
-        _object756.restore();
-        let _object757 = gget_snapshot(); //ZZZZ Snapshot YYYY gget_snapshot
-        _object757.save();
-        let _object758 = gget_snapshot(); //ZZZZ Snapshot YYYY gget_snapshot
-        _object758.to_node();
-    }
-    // SortListModel
-    {
-        let _object760 = gget_sortlistmodel(); //ZZZZ SortListModel YYYY gget_sortlistmodel
-        _object760.is_incremental();
-        let _object761 = gget_sortlistmodel(); //ZZZZ SortListModel YYYY gget_sortlistmodel
-        _object761.model();
-        let _object763 = gget_sortlistmodel(); //ZZZZ SortListModel YYYY gget_sortlistmodel
-        _object763.pending();
-    }
-    // SpinButton
-    {
-        let _object765 = gget_spinbutton(); //ZZZZ SpinButton YYYY gget_spinbutton
-        _object765.increments();
-        let _object766 = gget_spinbutton(); //ZZZZ SpinButton YYYY gget_spinbutton
-        _object766.is_numeric();
-        let _object768 = gget_spinbutton(); //ZZZZ SpinButton YYYY gget_spinbutton
-        _object768.range();
-        let _object769 = gget_spinbutton(); //ZZZZ SpinButton YYYY gget_spinbutton
-        _object769.snaps_to_ticks();
-        let _object770 = gget_spinbutton(); //ZZZZ SpinButton YYYY gget_spinbutton
-        _object770.update();
-        let _object771 = gget_spinbutton(); //ZZZZ SpinButton YYYY gget_spinbutton
-        _object771.value_as_int();
-        let _object772 = gget_spinbutton(); //ZZZZ SpinButton YYYY gget_spinbutton
-        _object772.wraps();
-    }
-    // Spinner
-    {
-        let _object774 = gget_spinner(); //ZZZZ Spinner YYYY gget_spinner
-        _object774.is_spinning();
-        let _object776 = gget_spinner(); //ZZZZ Spinner YYYY gget_spinner
-        _object776.start();
-        let _object777 = gget_spinner(); //ZZZZ Spinner YYYY gget_spinner
-        _object777.stop();
-    }
-    // Stack
-    {
-        let _object779 = gget_stack(); //ZZZZ Stack YYYY gget_stack
-        _object779.interpolates_size();
-        let _object780 = gget_stack(); //ZZZZ Stack YYYY gget_stack
-        _object780.is_hhomogeneous();
-        let _object781 = gget_stack(); //ZZZZ Stack YYYY gget_stack
-        _object781.is_transition_running();
-        let _object782 = gget_stack(); //ZZZZ Stack YYYY gget_stack
-        _object782.is_vhomogeneous();
-        let _object784 = gget_stack(); //ZZZZ Stack YYYY gget_stack
-        _object784.pages();
-    }
-    // StackPage
-    {
-        let _object785 = gget_stackpage(); //ZZZZ StackPage YYYY gget_stackpage
-        _object785.child();
-        let _object786 = gget_stackpage(); //ZZZZ StackPage YYYY gget_stackpage
-        _object786.icon_name();
-        let _object787 = gget_stackpage(); //ZZZZ StackPage YYYY gget_stackpage
-        _object787.is_visible();
-        let _object788 = gget_stackpage(); //ZZZZ StackPage YYYY gget_stackpage
-        _object788.name();
-        let _object789 = gget_stackpage(); //ZZZZ StackPage YYYY gget_stackpage
-        _object789.needs_attention();
-        let _object790 = gget_stackpage(); //ZZZZ StackPage YYYY gget_stackpage
-        _object790.title();
-        let _object791 = gget_stackpage(); //ZZZZ StackPage YYYY gget_stackpage
-        _object791.uses_underline();
-    }
-    // StackSidebar
-    {}
-    // StackSwitcher
-    {}
-    // Statusbar
-    {}
-    // StringFilter
-    {
-        let _object799 = gget_stringfilter(); //ZZZZ StringFilter YYYY gget_stringfilter
-        _object799.ignores_case();
-    }
-    // StringList
-    {}
-    // StringObject
-    {
-        let _object801 = gget_stringobject(); //ZZZZ StringObject YYYY gget_stringobject
-        _object801.string();
-    }
-    // StringSorter
-    {
-        let _object803 = gget_stringsorter(); //ZZZZ StringSorter YYYY gget_stringsorter
-        _object803.ignores_case();
-    }
-    // Switch
-    {
-        let _object806 = gget_switch(); //ZZZZ Switch YYYY gget_switch
-        _object806.emit_activate();
-        let _object807 = gget_switch(); //ZZZZ Switch YYYY gget_switch
-        _object807.is_active();
-    }
-    // Text
-    {
-        let _object809 = gget_text(); //ZZZZ Text YYYY gget_text
-        _object809.attributes();
-        let _object811 = gget_text(); //ZZZZ Text YYYY gget_text
-        _object811.enables_emoji_completion();
-        let _object812 = gget_text(); //ZZZZ Text YYYY gget_text
-        _object812.extra_menu();
-        let _object813 = gget_text(); //ZZZZ Text YYYY gget_text
-        _object813.grab_focus_without_selecting();
-        let _object814 = gget_text(); //ZZZZ Text YYYY gget_text
-        _object814.is_invisible_char_set();
-        let _object815 = gget_text(); //ZZZZ Text YYYY gget_text
-        _object815.is_overwrite_mode();
-        let _object816 = gget_text(); //ZZZZ Text YYYY gget_text
-        _object816.is_visible();
-        let _object817 = gget_text(); //ZZZZ Text YYYY gget_text
-        _object817.must_truncate_multiline();
-        let _object819 = gget_text(); //ZZZZ Text YYYY gget_text
-        _object819.propagates_text_width();
-        let _object820 = gget_text(); //ZZZZ Text YYYY gget_text
-        _object820.scroll_offset();
-        let _object821 = gget_text(); //ZZZZ Text YYYY gget_text
-        _object821.tabs();
-        let _object822 = gget_text(); //ZZZZ Text YYYY gget_text
-        _object822.text_length();
-        let _object823 = gget_text(); //ZZZZ Text YYYY gget_text
-        _object823.unset_invisible_char();
-    }
-    // TextBuffer
-    {}
-    // TextChildAnchor
-    {}
-    // TextMark
-    {}
-    // TextTag
-    {}
-    // TextTagTable
-    {
-        let _object832 = gget_texttagtable(); //ZZZZ TextTagTable YYYY gget_texttagtable
-        _object832.size();
-    }
-    // TextView
-    {}
-    // ToggleButton
-    {}
-    // Tooltip
-    {}
-    // TreeExpander
-    {
-        let _object838 = gget_treeexpander(); //ZZZZ TreeExpander YYYY gget_treeexpander
-        _object838.is_indent_for_icon();
-        let _object839 = gget_treeexpander(); //ZZZZ TreeExpander YYYY gget_treeexpander
-        _object839.item();
-    }
-    // TreeListModel
-    {
-        let _object842 = gget_treelistmodel(); //ZZZZ TreeListModel YYYY gget_treelistmodel
-        _object842.is_autoexpand();
-        let _object843 = gget_treelistmodel(); //ZZZZ TreeListModel YYYY gget_treelistmodel
-        _object843.is_passthrough();
-        let _object844 = gget_treelistmodel(); //ZZZZ TreeListModel YYYY gget_treelistmodel
-        _object844.model();
-    }
-    // TreeListRow
-    {
-        let _object846 = gget_treelistrow(); //ZZZZ TreeListRow YYYY gget_treelistrow
-        _object846.children();
-        let _object847 = gget_treelistrow(); //ZZZZ TreeListRow YYYY gget_treelistrow
-        _object847.depth();
-        let _object848 = gget_treelistrow(); //ZZZZ TreeListRow YYYY gget_treelistrow
-        _object848.is_expandable();
-        let _object849 = gget_treelistrow(); //ZZZZ TreeListRow YYYY gget_treelistrow
-        _object849.is_expanded();
-        let _object850 = gget_treelistrow(); //ZZZZ TreeListRow YYYY gget_treelistrow
-        _object850.item();
-        let _object851 = gget_treelistrow(); //ZZZZ TreeListRow YYYY gget_treelistrow
-        _object851.parent();
-        let _object852 = gget_treelistrow(); //ZZZZ TreeListRow YYYY gget_treelistrow
-        _object852.position();
-    }
-    // TreeListRowSorter
-    {
-        let _object853 = gget_treelistrowsorter(); //ZZZZ TreeListRowSorter YYYY gget_treelistrowsorter
-        _object853.sorter();
-    }
-    // TreeModelSort
-    {}
-    // TreeSelection
-    {
-        let _object854 = gget_treeselection(); //ZZZZ TreeSelection YYYY gget_treeselection
-        _object854.count_selected_rows();
-        let _object855 = gget_treeselection(); //ZZZZ TreeSelection YYYY gget_treeselection
-        _object855.mode();
-        let _object856 = gget_treeselection(); //ZZZZ TreeSelection YYYY gget_treeselection
-        _object856.select_all();
-        let _object857 = gget_treeselection(); //ZZZZ TreeSelection YYYY gget_treeselection
-        _object857.selected();
-        let _object858 = gget_treeselection(); //ZZZZ TreeSelection YYYY gget_treeselection
-        _object858.selected_rows();
-        let _object859 = gget_treeselection(); //ZZZZ TreeSelection YYYY gget_treeselection
-        _object859.tree_view();
-        let _object860 = gget_treeselection(); //ZZZZ TreeSelection YYYY gget_treeselection
-        _object860.unselect_all();
-    }
-    // TreeStore
-    {
-        let _object861 = gget_treestore(); //ZZZZ TreeStore YYYY gget_treestore
-        _object861.clear();
-    }
-    // TreeView
-    {}
-    // TreeViewColumn
-    {
-        let _object865 = gget_treeviewcolumn(); //ZZZZ TreeViewColumn YYYY gget_treeviewcolumn
-        _object865.button();
-        let _object866 = gget_treeviewcolumn(); //ZZZZ TreeViewColumn YYYY gget_treeviewcolumn
-        _object866.cell_get_size();
-        let _object867 = gget_treeviewcolumn(); //ZZZZ TreeViewColumn YYYY gget_treeviewcolumn
-        _object867.cell_is_visible();
-        let _object868 = gget_treeviewcolumn(); //ZZZZ TreeViewColumn YYYY gget_treeviewcolumn
-        _object868.clicked();
-        let _object869 = gget_treeviewcolumn(); //ZZZZ TreeViewColumn YYYY gget_treeviewcolumn
-        _object869.expands();
-        let _object870 = gget_treeviewcolumn(); //ZZZZ TreeViewColumn YYYY gget_treeviewcolumn
-        _object870.is_clickable();
-        let _object871 = gget_treeviewcolumn(); //ZZZZ TreeViewColumn YYYY gget_treeviewcolumn
-        _object871.is_reorderable();
-        let _object872 = gget_treeviewcolumn(); //ZZZZ TreeViewColumn YYYY gget_treeviewcolumn
-        _object872.is_resizable();
-        let _object873 = gget_treeviewcolumn(); //ZZZZ TreeViewColumn YYYY gget_treeviewcolumn
-        _object873.is_sort_indicator();
-        let _object874 = gget_treeviewcolumn(); //ZZZZ TreeViewColumn YYYY gget_treeviewcolumn
-        _object874.is_visible();
-        let _object876 = gget_treeviewcolumn(); //ZZZZ TreeViewColumn YYYY gget_treeviewcolumn
-        _object876.queue_resize();
-        let _object877 = gget_treeviewcolumn(); //ZZZZ TreeViewColumn YYYY gget_treeviewcolumn
-        _object877.tree_view();
-        let _object878 = gget_treeviewcolumn(); //ZZZZ TreeViewColumn YYYY gget_treeviewcolumn
-        _object878.width();
-        let _object879 = gget_treeviewcolumn(); //ZZZZ TreeViewColumn YYYY gget_treeviewcolumn
-        _object879.x_offset();
-    }
-    // Video
-    {
-        let _object881 = gget_video(); //ZZZZ Video YYYY gget_video
-        _object881.file();
-        let _object882 = gget_video(); //ZZZZ Video YYYY gget_video
-        _object882.is_autoplay();
-        let _object883 = gget_video(); //ZZZZ Video YYYY gget_video
-        _object883.is_loop();
-    }
-    // Viewport
-    {
-        let _object886 = gget_viewport(); //ZZZZ Viewport YYYY gget_viewport
-        _object886.is_scroll_to_focus();
-    }
-    // VolumeButton
-    {
-        let _object890 = gget_volumebutton(); //ZZZZ VolumeButton YYYY gget_volumebutton
-        _object890.uses_symbolic();
-    }
-    // Widget
-    {
-        let _object891 = gget_widget(); //ZZZZ Widget YYYY gget_widget
-        _object891.default_direction();
-    }
-    // WidgetPaintable
-    {
-        let _object892 = gget_widgetpaintable(); //ZZZZ WidgetPaintable YYYY gget_widgetpaintable
-        _object892.widget();
-    }
-    // Window
-    {
-        let _object894 = gget_window(); //ZZZZ Window YYYY gget_window
-        _object894.default_icon_name();
-        let _object895 = gget_window(); //ZZZZ Window YYYY gget_window
-        _object895.list_toplevels();
-        let _object897 = gget_window(); //ZZZZ Window YYYY gget_window
-        _object897.toplevels();
-    }
-    // WindowControls
-    {
-        let _object899 = gget_windowcontrols(); //ZZZZ WindowControls YYYY gget_windowcontrols
-        _object899.is_empty();
-    }
-    // WindowGroup
-    {}
-    // WindowHandle
-    {}
+pub fn execute_things(){
+
+
+	// AboutDialog
+	{
+		for _i in 0..100{
+			let _object1 = gget_aboutdialog();
+			println!("Trying to execute AboutDialog.logo()");
+			_object1.logo();
+			println!("Executed AboutDialog.logo()");
+		}
+		for _i in 0..100{
+			let _object3 = gget_aboutdialog();
+			println!("Trying to execute AboutDialog.wraps_license()");
+			_object3.wraps_license();
+			println!("Executed AboutDialog.wraps_license()");
+		}
+	}
+	// ActionBar
+	{
+		for _i in 0..100{
+			let _object5 = gget_actionbar();
+			println!("Trying to execute ActionBar.center_widget()");
+			_object5.center_widget();
+			println!("Executed ActionBar.center_widget()");
+		}
+		for _i in 0..100{
+			let _object6 = gget_actionbar();
+			println!("Trying to execute ActionBar.is_revealed()");
+			_object6.is_revealed();
+			println!("Executed ActionBar.is_revealed()");
+		}
+	}
+	// ActivateAction
+	{
+	}
+	// Adjustment
+	{
+	}
+	// AlternativeTrigger
+	{
+	}
+	// AnyFilter
+	{
+	}
+	// AppChooserButton
+	{
+		for _i in 0..100{
+			let _object13 = gget_appchooserbutton();
+			println!("Trying to execute AppChooserButton.append_separator()");
+			_object13.append_separator();
+			println!("Executed AppChooserButton.append_separator()");
+		}
+		for _i in 0..100{
+			let _object15 = gget_appchooserbutton();
+			println!("Trying to execute AppChooserButton.is_modal()");
+			_object15.is_modal();
+			println!("Executed AppChooserButton.is_modal()");
+		}
+		for _i in 0..100{
+			let _object17 = gget_appchooserbutton();
+			println!("Trying to execute AppChooserButton.shows_default_item()");
+			_object17.shows_default_item();
+			println!("Executed AppChooserButton.shows_default_item()");
+		}
+		for _i in 0..100{
+			let _object18 = gget_appchooserbutton();
+			println!("Trying to execute AppChooserButton.shows_dialog_item()");
+			_object18.shows_dialog_item();
+			println!("Executed AppChooserButton.shows_dialog_item()");
+		}
+	}
+	// AppChooserDialog
+	{
+		for _i in 0..100{
+			let _object20 = gget_appchooserdialog();
+			println!("Trying to execute AppChooserDialog.gfile()");
+			_object20.gfile();
+			println!("Executed AppChooserDialog.gfile()");
+		}
+		for _i in 0..100{
+			let _object22 = gget_appchooserdialog();
+			println!("Trying to execute AppChooserDialog.widget()");
+			_object22.widget();
+			println!("Executed AppChooserDialog.widget()");
+		}
+	}
+	// AppChooserWidget
+	{
+		for _i in 0..100{
+			let _object25 = gget_appchooserwidget();
+			println!("Trying to execute AppChooserWidget.shows_all()");
+			_object25.shows_all();
+			println!("Executed AppChooserWidget.shows_all()");
+		}
+		for _i in 0..100{
+			let _object26 = gget_appchooserwidget();
+			println!("Trying to execute AppChooserWidget.shows_default()");
+			_object26.shows_default();
+			println!("Executed AppChooserWidget.shows_default()");
+		}
+		for _i in 0..100{
+			let _object27 = gget_appchooserwidget();
+			println!("Trying to execute AppChooserWidget.shows_fallback()");
+			_object27.shows_fallback();
+			println!("Executed AppChooserWidget.shows_fallback()");
+		}
+		for _i in 0..100{
+			let _object28 = gget_appchooserwidget();
+			println!("Trying to execute AppChooserWidget.shows_other()");
+			_object28.shows_other();
+			println!("Executed AppChooserWidget.shows_other()");
+		}
+		for _i in 0..100{
+			let _object29 = gget_appchooserwidget();
+			println!("Trying to execute AppChooserWidget.shows_recommended()");
+			_object29.shows_recommended();
+			println!("Executed AppChooserWidget.shows_recommended()");
+		}
+	}
+	// Application
+	{
+	}
+	// ApplicationWindow
+	{
+	}
+	// AspectFrame
+	{
+		for _i in 0..100{
+			let _object35 = gget_aspectframe();
+			println!("Trying to execute AspectFrame.is_obey_child()");
+			_object35.is_obey_child();
+			println!("Executed AspectFrame.is_obey_child()");
+		}
+	}
+	// Assistant
+	{
+		for _i in 0..100{
+			let _object38 = gget_assistant();
+			println!("Trying to execute Assistant.commit()");
+			_object38.commit();
+			println!("Executed Assistant.commit()");
+		}
+		for _i in 0..100{
+			let _object39 = gget_assistant();
+			println!("Trying to execute Assistant.current_page()");
+			_object39.current_page();
+			println!("Executed Assistant.current_page()");
+		}
+		for _i in 0..100{
+			let _object40 = gget_assistant();
+			println!("Trying to execute Assistant.n_pages()");
+			_object40.n_pages();
+			println!("Executed Assistant.n_pages()");
+		}
+		for _i in 0..100{
+			let _object42 = gget_assistant();
+			println!("Trying to execute Assistant.next_page()");
+			_object42.next_page();
+			println!("Executed Assistant.next_page()");
+		}
+		for _i in 0..100{
+			let _object43 = gget_assistant();
+			println!("Trying to execute Assistant.pages()");
+			_object43.pages();
+			println!("Executed Assistant.pages()");
+		}
+		for _i in 0..100{
+			let _object44 = gget_assistant();
+			println!("Trying to execute Assistant.previous_page()");
+			_object44.previous_page();
+			println!("Executed Assistant.previous_page()");
+		}
+		for _i in 0..100{
+			let _object45 = gget_assistant();
+			println!("Trying to execute Assistant.update_buttons_state()");
+			_object45.update_buttons_state();
+			println!("Executed Assistant.update_buttons_state()");
+		}
+	}
+	// BinLayout
+	{
+	}
+	// BookmarkList
+	{
+		for _i in 0..100{
+			let _object47 = gget_bookmarklist();
+			println!("Trying to execute BookmarkList.attributes()");
+			_object47.attributes();
+			println!("Executed BookmarkList.attributes()");
+		}
+		for _i in 0..100{
+			let _object48 = gget_bookmarklist();
+			println!("Trying to execute BookmarkList.filename()");
+			_object48.filename();
+			println!("Executed BookmarkList.filename()");
+		}
+		for _i in 0..100{
+			let _object49 = gget_bookmarklist();
+			println!("Trying to execute BookmarkList.is_loading()");
+			_object49.is_loading();
+			println!("Executed BookmarkList.is_loading()");
+		}
+	}
+	// Box
+	{
+	}
+	// BoxLayout
+	{
+		for _i in 0..100{
+			let _object53 = gget_boxlayout();
+			println!("Trying to execute BoxLayout.is_homogeneous()");
+			_object53.is_homogeneous();
+			println!("Executed BoxLayout.is_homogeneous()");
+		}
+	}
+	// Builder
+	{
+		for _i in 0..100{
+			let _object56 = gget_builder();
+			println!("Trying to execute Builder.objects()");
+			_object56.objects();
+			println!("Executed Builder.objects()");
+		}
+		for _i in 0..100{
+			let _object57 = gget_builder();
+			println!("Trying to execute Builder.scope()");
+			_object57.scope();
+			println!("Executed Builder.scope()");
+		}
+		for _i in 0..100{
+			let _object58 = gget_builder();
+			println!("Trying to execute Builder.translation_domain()");
+			_object58.translation_domain();
+			println!("Executed Builder.translation_domain()");
+		}
+	}
+	// Button
+	{
+	}
+	// Calendar
+	{
+		for _i in 0..100{
+			let _object62 = gget_calendar();
+			println!("Trying to execute Calendar.clear_marks()");
+			_object62.clear_marks();
+			println!("Executed Calendar.clear_marks()");
+		}
+		for _i in 0..100{
+			let _object63 = gget_calendar();
+			println!("Trying to execute Calendar.date()");
+			_object63.date();
+			println!("Executed Calendar.date()");
+		}
+		for _i in 0..100{
+			let _object65 = gget_calendar();
+			println!("Trying to execute Calendar.shows_day_names()");
+			_object65.shows_day_names();
+			println!("Executed Calendar.shows_day_names()");
+		}
+		for _i in 0..100{
+			let _object66 = gget_calendar();
+			println!("Trying to execute Calendar.shows_heading()");
+			_object66.shows_heading();
+			println!("Executed Calendar.shows_heading()");
+		}
+		for _i in 0..100{
+			let _object67 = gget_calendar();
+			println!("Trying to execute Calendar.shows_week_numbers()");
+			_object67.shows_week_numbers();
+			println!("Executed Calendar.shows_week_numbers()");
+		}
+	}
+	// CellAreaBox
+	{
+	}
+	// CellRendererAccel
+	{
+		for _i in 0..100{
+			let _object70 = gget_cellrendereraccel();
+			println!("Trying to execute CellRendererAccel.accel_mods()");
+			_object70.accel_mods();
+			println!("Executed CellRendererAccel.accel_mods()");
+		}
+	}
+	// CellRendererCombo
+	{
+	}
+	// CellRendererPixbuf
+	{
+		for _i in 0..100{
+			let _object76 = gget_cellrendererpixbuf();
+			println!("Trying to execute CellRendererPixbuf.gicon()");
+			_object76.gicon();
+			println!("Executed CellRendererPixbuf.gicon()");
+		}
+		for _i in 0..100{
+			let _object78 = gget_cellrendererpixbuf();
+			println!("Trying to execute CellRendererPixbuf.pixbuf_expander_closed()");
+			_object78.pixbuf_expander_closed();
+			println!("Executed CellRendererPixbuf.pixbuf_expander_closed()");
+		}
+		for _i in 0..100{
+			let _object79 = gget_cellrendererpixbuf();
+			println!("Trying to execute CellRendererPixbuf.pixbuf_expander_open()");
+			_object79.pixbuf_expander_open();
+			println!("Executed CellRendererPixbuf.pixbuf_expander_open()");
+		}
+		for _i in 0..100{
+			let _object80 = gget_cellrendererpixbuf();
+			println!("Trying to execute CellRendererPixbuf.texture()");
+			_object80.texture();
+			println!("Executed CellRendererPixbuf.texture()");
+		}
+	}
+	// CellRendererProgress
+	{
+		for _i in 0..100{
+			let _object82 = gget_cellrendererprogress();
+			println!("Trying to execute CellRendererProgress.is_inverted()");
+			_object82.is_inverted();
+			println!("Executed CellRendererProgress.is_inverted()");
+		}
+	}
+	// CellRendererSpin
+	{
+	}
+	// CellRendererSpinner
+	{
+		for _i in 0..100{
+			let _object87 = gget_cellrendererspinner();
+			println!("Trying to execute CellRendererSpinner.is_active()");
+			_object87.is_active();
+			println!("Executed CellRendererSpinner.is_active()");
+		}
+	}
+	// CellRendererText
+	{
+	}
+	// CellRendererToggle
+	{
+		for _i in 0..100{
+			let _object92 = gget_cellrenderertoggle();
+			println!("Trying to execute CellRendererToggle.is_activatable()");
+			_object92.is_activatable();
+			println!("Executed CellRendererToggle.is_activatable()");
+		}
+		for _i in 0..100{
+			let _object93 = gget_cellrenderertoggle();
+			println!("Trying to execute CellRendererToggle.is_active()");
+			_object93.is_active();
+			println!("Executed CellRendererToggle.is_active()");
+		}
+		for _i in 0..100{
+			let _object94 = gget_cellrenderertoggle();
+			println!("Trying to execute CellRendererToggle.is_inconsistent()");
+			_object94.is_inconsistent();
+			println!("Executed CellRendererToggle.is_inconsistent()");
+		}
+		for _i in 0..100{
+			let _object95 = gget_cellrenderertoggle();
+			println!("Trying to execute CellRendererToggle.is_radio()");
+			_object95.is_radio();
+			println!("Executed CellRendererToggle.is_radio()");
+		}
+	}
+	// CellView
+	{
+		for _i in 0..100{
+			let _object98 = gget_cellview();
+			println!("Trying to execute CellView.displayed_row()");
+			_object98.displayed_row();
+			println!("Executed CellView.displayed_row()");
+		}
+		for _i in 0..100{
+			let _object99 = gget_cellview();
+			println!("Trying to execute CellView.draws_sensitive()");
+			_object99.draws_sensitive();
+			println!("Executed CellView.draws_sensitive()");
+		}
+		for _i in 0..100{
+			let _object100 = gget_cellview();
+			println!("Trying to execute CellView.fits_model()");
+			_object100.fits_model();
+			println!("Executed CellView.fits_model()");
+		}
+	}
+	// CenterBox
+	{
+		for _i in 0..100{
+			let _object103 = gget_centerbox();
+			println!("Trying to execute CenterBox.center_widget()");
+			_object103.center_widget();
+			println!("Executed CenterBox.center_widget()");
+		}
+		for _i in 0..100{
+			let _object104 = gget_centerbox();
+			println!("Trying to execute CenterBox.end_widget()");
+			_object104.end_widget();
+			println!("Executed CenterBox.end_widget()");
+		}
+		for _i in 0..100{
+			let _object106 = gget_centerbox();
+			println!("Trying to execute CenterBox.start_widget()");
+			_object106.start_widget();
+			println!("Executed CenterBox.start_widget()");
+		}
+	}
+	// CenterLayout
+	{
+		for _i in 0..100{
+			let _object107 = gget_centerlayout();
+			println!("Trying to execute CenterLayout.baseline_position()");
+			_object107.baseline_position();
+			println!("Executed CenterLayout.baseline_position()");
+		}
+		for _i in 0..100{
+			let _object108 = gget_centerlayout();
+			println!("Trying to execute CenterLayout.center_widget()");
+			_object108.center_widget();
+			println!("Executed CenterLayout.center_widget()");
+		}
+		for _i in 0..100{
+			let _object109 = gget_centerlayout();
+			println!("Trying to execute CenterLayout.end_widget()");
+			_object109.end_widget();
+			println!("Executed CenterLayout.end_widget()");
+		}
+		for _i in 0..100{
+			let _object111 = gget_centerlayout();
+			println!("Trying to execute CenterLayout.orientation()");
+			_object111.orientation();
+			println!("Executed CenterLayout.orientation()");
+		}
+		for _i in 0..100{
+			let _object112 = gget_centerlayout();
+			println!("Trying to execute CenterLayout.start_widget()");
+			_object112.start_widget();
+			println!("Executed CenterLayout.start_widget()");
+		}
+	}
+	// CheckButton
+	{
+	}
+	// ColorButton
+	{
+		for _i in 0..100{
+			let _object116 = gget_colorbutton();
+			println!("Trying to execute ColorButton.is_modal()");
+			_object116.is_modal();
+			println!("Executed ColorButton.is_modal()");
+		}
+		for _i in 0..100{
+			let _object118 = gget_colorbutton();
+			println!("Trying to execute ColorButton.shows_editor()");
+			_object118.shows_editor();
+			println!("Executed ColorButton.shows_editor()");
+		}
+	}
+	// ColorChooserWidget
+	{
+		for _i in 0..100{
+			let _object121 = gget_colorchooserwidget();
+			println!("Trying to execute ColorChooserWidget.shows_editor()");
+			_object121.shows_editor();
+			println!("Executed ColorChooserWidget.shows_editor()");
+		}
+	}
+	// ComboBox
+	{
+	}
+	// ComboBoxText
+	{
+		for _i in 0..100{
+			let _object124 = gget_comboboxtext();
+			println!("Trying to execute ComboBoxText.active_text()");
+			_object124.active_text();
+			println!("Executed ComboBoxText.active_text()");
+		}
+		for _i in 0..100{
+			let _object127 = gget_comboboxtext();
+			println!("Trying to execute ComboBoxText.remove_all()");
+			_object127.remove_all();
+			println!("Executed ComboBoxText.remove_all()");
+		}
+	}
+	// Constraint
+	{
+		for _i in 0..100{
+			let _object129 = gget_constraint();
+			println!("Trying to execute Constraint.is_attached()");
+			_object129.is_attached();
+			println!("Executed Constraint.is_attached()");
+		}
+		for _i in 0..100{
+			let _object130 = gget_constraint();
+			println!("Trying to execute Constraint.is_constant()");
+			_object130.is_constant();
+			println!("Executed Constraint.is_constant()");
+		}
+		for _i in 0..100{
+			let _object131 = gget_constraint();
+			println!("Trying to execute Constraint.is_required()");
+			_object131.is_required();
+			println!("Executed Constraint.is_required()");
+		}
+	}
+	// ConstraintGuide
+	{
+	}
+	// ConstraintLayout
+	{
+		for _i in 0..100{
+			let _object136 = gget_constraintlayout();
+			println!("Trying to execute ConstraintLayout.observe_constraints()");
+			_object136.observe_constraints();
+			println!("Executed ConstraintLayout.observe_constraints()");
+		}
+		for _i in 0..100{
+			let _object137 = gget_constraintlayout();
+			println!("Trying to execute ConstraintLayout.observe_guides()");
+			_object137.observe_guides();
+			println!("Executed ConstraintLayout.observe_guides()");
+		}
+		for _i in 0..100{
+			let _object138 = gget_constraintlayout();
+			println!("Trying to execute ConstraintLayout.remove_all_constraints()");
+			_object138.remove_all_constraints();
+			println!("Executed ConstraintLayout.remove_all_constraints()");
+		}
+	}
+	// CssProvider
+	{
+		for _i in 0..100{
+			let _object140 = gget_cssprovider();
+			println!("Trying to execute CssProvider.to_str()");
+			_object140.to_str();
+			println!("Executed CssProvider.to_str()");
+		}
+	}
+	// Dialog
+	{
+	}
+	// DirectoryList
+	{
+		for _i in 0..100{
+			let _object143 = gget_directorylist();
+			println!("Trying to execute DirectoryList.attributes()");
+			_object143.attributes();
+			println!("Executed DirectoryList.attributes()");
+		}
+		for _i in 0..100{
+			let _object144 = gget_directorylist();
+			println!("Trying to execute DirectoryList.error()");
+			_object144.error();
+			println!("Executed DirectoryList.error()");
+		}
+		for _i in 0..100{
+			let _object145 = gget_directorylist();
+			println!("Trying to execute DirectoryList.file()");
+			_object145.file();
+			println!("Executed DirectoryList.file()");
+		}
+		for _i in 0..100{
+			let _object146 = gget_directorylist();
+			println!("Trying to execute DirectoryList.is_loading()");
+			_object146.is_loading();
+			println!("Executed DirectoryList.is_loading()");
+		}
+		for _i in 0..100{
+			let _object147 = gget_directorylist();
+			println!("Trying to execute DirectoryList.is_monitored()");
+			_object147.is_monitored();
+			println!("Executed DirectoryList.is_monitored()");
+		}
+	}
+	// DragSource
+	{
+		for _i in 0..100{
+			let _object148 = gget_dragsource();
+			println!("Trying to execute DragSource.actions()");
+			_object148.actions();
+			println!("Executed DragSource.actions()");
+		}
+		for _i in 0..100{
+			let _object150 = gget_dragsource();
+			println!("Trying to execute DragSource.content()");
+			_object150.content();
+			println!("Executed DragSource.content()");
+		}
+		for _i in 0..100{
+			let _object151 = gget_dragsource();
+			println!("Trying to execute DragSource.drag()");
+			_object151.drag();
+			println!("Executed DragSource.drag()");
+		}
+		for _i in 0..100{
+			let _object152 = gget_dragsource();
+			println!("Trying to execute DragSource.drag_cancel()");
+			_object152.drag_cancel();
+			println!("Executed DragSource.drag_cancel()");
+		}
+	}
+	// DrawingArea
+	{
+	}
+	// DropControllerMotion
+	{
+		for _i in 0..100{
+			let _object157 = gget_dropcontrollermotion();
+			println!("Trying to execute DropControllerMotion.contains_pointer()");
+			_object157.contains_pointer();
+			println!("Executed DropControllerMotion.contains_pointer()");
+		}
+		for _i in 0..100{
+			let _object158 = gget_dropcontrollermotion();
+			println!("Trying to execute DropControllerMotion.drop()");
+			_object158.drop();
+			println!("Executed DropControllerMotion.drop()");
+		}
+		for _i in 0..100{
+			let _object159 = gget_dropcontrollermotion();
+			println!("Trying to execute DropControllerMotion.is_pointer()");
+			_object159.is_pointer();
+			println!("Executed DropControllerMotion.is_pointer()");
+		}
+	}
+	// DropDown
+	{
+		for _i in 0..100{
+			let _object162 = gget_dropdown();
+			println!("Trying to execute DropDown.enables_search()");
+			_object162.enables_search();
+			println!("Executed DropDown.enables_search()");
+		}
+		for _i in 0..100{
+			let _object163 = gget_dropdown();
+			println!("Trying to execute DropDown.model()");
+			_object163.model();
+			println!("Executed DropDown.model()");
+		}
+		for _i in 0..100{
+			let _object165 = gget_dropdown();
+			println!("Trying to execute DropDown.selected_item()");
+			_object165.selected_item();
+			println!("Executed DropDown.selected_item()");
+		}
+	}
+	// DropTarget
+	{
+		for _i in 0..100{
+			let _object166 = gget_droptarget();
+			println!("Trying to execute DropTarget.actions()");
+			_object166.actions();
+			println!("Executed DropTarget.actions()");
+		}
+		for _i in 0..100{
+			let _object168 = gget_droptarget();
+			println!("Trying to execute DropTarget.drop()");
+			_object168.drop();
+			println!("Executed DropTarget.drop()");
+		}
+		for _i in 0..100{
+			let _object169 = gget_droptarget();
+			println!("Trying to execute DropTarget.formats()");
+			_object169.formats();
+			println!("Executed DropTarget.formats()");
+		}
+		for _i in 0..100{
+			let _object170 = gget_droptarget();
+			println!("Trying to execute DropTarget.is_preload()");
+			_object170.is_preload();
+			println!("Executed DropTarget.is_preload()");
+		}
+		for _i in 0..100{
+			let _object172 = gget_droptarget();
+			println!("Trying to execute DropTarget.reject()");
+			_object172.reject();
+			println!("Executed DropTarget.reject()");
+		}
+		for _i in 0..100{
+			let _object173 = gget_droptarget();
+			println!("Trying to execute DropTarget.value()");
+			_object173.value();
+			println!("Executed DropTarget.value()");
+		}
+	}
+	// EditableLabel
+	{
+		for _i in 0..100{
+			let _object175 = gget_editablelabel();
+			println!("Trying to execute EditableLabel.is_editing()");
+			_object175.is_editing();
+			println!("Executed EditableLabel.is_editing()");
+		}
+		for _i in 0..100{
+			let _object177 = gget_editablelabel();
+			println!("Trying to execute EditableLabel.start_editing()");
+			_object177.start_editing();
+			println!("Executed EditableLabel.start_editing()");
+		}
+	}
+	// EmojiChooser
+	{
+	}
+	// Entry
+	{
+	}
+	// EntryBuffer
+	{
+	}
+	// EntryCompletion
+	{
+		for _i in 0..100{
+			let _object185 = gget_entrycompletion();
+			println!("Trying to execute EntryCompletion.complete()");
+			_object185.complete();
+			println!("Executed EntryCompletion.complete()");
+		}
+		for _i in 0..100{
+			let _object186 = gget_entrycompletion();
+			println!("Trying to execute EntryCompletion.completion_prefix()");
+			_object186.completion_prefix();
+			println!("Executed EntryCompletion.completion_prefix()");
+		}
+		for _i in 0..100{
+			let _object187 = gget_entrycompletion();
+			println!("Trying to execute EntryCompletion.is_inline_completion()");
+			_object187.is_inline_completion();
+			println!("Executed EntryCompletion.is_inline_completion()");
+		}
+		for _i in 0..100{
+			let _object188 = gget_entrycompletion();
+			println!("Trying to execute EntryCompletion.is_inline_selection()");
+			_object188.is_inline_selection();
+			println!("Executed EntryCompletion.is_inline_selection()");
+		}
+		for _i in 0..100{
+			let _object189 = gget_entrycompletion();
+			println!("Trying to execute EntryCompletion.is_popup_completion()");
+			_object189.is_popup_completion();
+			println!("Executed EntryCompletion.is_popup_completion()");
+		}
+		for _i in 0..100{
+			let _object190 = gget_entrycompletion();
+			println!("Trying to execute EntryCompletion.is_popup_set_width()");
+			_object190.is_popup_set_width();
+			println!("Executed EntryCompletion.is_popup_set_width()");
+		}
+		for _i in 0..100{
+			let _object191 = gget_entrycompletion();
+			println!("Trying to execute EntryCompletion.is_popup_single_match()");
+			_object191.is_popup_single_match();
+			println!("Executed EntryCompletion.is_popup_single_match()");
+		}
+	}
+	// EventControllerFocus
+	{
+		for _i in 0..100{
+			let _object194 = gget_eventcontrollerfocus();
+			println!("Trying to execute EventControllerFocus.contains_focus()");
+			_object194.contains_focus();
+			println!("Executed EventControllerFocus.contains_focus()");
+		}
+		for _i in 0..100{
+			let _object195 = gget_eventcontrollerfocus();
+			println!("Trying to execute EventControllerFocus.is_focus()");
+			_object195.is_focus();
+			println!("Executed EventControllerFocus.is_focus()");
+		}
+	}
+	// EventControllerKey
+	{
+		for _i in 0..100{
+			let _object198 = gget_eventcontrollerkey();
+			println!("Trying to execute EventControllerKey.group()");
+			_object198.group();
+			println!("Executed EventControllerKey.group()");
+		}
+	}
+	// EventControllerLegacy
+	{
+	}
+	// EventControllerMotion
+	{
+		for _i in 0..100{
+			let _object203 = gget_eventcontrollermotion();
+			println!("Trying to execute EventControllerMotion.contains_pointer()");
+			_object203.contains_pointer();
+			println!("Executed EventControllerMotion.contains_pointer()");
+		}
+		for _i in 0..100{
+			let _object204 = gget_eventcontrollermotion();
+			println!("Trying to execute EventControllerMotion.is_pointer()");
+			_object204.is_pointer();
+			println!("Executed EventControllerMotion.is_pointer()");
+		}
+	}
+	// EventControllerScroll
+	{
+	}
+	// EveryFilter
+	{
+	}
+	// FileChooserDialog
+	{
+	}
+	// FileChooserNative
+	{
+	}
+	// FileFilter
+	{
+		for _i in 0..100{
+			let _object213 = gget_filefilter();
+			println!("Trying to execute FileFilter.add_pixbuf_formats()");
+			_object213.add_pixbuf_formats();
+			println!("Executed FileFilter.add_pixbuf_formats()");
+		}
+		for _i in 0..100{
+			let _object214 = gget_filefilter();
+			println!("Trying to execute FileFilter.attributes()");
+			_object214.attributes();
+			println!("Executed FileFilter.attributes()");
+		}
+		for _i in 0..100{
+			let _object215 = gget_filefilter();
+			println!("Trying to execute FileFilter.name()");
+			_object215.name();
+			println!("Executed FileFilter.name()");
+		}
+		for _i in 0..100{
+			let _object217 = gget_filefilter();
+			println!("Trying to execute FileFilter.to_gvariant()");
+			_object217.to_gvariant();
+			println!("Executed FileFilter.to_gvariant()");
+		}
+	}
+	// Fixed
+	{
+	}
+	// FixedLayout
+	{
+	}
+	// FlowBox
+	{
+		for _i in 0..100{
+			let _object221 = gget_flowbox();
+			println!("Trying to execute FlowBox.accepts_unpaired_release()");
+			_object221.accepts_unpaired_release();
+			println!("Executed FlowBox.accepts_unpaired_release()");
+		}
+		for _i in 0..100{
+			let _object222 = gget_flowbox();
+			println!("Trying to execute FlowBox.activates_on_single_click()");
+			_object222.activates_on_single_click();
+			println!("Executed FlowBox.activates_on_single_click()");
+		}
+		for _i in 0..100{
+			let _object224 = gget_flowbox();
+			println!("Trying to execute FlowBox.invalidate_filter()");
+			_object224.invalidate_filter();
+			println!("Executed FlowBox.invalidate_filter()");
+		}
+		for _i in 0..100{
+			let _object225 = gget_flowbox();
+			println!("Trying to execute FlowBox.invalidate_sort()");
+			_object225.invalidate_sort();
+			println!("Executed FlowBox.invalidate_sort()");
+		}
+		for _i in 0..100{
+			let _object226 = gget_flowbox();
+			println!("Trying to execute FlowBox.is_homogeneous()");
+			_object226.is_homogeneous();
+			println!("Executed FlowBox.is_homogeneous()");
+		}
+		for _i in 0..100{
+			let _object228 = gget_flowbox();
+			println!("Trying to execute FlowBox.select_all()");
+			_object228.select_all();
+			println!("Executed FlowBox.select_all()");
+		}
+		for _i in 0..100{
+			let _object229 = gget_flowbox();
+			println!("Trying to execute FlowBox.selected_children()");
+			_object229.selected_children();
+			println!("Executed FlowBox.selected_children()");
+		}
+		for _i in 0..100{
+			let _object230 = gget_flowbox();
+			println!("Trying to execute FlowBox.unselect_all()");
+			_object230.unselect_all();
+			println!("Executed FlowBox.unselect_all()");
+		}
+	}
+	// FlowBoxChild
+	{
+	}
+	// FontButton
+	{
+		for _i in 0..100{
+			let _object234 = gget_fontbutton();
+			println!("Trying to execute FontButton.is_modal()");
+			_object234.is_modal();
+			println!("Executed FontButton.is_modal()");
+		}
+		for _i in 0..100{
+			let _object236 = gget_fontbutton();
+			println!("Trying to execute FontButton.uses_font()");
+			_object236.uses_font();
+			println!("Executed FontButton.uses_font()");
+		}
+		for _i in 0..100{
+			let _object237 = gget_fontbutton();
+			println!("Trying to execute FontButton.uses_size()");
+			_object237.uses_size();
+			println!("Executed FontButton.uses_size()");
+		}
+	}
+	// FontChooserDialog
+	{
+	}
+	// FontChooserWidget
+	{
+		for _i in 0..100{
+			let _object242 = gget_fontchooserwidget();
+			println!("Trying to execute FontChooserWidget.tweak_action()");
+			_object242.tweak_action();
+			println!("Executed FontChooserWidget.tweak_action()");
+		}
+	}
+	// Frame
+	{
+	}
+	// GLArea
+	{
+	}
+	// GestureClick
+	{
+	}
+	// GestureDrag
+	{
+	}
+	// GestureLongPress
+	{
+	}
+	// GesturePan
+	{
+	}
+	// GestureRotate
+	{
+		for _i in 0..100{
+			let _object255 = gget_gesturerotate();
+			println!("Trying to execute GestureRotate.angle_delta()");
+			_object255.angle_delta();
+			println!("Executed GestureRotate.angle_delta()");
+		}
+	}
+	// GestureStylus
+	{
+		for _i in 0..100{
+			let _object258 = gget_gesturestylus();
+			println!("Trying to execute GestureStylus.backlog()");
+			_object258.backlog();
+			println!("Executed GestureStylus.backlog()");
+		}
+		for _i in 0..100{
+			let _object260 = gget_gesturestylus();
+			println!("Trying to execute GestureStylus.device_tool()");
+			_object260.device_tool();
+			println!("Executed GestureStylus.device_tool()");
+		}
+	}
+	// GestureSwipe
+	{
+		for _i in 0..100{
+			let _object264 = gget_gestureswipe();
+			println!("Trying to execute GestureSwipe.velocity()");
+			_object264.velocity();
+			println!("Executed GestureSwipe.velocity()");
+		}
+	}
+	// GestureZoom
+	{
+		for _i in 0..100{
+			let _object267 = gget_gesturezoom();
+			println!("Trying to execute GestureZoom.scale_delta()");
+			_object267.scale_delta();
+			println!("Executed GestureZoom.scale_delta()");
+		}
+	}
+	// Grid
+	{
+	}
+	// GridLayout
+	{
+		for _i in 0..100{
+			let _object271 = gget_gridlayout();
+			println!("Trying to execute GridLayout.is_column_homogeneous()");
+			_object271.is_column_homogeneous();
+			println!("Executed GridLayout.is_column_homogeneous()");
+		}
+		for _i in 0..100{
+			let _object272 = gget_gridlayout();
+			println!("Trying to execute GridLayout.is_row_homogeneous()");
+			_object272.is_row_homogeneous();
+			println!("Executed GridLayout.is_row_homogeneous()");
+		}
+	}
+	// HeaderBar
+	{
+		for _i in 0..100{
+			let _object276 = gget_headerbar();
+			println!("Trying to execute HeaderBar.shows_title_buttons()");
+			_object276.shows_title_buttons();
+			println!("Executed HeaderBar.shows_title_buttons()");
+		}
+	}
+	// IMContextSimple
+	{
+	}
+	// IMMulticontext
+	{
+	}
+	// IconTheme
+	{
+		for _i in 0..100{
+			let _object282 = gget_icontheme();
+			println!("Trying to execute IconTheme.display()");
+			_object282.display();
+			println!("Executed IconTheme.display()");
+		}
+		for _i in 0..100{
+			let _object283 = gget_icontheme();
+			println!("Trying to execute IconTheme.icon_names()");
+			_object283.icon_names();
+			println!("Executed IconTheme.icon_names()");
+		}
+	}
+	// IconView
+	{
+		for _i in 0..100{
+			let _object285 = gget_iconview();
+			println!("Trying to execute IconView.activates_on_single_click()");
+			_object285.activates_on_single_click();
+			println!("Executed IconView.activates_on_single_click()");
+		}
+		for _i in 0..100{
+			let _object287 = gget_iconview();
+			println!("Trying to execute IconView.cursor()");
+			_object287.cursor();
+			println!("Executed IconView.cursor()");
+		}
+		for _i in 0..100{
+			let _object288 = gget_iconview();
+			println!("Trying to execute IconView.is_reorderable()");
+			_object288.is_reorderable();
+			println!("Executed IconView.is_reorderable()");
+		}
+		for _i in 0..100{
+			let _object290 = gget_iconview();
+			println!("Trying to execute IconView.select_all()");
+			_object290.select_all();
+			println!("Executed IconView.select_all()");
+		}
+		for _i in 0..100{
+			let _object291 = gget_iconview();
+			println!("Trying to execute IconView.selected_items()");
+			_object291.selected_items();
+			println!("Executed IconView.selected_items()");
+		}
+		for _i in 0..100{
+			let _object292 = gget_iconview();
+			println!("Trying to execute IconView.unselect_all()");
+			_object292.unselect_all();
+			println!("Executed IconView.unselect_all()");
+		}
+		for _i in 0..100{
+			let _object293 = gget_iconview();
+			println!("Trying to execute IconView.unset_model_drag_dest()");
+			_object293.unset_model_drag_dest();
+			println!("Executed IconView.unset_model_drag_dest()");
+		}
+		for _i in 0..100{
+			let _object294 = gget_iconview();
+			println!("Trying to execute IconView.unset_model_drag_source()");
+			_object294.unset_model_drag_source();
+			println!("Executed IconView.unset_model_drag_source()");
+		}
+		for _i in 0..100{
+			let _object295 = gget_iconview();
+			println!("Trying to execute IconView.visible_range()");
+			_object295.visible_range();
+			println!("Executed IconView.visible_range()");
+		}
+	}
+	// Image
+	{
+		for _i in 0..100{
+			let _object297 = gget_image();
+			println!("Trying to execute Image.clear()");
+			_object297.clear();
+			println!("Executed Image.clear()");
+		}
+		for _i in 0..100{
+			let _object298 = gget_image();
+			println!("Trying to execute Image.gicon()");
+			_object298.gicon();
+			println!("Executed Image.gicon()");
+		}
+		for _i in 0..100{
+			let _object300 = gget_image();
+			println!("Trying to execute Image.paintable()");
+			_object300.paintable();
+			println!("Executed Image.paintable()");
+		}
+		for _i in 0..100{
+			let _object301 = gget_image();
+			println!("Trying to execute Image.storage_type()");
+			_object301.storage_type();
+			println!("Executed Image.storage_type()");
+		}
+		for _i in 0..100{
+			let _object302 = gget_image();
+			println!("Trying to execute Image.uses_fallback()");
+			_object302.uses_fallback();
+			println!("Executed Image.uses_fallback()");
+		}
+	}
+	// InfoBar
+	{
+		for _i in 0..100{
+			let _object304 = gget_infobar();
+			println!("Trying to execute InfoBar.is_revealed()");
+			_object304.is_revealed();
+			println!("Executed InfoBar.is_revealed()");
+		}
+		for _i in 0..100{
+			let _object306 = gget_infobar();
+			println!("Trying to execute InfoBar.shows_close_button()");
+			_object306.shows_close_button();
+			println!("Executed InfoBar.shows_close_button()");
+		}
+	}
+	// LevelBar
+	{
+		for _i in 0..100{
+			let _object308 = gget_levelbar();
+			println!("Trying to execute LevelBar.is_inverted()");
+			_object308.is_inverted();
+			println!("Executed LevelBar.is_inverted()");
+		}
+	}
+	// ListBox
+	{
+		for _i in 0..100{
+			let _object310 = gget_listbox();
+			println!("Trying to execute ListBox.accepts_unpaired_release()");
+			_object310.accepts_unpaired_release();
+			println!("Executed ListBox.accepts_unpaired_release()");
+		}
+		for _i in 0..100{
+			let _object311 = gget_listbox();
+			println!("Trying to execute ListBox.activates_on_single_click()");
+			_object311.activates_on_single_click();
+			println!("Executed ListBox.activates_on_single_click()");
+		}
+		for _i in 0..100{
+			let _object312 = gget_listbox();
+			println!("Trying to execute ListBox.adjustment()");
+			_object312.adjustment();
+			println!("Executed ListBox.adjustment()");
+		}
+		for _i in 0..100{
+			let _object314 = gget_listbox();
+			println!("Trying to execute ListBox.drag_unhighlight_row()");
+			_object314.drag_unhighlight_row();
+			println!("Executed ListBox.drag_unhighlight_row()");
+		}
+		for _i in 0..100{
+			let _object315 = gget_listbox();
+			println!("Trying to execute ListBox.invalidate_filter()");
+			_object315.invalidate_filter();
+			println!("Executed ListBox.invalidate_filter()");
+		}
+		for _i in 0..100{
+			let _object316 = gget_listbox();
+			println!("Trying to execute ListBox.invalidate_headers()");
+			_object316.invalidate_headers();
+			println!("Executed ListBox.invalidate_headers()");
+		}
+		for _i in 0..100{
+			let _object317 = gget_listbox();
+			println!("Trying to execute ListBox.invalidate_sort()");
+			_object317.invalidate_sort();
+			println!("Executed ListBox.invalidate_sort()");
+		}
+		for _i in 0..100{
+			let _object319 = gget_listbox();
+			println!("Trying to execute ListBox.select_all()");
+			_object319.select_all();
+			println!("Executed ListBox.select_all()");
+		}
+		for _i in 0..100{
+			let _object320 = gget_listbox();
+			println!("Trying to execute ListBox.selected_row()");
+			_object320.selected_row();
+			println!("Executed ListBox.selected_row()");
+		}
+		for _i in 0..100{
+			let _object321 = gget_listbox();
+			println!("Trying to execute ListBox.selected_rows()");
+			_object321.selected_rows();
+			println!("Executed ListBox.selected_rows()");
+		}
+		for _i in 0..100{
+			let _object322 = gget_listbox();
+			println!("Trying to execute ListBox.shows_separators()");
+			_object322.shows_separators();
+			println!("Executed ListBox.shows_separators()");
+		}
+		for _i in 0..100{
+			let _object323 = gget_listbox();
+			println!("Trying to execute ListBox.unselect_all()");
+			_object323.unselect_all();
+			println!("Executed ListBox.unselect_all()");
+		}
+	}
+	// ListBoxRow
+	{
+	}
+	// MediaControls
+	{
+	}
+	// MediaFile
+	{
+	}
+	// MenuButton
+	{
+		for _i in 0..100{
+			let _object330 = gget_menubutton();
+			println!("Trying to execute MenuButton.menu_model()");
+			_object330.menu_model();
+			println!("Executed MenuButton.menu_model()");
+		}
+		for _i in 0..100{
+			let _object332 = gget_menubutton();
+			println!("Trying to execute MenuButton.popdown()");
+			_object332.popdown();
+			println!("Executed MenuButton.popdown()");
+		}
+		for _i in 0..100{
+			let _object333 = gget_menubutton();
+			println!("Trying to execute MenuButton.popup()");
+			_object333.popup();
+			println!("Executed MenuButton.popup()");
+		}
+		for _i in 0..100{
+			let _object334 = gget_menubutton();
+			println!("Trying to execute MenuButton.uses_underline()");
+			_object334.uses_underline();
+			println!("Executed MenuButton.uses_underline()");
+		}
+	}
+	// MountOperation
+	{
+	}
+	// MultiSorter
+	{
+	}
+	// Notebook
+	{
+		for _i in 0..100{
+			let _object339 = gget_notebook();
+			println!("Trying to execute Notebook.enables_popup()");
+			_object339.enables_popup();
+			println!("Executed Notebook.enables_popup()");
+		}
+		for _i in 0..100{
+			let _object340 = gget_notebook();
+			println!("Trying to execute Notebook.is_scrollable()");
+			_object340.is_scrollable();
+			println!("Executed Notebook.is_scrollable()");
+		}
+		for _i in 0..100{
+			let _object342 = gget_notebook();
+			println!("Trying to execute Notebook.next_page()");
+			_object342.next_page();
+			println!("Executed Notebook.next_page()");
+		}
+		for _i in 0..100{
+			let _object343 = gget_notebook();
+			println!("Trying to execute Notebook.pages()");
+			_object343.pages();
+			println!("Executed Notebook.pages()");
+		}
+		for _i in 0..100{
+			let _object344 = gget_notebook();
+			println!("Trying to execute Notebook.popup_disable()");
+			_object344.popup_disable();
+			println!("Executed Notebook.popup_disable()");
+		}
+		for _i in 0..100{
+			let _object345 = gget_notebook();
+			println!("Trying to execute Notebook.popup_enable()");
+			_object345.popup_enable();
+			println!("Executed Notebook.popup_enable()");
+		}
+		for _i in 0..100{
+			let _object346 = gget_notebook();
+			println!("Trying to execute Notebook.prev_page()");
+			_object346.prev_page();
+			println!("Executed Notebook.prev_page()");
+		}
+		for _i in 0..100{
+			let _object347 = gget_notebook();
+			println!("Trying to execute Notebook.shows_border()");
+			_object347.shows_border();
+			println!("Executed Notebook.shows_border()");
+		}
+		for _i in 0..100{
+			let _object348 = gget_notebook();
+			println!("Trying to execute Notebook.shows_tabs()");
+			_object348.shows_tabs();
+			println!("Executed Notebook.shows_tabs()");
+		}
+	}
+	// NumericSorter
+	{
+	}
+	// Overlay
+	{
+	}
+	// OverlayLayout
+	{
+	}
+	// PageSetup
+	{
+		for _i in 0..100{
+			let _object354 = gget_pagesetup();
+			println!("Trying to execute PageSetup.copy()");
+			_object354.copy();
+			println!("Executed PageSetup.copy()");
+		}
+		for _i in 0..100{
+			let _object356 = gget_pagesetup();
+			println!("Trying to execute PageSetup.orientation()");
+			_object356.orientation();
+			println!("Executed PageSetup.orientation()");
+		}
+		for _i in 0..100{
+			let _object357 = gget_pagesetup();
+			println!("Trying to execute PageSetup.paper_size()");
+			_object357.paper_size();
+			println!("Executed PageSetup.paper_size()");
+		}
+		for _i in 0..100{
+			let _object358 = gget_pagesetup();
+			println!("Trying to execute PageSetup.to_gvariant()");
+			_object358.to_gvariant();
+			println!("Executed PageSetup.to_gvariant()");
+		}
+	}
+	// PasswordEntry
+	{
+		for _i in 0..100{
+			let _object360 = gget_passwordentry();
+			println!("Trying to execute PasswordEntry.extra_menu()");
+			_object360.extra_menu();
+			println!("Executed PasswordEntry.extra_menu()");
+		}
+		for _i in 0..100{
+			let _object362 = gget_passwordentry();
+			println!("Trying to execute PasswordEntry.shows_peek_icon()");
+			_object362.shows_peek_icon();
+			println!("Executed PasswordEntry.shows_peek_icon()");
+		}
+	}
+	// PasswordEntryBuffer
+	{
+	}
+	// Picture
+	{
+		for _i in 0..100{
+			let _object366 = gget_picture();
+			println!("Trying to execute Picture.file()");
+			_object366.file();
+			println!("Executed Picture.file()");
+		}
+		for _i in 0..100{
+			let _object367 = gget_picture();
+			println!("Trying to execute Picture.is_keep_aspect_ratio()");
+			_object367.is_keep_aspect_ratio();
+			println!("Executed Picture.is_keep_aspect_ratio()");
+		}
+		for _i in 0..100{
+			let _object369 = gget_picture();
+			println!("Trying to execute Picture.paintable()");
+			_object369.paintable();
+			println!("Executed Picture.paintable()");
+		}
+	}
+	// Popover
+	{
+	}
+	// PrintOperation
+	{
+	}
+	// PrintSettings
+	{
+		for _i in 0..100{
+			let _object374 = gget_printsettings();
+			println!("Trying to execute PrintSettings.copy()");
+			_object374.copy();
+			println!("Executed PrintSettings.copy()");
+		}
+		for _i in 0..100{
+			let _object375 = gget_printsettings();
+			println!("Trying to execute PrintSettings.default_source()");
+			_object375.default_source();
+			println!("Executed PrintSettings.default_source()");
+		}
+		for _i in 0..100{
+			let _object376 = gget_printsettings();
+			println!("Trying to execute PrintSettings.dither()");
+			_object376.dither();
+			println!("Executed PrintSettings.dither()");
+		}
+		for _i in 0..100{
+			let _object377 = gget_printsettings();
+			println!("Trying to execute PrintSettings.duplex()");
+			_object377.duplex();
+			println!("Executed PrintSettings.duplex()");
+		}
+		for _i in 0..100{
+			let _object378 = gget_printsettings();
+			println!("Trying to execute PrintSettings.finishings()");
+			_object378.finishings();
+			println!("Executed PrintSettings.finishings()");
+		}
+		for _i in 0..100{
+			let _object379 = gget_printsettings();
+			println!("Trying to execute PrintSettings.is_collate()");
+			_object379.is_collate();
+			println!("Executed PrintSettings.is_collate()");
+		}
+		for _i in 0..100{
+			let _object380 = gget_printsettings();
+			println!("Trying to execute PrintSettings.is_reverse()");
+			_object380.is_reverse();
+			println!("Executed PrintSettings.is_reverse()");
+		}
+		for _i in 0..100{
+			let _object381 = gget_printsettings();
+			println!("Trying to execute PrintSettings.media_type()");
+			_object381.media_type();
+			println!("Executed PrintSettings.media_type()");
+		}
+		for _i in 0..100{
+			let _object382 = gget_printsettings();
+			println!("Trying to execute PrintSettings.n_copies()");
+			_object382.n_copies();
+			println!("Executed PrintSettings.n_copies()");
+		}
+		for _i in 0..100{
+			let _object384 = gget_printsettings();
+			println!("Trying to execute PrintSettings.number_up()");
+			_object384.number_up();
+			println!("Executed PrintSettings.number_up()");
+		}
+		for _i in 0..100{
+			let _object385 = gget_printsettings();
+			println!("Trying to execute PrintSettings.number_up_layout()");
+			_object385.number_up_layout();
+			println!("Executed PrintSettings.number_up_layout()");
+		}
+		for _i in 0..100{
+			let _object386 = gget_printsettings();
+			println!("Trying to execute PrintSettings.orientation()");
+			_object386.orientation();
+			println!("Executed PrintSettings.orientation()");
+		}
+		for _i in 0..100{
+			let _object387 = gget_printsettings();
+			println!("Trying to execute PrintSettings.output_bin()");
+			_object387.output_bin();
+			println!("Executed PrintSettings.output_bin()");
+		}
+		for _i in 0..100{
+			let _object388 = gget_printsettings();
+			println!("Trying to execute PrintSettings.page_ranges()");
+			_object388.page_ranges();
+			println!("Executed PrintSettings.page_ranges()");
+		}
+		for _i in 0..100{
+			let _object389 = gget_printsettings();
+			println!("Trying to execute PrintSettings.page_set()");
+			_object389.page_set();
+			println!("Executed PrintSettings.page_set()");
+		}
+		for _i in 0..100{
+			let _object390 = gget_printsettings();
+			println!("Trying to execute PrintSettings.paper_size()");
+			_object390.paper_size();
+			println!("Executed PrintSettings.paper_size()");
+		}
+		for _i in 0..100{
+			let _object391 = gget_printsettings();
+			println!("Trying to execute PrintSettings.print_pages()");
+			_object391.print_pages();
+			println!("Executed PrintSettings.print_pages()");
+		}
+		for _i in 0..100{
+			let _object392 = gget_printsettings();
+			println!("Trying to execute PrintSettings.printer()");
+			_object392.printer();
+			println!("Executed PrintSettings.printer()");
+		}
+		for _i in 0..100{
+			let _object393 = gget_printsettings();
+			println!("Trying to execute PrintSettings.printer_lpi()");
+			_object393.printer_lpi();
+			println!("Executed PrintSettings.printer_lpi()");
+		}
+		for _i in 0..100{
+			let _object394 = gget_printsettings();
+			println!("Trying to execute PrintSettings.quality()");
+			_object394.quality();
+			println!("Executed PrintSettings.quality()");
+		}
+		for _i in 0..100{
+			let _object395 = gget_printsettings();
+			println!("Trying to execute PrintSettings.resolution()");
+			_object395.resolution();
+			println!("Executed PrintSettings.resolution()");
+		}
+		for _i in 0..100{
+			let _object396 = gget_printsettings();
+			println!("Trying to execute PrintSettings.resolution_x()");
+			_object396.resolution_x();
+			println!("Executed PrintSettings.resolution_x()");
+		}
+		for _i in 0..100{
+			let _object397 = gget_printsettings();
+			println!("Trying to execute PrintSettings.resolution_y()");
+			_object397.resolution_y();
+			println!("Executed PrintSettings.resolution_y()");
+		}
+		for _i in 0..100{
+			let _object398 = gget_printsettings();
+			println!("Trying to execute PrintSettings.scale()");
+			_object398.scale();
+			println!("Executed PrintSettings.scale()");
+		}
+		for _i in 0..100{
+			let _object399 = gget_printsettings();
+			println!("Trying to execute PrintSettings.to_gvariant()");
+			_object399.to_gvariant();
+			println!("Executed PrintSettings.to_gvariant()");
+		}
+		for _i in 0..100{
+			let _object400 = gget_printsettings();
+			println!("Trying to execute PrintSettings.uses_color()");
+			_object400.uses_color();
+			println!("Executed PrintSettings.uses_color()");
+		}
+	}
+	// ProgressBar
+	{
+		for _i in 0..100{
+			let _object402 = gget_progressbar();
+			println!("Trying to execute ProgressBar.ellipsize()");
+			_object402.ellipsize();
+			println!("Executed ProgressBar.ellipsize()");
+		}
+		for _i in 0..100{
+			let _object403 = gget_progressbar();
+			println!("Trying to execute ProgressBar.is_inverted()");
+			_object403.is_inverted();
+			println!("Executed ProgressBar.is_inverted()");
+		}
+		for _i in 0..100{
+			let _object405 = gget_progressbar();
+			println!("Trying to execute ProgressBar.pulse()");
+			_object405.pulse();
+			println!("Executed ProgressBar.pulse()");
+		}
+		for _i in 0..100{
+			let _object406 = gget_progressbar();
+			println!("Trying to execute ProgressBar.shows_text()");
+			_object406.shows_text();
+			println!("Executed ProgressBar.shows_text()");
+		}
+	}
+	// RecentManager
+	{
+	}
+	// Revealer
+	{
+		for _i in 0..100{
+			let _object409 = gget_revealer();
+			println!("Trying to execute Revealer.is_child_revealed()");
+			_object409.is_child_revealed();
+			println!("Executed Revealer.is_child_revealed()");
+		}
+		for _i in 0..100{
+			let _object411 = gget_revealer();
+			println!("Trying to execute Revealer.reveals_child()");
+			_object411.reveals_child();
+			println!("Executed Revealer.reveals_child()");
+		}
+	}
+	// Scale
+	{
+	}
+	// ScaleButton
+	{
+	}
+	// Scrollbar
+	{
+	}
+	// ScrolledWindow
+	{
+		for _i in 0..100{
+			let _object419 = gget_scrolledwindow();
+			println!("Trying to execute ScrolledWindow.hscrollbar()");
+			_object419.hscrollbar();
+			println!("Executed ScrolledWindow.hscrollbar()");
+		}
+		for _i in 0..100{
+			let _object420 = gget_scrolledwindow();
+			println!("Trying to execute ScrolledWindow.is_kinetic_scrolling()");
+			_object420.is_kinetic_scrolling();
+			println!("Executed ScrolledWindow.is_kinetic_scrolling()");
+		}
+		for _i in 0..100{
+			let _object421 = gget_scrolledwindow();
+			println!("Trying to execute ScrolledWindow.is_overlay_scrolling()");
+			_object421.is_overlay_scrolling();
+			println!("Executed ScrolledWindow.is_overlay_scrolling()");
+		}
+		for _i in 0..100{
+			let _object423 = gget_scrolledwindow();
+			println!("Trying to execute ScrolledWindow.placement()");
+			_object423.placement();
+			println!("Executed ScrolledWindow.placement()");
+		}
+		for _i in 0..100{
+			let _object424 = gget_scrolledwindow();
+			println!("Trying to execute ScrolledWindow.policy()");
+			_object424.policy();
+			println!("Executed ScrolledWindow.policy()");
+		}
+		for _i in 0..100{
+			let _object425 = gget_scrolledwindow();
+			println!("Trying to execute ScrolledWindow.propagates_natural_height()");
+			_object425.propagates_natural_height();
+			println!("Executed ScrolledWindow.propagates_natural_height()");
+		}
+		for _i in 0..100{
+			let _object426 = gget_scrolledwindow();
+			println!("Trying to execute ScrolledWindow.propagates_natural_width()");
+			_object426.propagates_natural_width();
+			println!("Executed ScrolledWindow.propagates_natural_width()");
+		}
+		for _i in 0..100{
+			let _object427 = gget_scrolledwindow();
+			println!("Trying to execute ScrolledWindow.unset_placement()");
+			_object427.unset_placement();
+			println!("Executed ScrolledWindow.unset_placement()");
+		}
+		for _i in 0..100{
+			let _object428 = gget_scrolledwindow();
+			println!("Trying to execute ScrolledWindow.vscrollbar()");
+			_object428.vscrollbar();
+			println!("Executed ScrolledWindow.vscrollbar()");
+		}
+	}
+	// SearchBar
+	{
+		for _i in 0..100{
+			let _object430 = gget_searchbar();
+			println!("Trying to execute SearchBar.is_search_mode()");
+			_object430.is_search_mode();
+			println!("Executed SearchBar.is_search_mode()");
+		}
+		for _i in 0..100{
+			let _object432 = gget_searchbar();
+			println!("Trying to execute SearchBar.shows_close_button()");
+			_object432.shows_close_button();
+			println!("Executed SearchBar.shows_close_button()");
+		}
+	}
+	// SearchEntry
+	{
+		for _i in 0..100{
+			let _object434 = gget_searchentry();
+			println!("Trying to execute SearchEntry.key_capture_widget()");
+			_object434.key_capture_widget();
+			println!("Executed SearchEntry.key_capture_widget()");
+		}
+	}
+	// Separator
+	{
+	}
+	// ShortcutAction
+	{
+	}
+	// ShortcutController
+	{
+		for _i in 0..100{
+			let _object439 = gget_shortcutcontroller();
+			println!("Trying to execute ShortcutController.mnemonic_modifiers()");
+			_object439.mnemonic_modifiers();
+			println!("Executed ShortcutController.mnemonic_modifiers()");
+		}
+		for _i in 0..100{
+			let _object440 = gget_shortcutcontroller();
+			println!("Trying to execute ShortcutController.mnemonics_modifiers()");
+			_object440.mnemonics_modifiers();
+			println!("Executed ShortcutController.mnemonics_modifiers()");
+		}
+	}
+	// ShortcutLabel
+	{
+	}
+	// ShortcutTrigger
+	{
+	}
+	// ShortcutsSection
+	{
+	}
+	// SignalListItemFactory
+	{
+	}
+	// Snapshot
+	{
+		for _i in 0..100{
+			let _object447 = gget_snapshot();
+			println!("Trying to execute Snapshot.gl_shader_pop_texture()");
+			_object447.gl_shader_pop_texture();
+			println!("Executed Snapshot.gl_shader_pop_texture()");
+		}
+		for _i in 0..100{
+			let _object449 = gget_snapshot();
+			println!("Trying to execute Snapshot.pop()");
+			_object449.pop();
+			println!("Executed Snapshot.pop()");
+		}
+		for _i in 0..100{
+			let _object450 = gget_snapshot();
+			println!("Trying to execute Snapshot.restore()");
+			_object450.restore();
+			println!("Executed Snapshot.restore()");
+		}
+		for _i in 0..100{
+			let _object451 = gget_snapshot();
+			println!("Trying to execute Snapshot.save()");
+			_object451.save();
+			println!("Executed Snapshot.save()");
+		}
+		for _i in 0..100{
+			let _object452 = gget_snapshot();
+			println!("Trying to execute Snapshot.to_node()");
+			_object452.to_node();
+			println!("Executed Snapshot.to_node()");
+		}
+	}
+	// Spinner
+	{
+		for _i in 0..100{
+			let _object454 = gget_spinner();
+			println!("Trying to execute Spinner.is_spinning()");
+			_object454.is_spinning();
+			println!("Executed Spinner.is_spinning()");
+		}
+		for _i in 0..100{
+			let _object456 = gget_spinner();
+			println!("Trying to execute Spinner.start()");
+			_object456.start();
+			println!("Executed Spinner.start()");
+		}
+		for _i in 0..100{
+			let _object457 = gget_spinner();
+			println!("Trying to execute Spinner.stop()");
+			_object457.stop();
+			println!("Executed Spinner.stop()");
+		}
+	}
+	// Stack
+	{
+		for _i in 0..100{
+			let _object459 = gget_stack();
+			println!("Trying to execute Stack.interpolates_size()");
+			_object459.interpolates_size();
+			println!("Executed Stack.interpolates_size()");
+		}
+		for _i in 0..100{
+			let _object460 = gget_stack();
+			println!("Trying to execute Stack.is_hhomogeneous()");
+			_object460.is_hhomogeneous();
+			println!("Executed Stack.is_hhomogeneous()");
+		}
+		for _i in 0..100{
+			let _object461 = gget_stack();
+			println!("Trying to execute Stack.is_transition_running()");
+			_object461.is_transition_running();
+			println!("Executed Stack.is_transition_running()");
+		}
+		for _i in 0..100{
+			let _object462 = gget_stack();
+			println!("Trying to execute Stack.is_vhomogeneous()");
+			_object462.is_vhomogeneous();
+			println!("Executed Stack.is_vhomogeneous()");
+		}
+		for _i in 0..100{
+			let _object464 = gget_stack();
+			println!("Trying to execute Stack.pages()");
+			_object464.pages();
+			println!("Executed Stack.pages()");
+		}
+	}
+	// StackSidebar
+	{
+	}
+	// StackSwitcher
+	{
+	}
+	// Statusbar
+	{
+	}
+	// StringList
+	{
+	}
+	// Switch
+	{
+		for _i in 0..100{
+			let _object472 = gget_switch();
+			println!("Trying to execute Switch.is_active()");
+			_object472.is_active();
+			println!("Executed Switch.is_active()");
+		}
+	}
+	// Text
+	{
+		for _i in 0..100{
+			let _object474 = gget_text();
+			println!("Trying to execute Text.attributes()");
+			_object474.attributes();
+			println!("Executed Text.attributes()");
+		}
+		for _i in 0..100{
+			let _object476 = gget_text();
+			println!("Trying to execute Text.enables_emoji_completion()");
+			_object476.enables_emoji_completion();
+			println!("Executed Text.enables_emoji_completion()");
+		}
+		for _i in 0..100{
+			let _object477 = gget_text();
+			println!("Trying to execute Text.extra_menu()");
+			_object477.extra_menu();
+			println!("Executed Text.extra_menu()");
+		}
+		for _i in 0..100{
+			let _object478 = gget_text();
+			println!("Trying to execute Text.grab_focus_without_selecting()");
+			_object478.grab_focus_without_selecting();
+			println!("Executed Text.grab_focus_without_selecting()");
+		}
+		for _i in 0..100{
+			let _object479 = gget_text();
+			println!("Trying to execute Text.is_invisible_char_set()");
+			_object479.is_invisible_char_set();
+			println!("Executed Text.is_invisible_char_set()");
+		}
+		for _i in 0..100{
+			let _object480 = gget_text();
+			println!("Trying to execute Text.is_overwrite_mode()");
+			_object480.is_overwrite_mode();
+			println!("Executed Text.is_overwrite_mode()");
+		}
+		for _i in 0..100{
+			let _object481 = gget_text();
+			println!("Trying to execute Text.is_visible()");
+			_object481.is_visible();
+			println!("Executed Text.is_visible()");
+		}
+		for _i in 0..100{
+			let _object482 = gget_text();
+			println!("Trying to execute Text.must_truncate_multiline()");
+			_object482.must_truncate_multiline();
+			println!("Executed Text.must_truncate_multiline()");
+		}
+		for _i in 0..100{
+			let _object484 = gget_text();
+			println!("Trying to execute Text.propagates_text_width()");
+			_object484.propagates_text_width();
+			println!("Executed Text.propagates_text_width()");
+		}
+		for _i in 0..100{
+			let _object485 = gget_text();
+			println!("Trying to execute Text.scroll_offset()");
+			_object485.scroll_offset();
+			println!("Executed Text.scroll_offset()");
+		}
+		for _i in 0..100{
+			let _object486 = gget_text();
+			println!("Trying to execute Text.tabs()");
+			_object486.tabs();
+			println!("Executed Text.tabs()");
+		}
+		for _i in 0..100{
+			let _object487 = gget_text();
+			println!("Trying to execute Text.text_length()");
+			_object487.text_length();
+			println!("Executed Text.text_length()");
+		}
+		for _i in 0..100{
+			let _object488 = gget_text();
+			println!("Trying to execute Text.unset_invisible_char()");
+			_object488.unset_invisible_char();
+			println!("Executed Text.unset_invisible_char()");
+		}
+	}
+	// TextBuffer
+	{
+	}
+	// TextChildAnchor
+	{
+	}
+	// TextMark
+	{
+	}
+	// TextTag
+	{
+	}
+	// TextTagTable
+	{
+		for _i in 0..100{
+			let _object497 = gget_texttagtable();
+			println!("Trying to execute TextTagTable.size()");
+			_object497.size();
+			println!("Executed TextTagTable.size()");
+		}
+	}
+	// TextView
+	{
+	}
+	// ToggleButton
+	{
+	}
+	// Tooltip
+	{
+	}
+	// TreeExpander
+	{
+		for _i in 0..100{
+			let _object503 = gget_treeexpander();
+			println!("Trying to execute TreeExpander.item()");
+			_object503.item();
+			println!("Executed TreeExpander.item()");
+		}
+	}
+	// TreeModelSort
+	{
+	}
+	// TreeView
+	{
+	}
+	// TreeViewColumn
+	{
+		for _i in 0..100{
+			let _object508 = gget_treeviewcolumn();
+			println!("Trying to execute TreeViewColumn.button()");
+			_object508.button();
+			println!("Executed TreeViewColumn.button()");
+		}
+		for _i in 0..100{
+			let _object509 = gget_treeviewcolumn();
+			println!("Trying to execute TreeViewColumn.cell_get_size()");
+			_object509.cell_get_size();
+			println!("Executed TreeViewColumn.cell_get_size()");
+		}
+		for _i in 0..100{
+			let _object510 = gget_treeviewcolumn();
+			println!("Trying to execute TreeViewColumn.cell_is_visible()");
+			_object510.cell_is_visible();
+			println!("Executed TreeViewColumn.cell_is_visible()");
+		}
+		for _i in 0..100{
+			let _object511 = gget_treeviewcolumn();
+			println!("Trying to execute TreeViewColumn.clicked()");
+			_object511.clicked();
+			println!("Executed TreeViewColumn.clicked()");
+		}
+		for _i in 0..100{
+			let _object512 = gget_treeviewcolumn();
+			println!("Trying to execute TreeViewColumn.expands()");
+			_object512.expands();
+			println!("Executed TreeViewColumn.expands()");
+		}
+		for _i in 0..100{
+			let _object513 = gget_treeviewcolumn();
+			println!("Trying to execute TreeViewColumn.is_clickable()");
+			_object513.is_clickable();
+			println!("Executed TreeViewColumn.is_clickable()");
+		}
+		for _i in 0..100{
+			let _object514 = gget_treeviewcolumn();
+			println!("Trying to execute TreeViewColumn.is_reorderable()");
+			_object514.is_reorderable();
+			println!("Executed TreeViewColumn.is_reorderable()");
+		}
+		for _i in 0..100{
+			let _object515 = gget_treeviewcolumn();
+			println!("Trying to execute TreeViewColumn.is_resizable()");
+			_object515.is_resizable();
+			println!("Executed TreeViewColumn.is_resizable()");
+		}
+		for _i in 0..100{
+			let _object516 = gget_treeviewcolumn();
+			println!("Trying to execute TreeViewColumn.is_sort_indicator()");
+			_object516.is_sort_indicator();
+			println!("Executed TreeViewColumn.is_sort_indicator()");
+		}
+		for _i in 0..100{
+			let _object517 = gget_treeviewcolumn();
+			println!("Trying to execute TreeViewColumn.is_visible()");
+			_object517.is_visible();
+			println!("Executed TreeViewColumn.is_visible()");
+		}
+		for _i in 0..100{
+			let _object519 = gget_treeviewcolumn();
+			println!("Trying to execute TreeViewColumn.queue_resize()");
+			_object519.queue_resize();
+			println!("Executed TreeViewColumn.queue_resize()");
+		}
+		for _i in 0..100{
+			let _object520 = gget_treeviewcolumn();
+			println!("Trying to execute TreeViewColumn.tree_view()");
+			_object520.tree_view();
+			println!("Executed TreeViewColumn.tree_view()");
+		}
+		for _i in 0..100{
+			let _object521 = gget_treeviewcolumn();
+			println!("Trying to execute TreeViewColumn.width()");
+			_object521.width();
+			println!("Executed TreeViewColumn.width()");
+		}
+		for _i in 0..100{
+			let _object522 = gget_treeviewcolumn();
+			println!("Trying to execute TreeViewColumn.x_offset()");
+			_object522.x_offset();
+			println!("Executed TreeViewColumn.x_offset()");
+		}
+	}
+	// Video
+	{
+		for _i in 0..100{
+			let _object524 = gget_video();
+			println!("Trying to execute Video.file()");
+			_object524.file();
+			println!("Executed Video.file()");
+		}
+		for _i in 0..100{
+			let _object525 = gget_video();
+			println!("Trying to execute Video.is_autoplay()");
+			_object525.is_autoplay();
+			println!("Executed Video.is_autoplay()");
+		}
+		for _i in 0..100{
+			let _object526 = gget_video();
+			println!("Trying to execute Video.is_loop()");
+			_object526.is_loop();
+			println!("Executed Video.is_loop()");
+		}
+	}
+	// VolumeButton
+	{
+		for _i in 0..100{
+			let _object530 = gget_volumebutton();
+			println!("Trying to execute VolumeButton.uses_symbolic()");
+			_object530.uses_symbolic();
+			println!("Executed VolumeButton.uses_symbolic()");
+		}
+	}
+	// Window
+	{
+	}
+	// WindowGroup
+	{
+	}
+	// WindowHandle
+	{
+	}
 }
+
 
 pub fn take_string() -> String {
     if random_int() % 2 == 0 {
@@ -1760,7 +2134,11 @@ pub fn stek_orientation() -> Orientation {
         false => Orientation::Vertical,
     }
 }
+pub fn stek_glib_type() -> glib::Type {
+    [glib::Type::BOOL].choose(&mut rand::thread_rng()).unwrap().clone()
+}
 
+//// Too hard
 // pub fn gget_atcontext() -> ATContext {
 //     ATContext::new()
 // }
@@ -1770,15 +2148,15 @@ pub fn gget_aboutdialog() -> AboutDialog {
 pub fn gget_actionbar() -> ActionBar {
     ActionBar::new()
 }
-// pub fn gget_activateaction() -> ActivateAction {
-//     ActivateAction::new()
-// }
+pub fn gget_activateaction() -> ActivateAction {
+    ActivateAction::get()
+}
 pub fn gget_appchooserbutton() -> AppChooserButton {
     AppChooserButton::new(&take_string())
 }
-// pub fn gget_appchooserdialog() -> AppChooserDialog {
-//     AppChooserDialog::new()
-// }
+pub fn gget_appchooserdialog() -> AppChooserDialog {
+    AppChooserDialog::default()
+}
 pub fn gget_appchooserwidget() -> AppChooserWidget {
     AppChooserWidget::new(&take_string())
 }
@@ -1788,15 +2166,17 @@ pub fn gget_aspectframe() -> AspectFrame {
 pub fn gget_assistant() -> Assistant {
     Assistant::new()
 }
+// // TOO HARD
 // pub fn gget_assistantpage() -> AssistantPage {
 //     AssistantPage::new()
 // }
 pub fn gget_bookmarklist() -> BookmarkList {
     BookmarkList::new(Some(&take_string()), Some(&take_string()))
 }
-// pub fn gget_boolfilter() -> BoolFilter {
-//     BoolFilter::new()
-// }
+pub fn gget_boolfilter() -> BoolFilter {
+    let expression: Option<Expression> = None;
+    BoolFilter::new(expression)
+}
 pub fn gget_boxlayout() -> BoxLayout {
     BoxLayout::new(stek_orientation())
 }
@@ -1804,7 +2184,8 @@ pub fn gget_builder() -> Builder {
     Builder::new()
 }
 // pub fn gget_builderlistitemfactory() -> BuilderListItemFactory {
-//     BuilderListItemFactory::new()
+//     let builder_scope : Option<BuilderScope> = None;
+//     BuilderListItemFactory::new(builder_scope,)
 // }
 pub fn gget_calendar() -> Calendar {
     Calendar::new()
@@ -1836,36 +2217,42 @@ pub fn gget_centerlayout() -> CenterLayout {
 pub fn gget_colorbutton() -> ColorButton {
     ColorButton::new()
 }
-// pub fn gget_colorchooserdialog() -> ColorChooserDialog {
-//     ColorChooserDialog::new()
-// }
+pub fn gget_colorchooserdialog() -> ColorChooserDialog {
+    ColorChooserDialog::default()
+}
 pub fn gget_colorchooserwidget() -> ColorChooserWidget {
     ColorChooserWidget::new()
 }
-// pub fn gget_columnview() -> ColumnView {
-//     ColumnView::new(None)
-// }
-// pub fn gget_columnviewcolumn() -> ColumnViewColumn {
-//     ColumnViewColumn::new(Some(&take_string()), None)
-// }
+pub fn gget_columnview() -> ColumnView {
+    let sm: Option<&SelectionModel> = None;
+    ColumnView::new(sm)
+}
+pub fn gget_columnviewcolumn() -> ColumnViewColumn {
+    let thing: Option<&ListItemFactory> = None;
+    ColumnViewColumn::new(Some(&take_string()), thing)
+}
 pub fn gget_combobox() -> ComboBox {
     ComboBox::new()
 }
 pub fn gget_comboboxtext() -> ComboBoxText {
     ComboBoxText::new()
 }
-// pub fn gget_constraint() -> Constraint {
-//     Constraint::new()
-// }
+pub fn gget_constraint() -> Constraint {
+    let thing: Option<&ConstraintTarget> = None;
+    let thing2: ConstraintAttribute = ConstraintAttribute::None;
+    let thing3: ConstraintRelation = ConstraintRelation::Eq;
+    Constraint::new_constant(thing, thing2, thing3, take_f64(), take_i32())
+}
 pub fn gget_constraintlayout() -> ConstraintLayout {
     ConstraintLayout::new()
 }
 pub fn gget_cssprovider() -> CssProvider {
     CssProvider::new()
 }
-// pub fn gget_directorylist() -> DirectoryList {
-//     DirectoryList::new()
-// }
+pub fn gget_directorylist() -> DirectoryList {
+    let thing: Option<&gio::File> = None;
+    DirectoryList::new(Some(&take_string()), thing)
+}
 // pub fn gget_dragicon() -> DragIcon {
 //     DragIcon::new()
 // }
@@ -1875,18 +2262,20 @@ pub fn gget_dragsource() -> DragSource {
 pub fn gget_dropcontrollermotion() -> DropControllerMotion {
     DropControllerMotion::new()
 }
-// pub fn gget_dropdown() -> DropDown {
-//     DropDown::new()
-// }
-// pub fn gget_droptarget() -> DropTarget {
-//     DropTarget::new()
-// }
+pub fn gget_dropdown() -> DropDown {
+    let thing: Option<&Expression> = None;
+    let thing2: Option<&gio::ListModel> = None;
+    DropDown::new(thing2, thing)
+}
+pub fn gget_droptarget() -> DropTarget {
+    DropTarget::new(stek_glib_type(), DragAction::COPY)
+}
 // pub fn gget_droptargetasync() -> DropTargetAsync {
 //     DropTargetAsync::new()
 // }
-// pub fn gget_editablelabel() -> EditableLabel {
-//     EditableLabel::new()
-// }
+pub fn gget_editablelabel() -> EditableLabel {
+    EditableLabel::new(&take_string())
+}
 pub fn gget_entrycompletion() -> EntryCompletion {
     EntryCompletion::new()
 }
@@ -2199,3 +2588,4 @@ pub fn gget_window() -> Window {
 // pub fn gget_windowcontrols() -> WindowControls {
 //     WindowControls::new()
 // }
+
