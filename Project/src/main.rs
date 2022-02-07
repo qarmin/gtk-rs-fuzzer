@@ -1,10 +1,12 @@
+mod create_objects;
 mod helpers;
 mod ziemniak;
 
+use crate::create_objects::*;
 use crate::ziemniak::execute_things;
 use gtk4::prelude::*;
 
-const CRASHES: u64 = 1;
+const CRASHES: u64 = 0;
 
 fn main() {
     let application = gtk4::Application::builder().build();

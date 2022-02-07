@@ -1,16 +1,16 @@
 mod bottom_text;
 
-use crate::bottom_text::{BOTTOM_TEXT, IGNORED_CLASSES, IGNORED_FUNCTIONS};
+use crate::bottom_text::{IGNORED_CLASSES, IGNORED_FUNCTIONS};
 use std::collections::BTreeMap;
 use std::fs;
 use std::fs::OpenOptions;
 use std::io::{BufWriter, Write};
 use std::path::PathBuf;
 
-const PATH_TO_GTK_RS: &str = "/home/rafal/Pobrane/gtk4-rs-master/gtk4/src";
-const PATH_TO_GTK_RS_AUTO: &str = "/home/rafal/Pobrane/gtk4-rs-master/gtk4/src/auto";
+const PATH_TO_GTK_RS: &str = "/home/rafal/Downloads/gtk4-rs-master/gtk4/src";
+const PATH_TO_GTK_RS_AUTO: &str = "/home/rafal/Downloads/gtk4-rs-master/gtk4/src/auto";
 
-const PATH_TO_PROJECT_FILE: &str = "/home/rafal/Pulpit/gtk_rs_fuzzer/Project/src/ziemniak.rs";
+const PATH_TO_PROJECT_FILE: &str = "/home/rafal/Projekty/Rust/gtk_rs_fuzzer/Project/src/ziemniak.rs";
 
 const NUMBER_OF_REPEATS: u32 = 100; // How many time repeat function executing to be sure that this function cause problems
 
@@ -18,19 +18,18 @@ fn main() {
     let (class_info, class_functions) = collect_things();
     create_project_file(class_info, class_functions)
 }
-fn create_project_file(class_info: BTreeMap<String, Vec<String>>, class_functions: BTreeMap<String, BTreeMap<String, Vec<String>>>) {
+fn create_project_file(_class_info: BTreeMap<String, Vec<String>>, class_functions: BTreeMap<String, BTreeMap<String, Vec<String>>>) {
     let _ = fs::remove_file(PATH_TO_PROJECT_FILE);
 
-    let mut file = OpenOptions::new().write(true).create(true).open(PATH_TO_PROJECT_FILE).unwrap();
+    let file = OpenOptions::new().write(true).create(true).open(PATH_TO_PROJECT_FILE).unwrap();
     let mut file = BufWriter::new(file);
 
     writeln!(
         file,
-        "use gtk4::prelude::*;
+        "use crate::create_objects::*;
+use crate::helpers::*;
+use gtk4::prelude::*;
 use gtk4::*;
-use glib::{{random_int, random_int_range,random_double_range}};
-use gdk4::DragAction;
-use rand::prelude::SliceRandom;
 
 pub fn execute_things(){{
 
@@ -42,7 +41,7 @@ pub fn execute_things(){{
     let mut object_number = 0;
 
     let mut st_save: Vec<String> = Vec::new();
-    for (index, (name_of_class, function_list)) in class_functions.iter().enumerate() {
+    for (_index, (name_of_class, function_list)) in class_functions.iter().enumerate() {
         // if name_of_class != "Label" {
         //     continue;
         // }
@@ -53,22 +52,17 @@ pub fn execute_things(){{
         st_save.push("\t{".to_string());
         for (function, arguments) in function_list {
             // TODO create here an object
-            if function == "build" {
+            if function == "build" || function == "new" || function.contains("new_") || function == "builder" {
                 continue; // TODO check why
             }
             if arguments.is_empty() {
-                if function == "new" || function.contains("new_") || function == "builder" {
-                    // st_save.push(format!("\t\t_object{}::{}();", object_number, function));
+                st_save.push(format!("\t\tfor _i in 0..{}{{", NUMBER_OF_REPEATS));
+                st_save.push(format!("\t\t\tlet _object{} = gget_{}();", object_number, name_of_class.to_ascii_lowercase(),));
+                st_save.push(format!("\t\t\tprintln!(\"Trying to execute {}.{}()\");", name_of_class, function,));
+                st_save.push(format!("\t\t\t_object{}.{}();", object_number, function));
+                st_save.push(format!("\t\t\tprintln!(\"Executed {}.{}()\");", name_of_class, function,));
+                st_save.push("\t\t}".to_string());
 
-                    // STATIC function do nothing
-                } else {
-                    st_save.push(format!("\t\tfor _i in 0..{}{{", NUMBER_OF_REPEATS));
-                    st_save.push(format!("\t\t\tlet _object{} = gget_{}();", object_number, name_of_class.to_ascii_lowercase(),));
-                    st_save.push(format!("\t\t\tprintln!(\"Trying to execute {}.{}()\");", name_of_class, function,));
-                    st_save.push(format!("\t\t\t_object{}.{}();", object_number, function));
-                    st_save.push(format!("\t\t\tprintln!(\"Executed {}.{}()\");", name_of_class, function,));
-                    st_save.push("\t\t}".to_string());
-                }
                 object_number += 1;
             }
         }
@@ -80,7 +74,6 @@ pub fn execute_things(){{
     }
 
     writeln!(file, "}}").unwrap();
-    writeln!(file, "{}", BOTTOM_TEXT);
 }
 
 fn collect_things() -> (BTreeMap<String, Vec<String>>, BTreeMap<String, BTreeMap<String, Vec<String>>>) {
@@ -267,7 +260,7 @@ fn collect_things() -> (BTreeMap<String, Vec<String>>, BTreeMap<String, BTreeMap
     let mut counter_class = 0;
     let mut counter_methods = 0;
     let mut counter_arguments = 0;
-    let mut all_class_number = class_info.len();
+    let all_class_number = class_info.len();
 
     for (name_of_class, help_classes) in &class_info {
         println!("Class {}, {:?}", name_of_class, help_classes);
@@ -296,7 +289,7 @@ fn collect_things() -> (BTreeMap<String, Vec<String>>, BTreeMap<String, BTreeMap
         };
     }
     for ignored in IGNORED_FUNCTIONS {
-        for (name_of_class, functions) in &mut class_functions {
+        for (_name_of_class, functions) in &mut class_functions {
             if let Some(removed) = functions.remove(ignored) {
                 counter_methods -= 1;
                 counter_arguments -= removed.len();
