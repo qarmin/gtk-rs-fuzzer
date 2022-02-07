@@ -1,0 +1,20 @@
+[package]
+name = "crash_thing"
+authors = ["Rafał Mikrut <mikrutrafal@protonmail.com>"]
+edition = "2021"
+description = "Crash project"
+license = "MIT"
+version = "0.1.0"
+
+[dependencies]
+gdk4 = "0.4.6"
+gio = "0.15.4"
+glib = "0.15.4"
+
+rand = "0.8.4"
+
+[dependencies.gtk4]
+version = "0.4.6"
+default-features = false # just in case
+features = ["v4_2"]
+
