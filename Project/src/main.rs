@@ -1,9 +1,8 @@
+mod helpers;
 mod ziemniak;
 
-use crate::ziemniak::{execute_things, gget_droptarget};
-use gdk4::DragAction;
+use crate::ziemniak::execute_things;
 use gtk4::prelude::*;
-use gtk4::DropTarget;
 
 const CRASHES: u64 = 1;
 
@@ -26,11 +25,7 @@ fn main() {
 }
 
 fn crashes() {
-    for _i in 0..100 {
-        DropTarget::new(glib::Type::BOOL, DragAction::COPY).formats();
-        println!("a");
-    }
-
+    // gtk4::DropTarget::new(glib::Type::BOOL, DragAction::COPY).formats();
     // gtk4::SearchEntry::new().emit_stop_search();
     // gtk4::SearchEntry::new().emit_previous_match();
     // gtk4::SearchEntry::new().emit_next_match();
