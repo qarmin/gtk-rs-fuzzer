@@ -1,19 +1,25 @@
+mod bottom_text;
+
+use crate::bottom_text::BOTTOM_TEXT;
 use std::collections::BTreeMap;
 use std::fs;
 use std::fs::OpenOptions;
 use std::io::{BufWriter, Write};
 use std::path::PathBuf;
 
+const PATH_TO_GTK_RS: &str = "/home/rafal/Pobrane/gtk4-rs-master/gtk4/src";
+const PATH_TO_GTK_RS_AUTO: &str = "/home/rafal/Pobrane/gtk4-rs-master/gtk4/src/auto";
+
+const PATH_TO_PROJECT_FILE: &str = "/home/rafal/Pulpit/gtk_rs_fuzzer/Project/src/ziemniak.rs";
+
 fn main() {
     let (class_info, class_functions) = collect_things();
     create_project_file(class_info, class_functions)
 }
 fn create_project_file(class_info: BTreeMap<String, Vec<String>>, class_functions: BTreeMap<String, BTreeMap<String, Vec<String>>>) {
-    let path_to_project_file = "/home/rafal/Projekty/Rust/gtk_rs_fuzzer/Project/src/ziemniak.rs";
+    let _ = fs::remove_file(PATH_TO_PROJECT_FILE);
 
-    let _ = fs::remove_file(path_to_project_file);
-
-    let mut file = OpenOptions::new().write(true).create(true).open(path_to_project_file).unwrap();
+    let mut file = OpenOptions::new().write(true).create(true).open(PATH_TO_PROJECT_FILE).unwrap();
     let mut file = BufWriter::new(file);
 
     writeln!(
@@ -72,43 +78,14 @@ pub fn execute_things(){{
     }
 
     writeln!(file, "}}").unwrap();
-    let string = r###"
-pub fn take_string() -> String {
-    if random_int() % 2 == 0 {
-        return "".to_string();
-    }
-    return random_int().to_string();
-    }
-pub fn take_i32() -> i32 {
-        random_int_range(-100000, 100000)
-    }
-pub fn take_i64() -> i64 {
-        random_int_range(-100000, 100000) as i64
-    }
-pub fn take_u32() -> u32 {
-        random_int_range(0, 100000) as u32
-    }
-pub fn take_u64() -> u64 {
-        random_int_range(0, 100000) as u64
-    }
-    
-pub fn gget_label() -> Label {
-        Label::new(Some(&take_string()))
-    }
-
-    
-    "###;
-    writeln!(file, "{}", string);
+    writeln!(file, "{}", BOTTOM_TEXT);
 }
 
 fn collect_things() -> (BTreeMap<String, Vec<String>>, BTreeMap<String, BTreeMap<String, Vec<String>>>) {
-    let path_to_gtk_rs = "/home/rafal/Downloads/gtk4-rs-master/gtk4/src";
-    let path_to_gtk_rs_auto = "/home/rafal/Downloads/gtk4-rs-master/gtk4/src/auto";
-
     let mut class_info: BTreeMap<String, Vec<String>> = Default::default(); // Class + what extends e.g.   Label -> [Widget, LabelExt]
     let mut class_functions: BTreeMap<String, BTreeMap<String, Vec<String>>> = Default::default(); // Class + functions + arguments e.g. Label -> new -> [&str]
 
-    for path_dir in [path_to_gtk_rs, path_to_gtk_rs_auto] {
+    for path_dir in [PATH_TO_GTK_RS, PATH_TO_GTK_RS_AUTO] {
         let dir = fs::read_dir(path_dir).unwrap();
         for entry in dir {
             let entry_data = match entry {
