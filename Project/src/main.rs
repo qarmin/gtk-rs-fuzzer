@@ -1,3 +1,7 @@
+#![allow(dead_code)]
+#![allow(unused_imports)]
+#![allow(unused_must_use)]
+
 mod create_objects;
 mod helpers;
 mod ziemniak;
@@ -6,8 +10,6 @@ use crate::create_objects::*;
 use crate::ziemniak::execute_things;
 use gtk4::prelude::*;
 use gtk4::*;
-
-const CRASHES: u64 = 0;
 
 fn main() {
     let application = gtk4::Application::builder().build();
@@ -27,16 +29,18 @@ fn main() {
     application.run();
 }
 
+const CRASHES: u64 = 0;
 fn crashes() {
-    for _j in 0..100 {
-        for _i in 0..10 {
-            let ff = NamedAction::new(&"");
-        }
-    }
-    // for _j in 0..10 {
-    //     let thing: Option<&ListItemFactory> = None;
-    //     ColumnViewColumn::new(Some("10"), thing);
+    println!("TESTSTTSTSTSTSTSTST");
+    // gtk4::SingleSelection::default().model();
+    //     for _i in 0..10 {
+    //         let ff = NamedAction::new(&"");
+    //     }
     // }
+    for _j in 0..10 {
+        let thing: Option<&ListItemFactory> = None;
+        ColumnViewColumn::new(Some("10"), thing);
+    }
     // ColumnView
     // for _j in 0..10 {
     //     let thing: Option<&ListItemFactory> = None;
@@ -64,7 +68,7 @@ fn crashes() {
     // gtk4::FlowBox::new().emit_toggle_cursor_child();
     // gtk4::FlowBox::new().emit_select_all();
     // gtk4::FlowBox::new().emit_activate_cursor_child();
-    // gtk4::IconView::new().drag_dest_item();
+    //gtk4::IconView::new().drag_dest_item();
     // gtk4::EventControllerKey::new().im_context();
     // gtk4::EntryCompletion::new().insert_prefix();
     // gtk4::Assistant::new().emit_escape();

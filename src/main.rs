@@ -1,6 +1,10 @@
-mod bottom_text;
+#![allow(clippy::collapsible_else_if)]
+#![allow(clippy::type_complexity)]
+#![allow(clippy::single_char_pattern)]
 
-use crate::bottom_text::{IGNORED_CLASSES, IGNORED_FUNCTIONS};
+mod settings;
+
+use crate::settings::{CLASSES_TO_USE, IGNORED_CLASSES, IGNORED_FUNCTIONS};
 use std::collections::BTreeMap;
 use std::fs;
 use std::fs::OpenOptions;
@@ -52,14 +56,13 @@ pub fn execute_things(){{
         st_save.push("\t{".to_string());
         for (function, arguments) in function_list {
             // TODO create here an object
-            if function == "build" || function == "new" || function.contains("new_") || function.contains("emit_") || function == "builder" {
+            if function == "build" || function == "new" || function.contains("new_") || function == "builder" {
                 continue; // TODO check why
-                          // TODO Remove emits
             }
             // TODO
             if arguments.is_empty() {
                 st_save.push(format!("\t\tfor _i in 0..{}{{", NUMBER_OF_REPEATS));
-                st_save.push(format!("\t\t\tprintln!(\"Creating object {}\");", name_of_class));
+                st_save.push(format!("\t\t\tprintln!(\"Creating object {} - gget_{} - \");", name_of_class, name_of_class.to_ascii_lowercase()));
                 st_save.push(format!("\t\t\tlet _object{} = gget_{}();", object_number, name_of_class.to_ascii_lowercase()));
                 st_save.push(format!("\t\t\tprintln!(\"Trying to execute {}.{}()\");", name_of_class, function));
                 st_save.push(format!("\t\t\t_object{}.{}();", object_number, function));
@@ -80,11 +83,13 @@ pub fn execute_things(){{
 }
 
 fn collect_things() -> (BTreeMap<String, Vec<String>>, BTreeMap<String, BTreeMap<String, Vec<String>>>) {
+    // Do not modify result of this variable
     let mut class_info: BTreeMap<String, Vec<String>> = Default::default(); // Class + what extends e.g.   Label -> [Widget, LabelExt]
+                                                                            // Can be removed
     let mut class_functions: BTreeMap<String, BTreeMap<String, Vec<String>>> = Default::default(); // Class + functions + arguments e.g. Label -> new -> [&str]
 
     for path_dir in [PATH_TO_GTK_RS, PATH_TO_GTK_RS_AUTO] {
-        let dir = fs::read_dir(path_dir).expect(&format!("Cannot open dir {}", path_dir));
+        let dir = fs::read_dir(path_dir).unwrap_or_else(|_| panic!("Cannot open dir {}", path_dir));
         for entry in dir {
             let entry_data = match entry {
                 Ok(t) => t,
@@ -137,7 +142,7 @@ fn collect_things() -> (BTreeMap<String, Vec<String>>, BTreeMap<String, BTreeMap
                             class_functions.entry(current_class.clone()).or_insert_with(Default::default);
                             class_functions.get_mut(&current_class).unwrap().insert(function_name.clone(), parts.clone());
 
-                            println!("Arguments for multiline function {}, {:?}", function_name, parts);
+                            // println!("Arguments for multiline function {}, {:?}", function_name, parts);
                         } else {
                             panic!("HMMMMMMMMMMMMM");
                         }
@@ -146,13 +151,13 @@ fn collect_things() -> (BTreeMap<String, Vec<String>>, BTreeMap<String, BTreeMap
                         previous_arguments.clear();
                         function_name.clear();
                     } else {
-                        previous_arguments.push_str(&line);
+                        previous_arguments.push_str(line);
                         if line.contains("{") {
                             panic!("HHHHHHHHHHHHHHHHHHHHh");
                         }
                     }
-                } else if line.starts_with("pub fn ") && line.contains("(") && current_class != "" {
-                    println!("{}", line);
+                } else if line.starts_with("pub fn ") && line.contains("(") && !current_class.is_empty() {
+                    // println!("{}", line);
                     let text_to_check = "pub fn ";
                     let function_name_local = &line[text_to_check.len()..line.find("(").unwrap()];
                     if function_name_local.contains("connect_") || function_name_local.contains("<") {
@@ -185,7 +190,7 @@ fn collect_things() -> (BTreeMap<String, Vec<String>>, BTreeMap<String, BTreeMap
                             class_functions.entry(current_class.clone()).or_insert_with(Default::default);
                             class_functions.get_mut(&current_class).unwrap().insert(function_name_local.to_string(), parts.clone());
 
-                            println!("Arguments for function {}, {:?}", function_name_local, parts);
+                            // println!("Arguments for function {}, {:?}", function_name_local, parts);
                         } else {
                             panic!("HMMMMMMMMMMMMM");
                         }
@@ -199,7 +204,7 @@ fn collect_things() -> (BTreeMap<String, Vec<String>>, BTreeMap<String, BTreeMap
                         continue_function_declaration = true;
                     }
 
-                    println!("found function \"{}\" for \"{}\"", function_name_local, current_class);
+                    // println!("found function \"{}\" for \"{}\"", function_name_local, current_class);
                 } else if line.contains("Object<ffi::") {
                     let t_help = "pub struct ";
                     if let Some(found_item) = line.find(t_help) {
@@ -260,46 +265,63 @@ fn collect_things() -> (BTreeMap<String, Vec<String>>, BTreeMap<String, BTreeMap
         }
     }
 
-    let mut counter_class = 0;
-    let mut counter_methods = 0;
-    let mut counter_arguments = 0;
+    let mut counter_class;
+    let mut counter_methods;
+    let mut counter_arguments;
     let all_class_number = class_info.len();
 
-    for (name_of_class, help_classes) in &class_info {
-        println!("Class {}, {:?}", name_of_class, help_classes);
+    //// DEBUG
+    {
+        counter_class = 0;
+        counter_methods = 0;
+        counter_arguments = 0;
+        for function_list in class_functions.values() {
+            counter_class += 1;
+            for arguments in function_list.values() {
+                counter_methods += 1;
+                counter_arguments += arguments.len();
+            }
+        }
+        println!("All classes {}", all_class_number);
+        println!("Class: {}, Methods: {}, Arguments: {}", counter_class, counter_methods, counter_arguments);
     }
+    //// DEBUG END
 
-    for (name_of_class, function_list) in &class_functions {
-        println!("Class {}", name_of_class);
-        counter_class += 1;
-        for (_function, arguments) in function_list {
-            // println!("Function {}, arguments {:?}", function, arguments);
-            counter_methods += 1;
-            counter_arguments += arguments.len();
+    // Remove classes which won't be used
+    if !CLASSES_TO_USE.is_empty() {
+        for used_class in class_info.keys() {
+            if !CLASSES_TO_USE.iter().any(|e| e == used_class) {
+                class_functions.remove(used_class);
+            }
+        }
+    } else {
+        for ignored in IGNORED_CLASSES {
+            class_functions.remove(&ignored.to_string());
         }
     }
-    println!("All classes {}", all_class_number);
-    println!("Class: {}, Methods: {}, Arguments: {}", counter_class, counter_methods, counter_arguments);
 
-    for ignored in IGNORED_CLASSES {
-        counter_class -= 1;
-        class_info.remove(ignored);
-        if let Some(removed) = class_functions.remove(ignored) {
-            for (_function, arguments) in removed {
-                counter_methods -= 1;
-                counter_arguments -= arguments.len();
-            }
-        };
-    }
+    // Remove ignored functions
     for ignored in IGNORED_FUNCTIONS {
-        for (_name_of_class, functions) in &mut class_functions {
-            if let Some(removed) = functions.remove(ignored) {
-                counter_methods -= 1;
-                counter_arguments -= removed.len();
-            }
+        for functions in class_functions.values_mut() {
+            functions.remove(&ignored.to_string());
         }
     }
-    println!("After ignoring: Class: {}, Methods: {}, Arguments: {}", counter_class, counter_methods, counter_arguments);
+
+    //// DEBUG
+    {
+        counter_class = 0;
+        counter_methods = 0;
+        counter_arguments = 0;
+        for function_list in class_functions.values() {
+            counter_class += 1;
+            for arguments in function_list.values() {
+                counter_methods += 1;
+                counter_arguments += arguments.len();
+            }
+        }
+        println!("After ignoring - Class: {}, Methods: {}, Arguments: {}", counter_class, counter_methods, counter_arguments);
+    }
+    //// DEBUG END
 
     (class_info, class_functions)
 }
