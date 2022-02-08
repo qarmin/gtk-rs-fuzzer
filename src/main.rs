@@ -4,7 +4,7 @@
 
 mod settings;
 
-use crate::settings::{CLASSES_TO_USE, IGNORED_CLASSES, IGNORED_FUNCTIONS};
+use crate::settings::{CLASSES_TO_USE, IGNORED_CLASSES, IGNORED_FUNCTIONS, USE_PARENT_ITEMS};
 use std::collections::BTreeMap;
 use std::fs;
 use std::fs::OpenOptions;
@@ -265,33 +265,36 @@ fn collect_things() -> (BTreeMap<String, Vec<String>>, BTreeMap<String, BTreeMap
         }
     }
 
-    let mut counter_class;
-    let mut counter_methods;
-    let mut counter_arguments;
-    let all_class_number = class_info.len();
+    count_objects(&class_functions, "At start            ");
 
-    //// DEBUG
-    {
-        counter_class = 0;
-        counter_methods = 0;
-        counter_arguments = 0;
-        for function_list in class_functions.values() {
-            counter_class += 1;
-            for arguments in function_list.values() {
-                counter_methods += 1;
-                counter_arguments += arguments.len();
+    // Extend classes with parent
+    if USE_PARENT_ITEMS {
+        let base_functions = class_functions.clone(); // Needed to have same set of functions across all iterations
+
+        for (name_of_class, parent_classes) in &class_info {
+            if class_functions.contains_key(name_of_class) {
+                for parent_class in parent_classes {
+                    if class_functions.contains_key(parent_class) {
+                        // println!("I'm in {}, {}", name_of_class, parent_class);
+                        class_functions.get_mut(name_of_class).unwrap().append(&mut base_functions.get(parent_class).unwrap().clone());
+                    } else {
+                        // println!("MISSING parent class: {}", parent_class); // TODO why is this missing?
+                    }
+                }
+            } else {
+                // println!("MISSING normal class: {}", name_of_class); // TODO why is this missing?
             }
         }
-        println!("All classes {}", all_class_number);
-        println!("Class: {}, Methods: {}, Arguments: {}", counter_class, counter_methods, counter_arguments);
     }
-    //// DEBUG END
+
+    count_objects(&class_functions, "After adding parents");
 
     // Remove classes which won't be used
     if !CLASSES_TO_USE.is_empty() {
-        for used_class in class_info.keys() {
-            if !CLASSES_TO_USE.iter().any(|e| e == used_class) {
-                class_functions.remove(used_class);
+        let keys = class_functions.clone().into_keys();
+        for used_class in keys {
+            if !CLASSES_TO_USE.iter().any(|e| *e == used_class) {
+                class_functions.remove(&used_class);
             }
         }
     } else {
@@ -307,21 +310,35 @@ fn collect_things() -> (BTreeMap<String, Vec<String>>, BTreeMap<String, BTreeMap
         }
     }
 
-    //// DEBUG
-    {
-        counter_class = 0;
-        counter_methods = 0;
-        counter_arguments = 0;
-        for function_list in class_functions.values() {
-            counter_class += 1;
-            for arguments in function_list.values() {
-                counter_methods += 1;
-                counter_arguments += arguments.len();
-            }
-        }
-        println!("After ignoring - Class: {}, Methods: {}, Arguments: {}", counter_class, counter_methods, counter_arguments);
-    }
+    count_objects(&class_functions, "End results         ");
+
     //// DEBUG END
+    // {
+    //     for (name_of_class, function_list) in &class_functions {
+    //         for (name_of_function, _arguments) in function_list {
+    //             println!("{}.{}", name_of_class, name_of_function)
+    //         }
+    //     }
+    // }
+    // {
+    //     for (name_of_class, similar_clases) in &class_info {
+    //         println!("{}.{:?}", name_of_class, similar_clases)
+    //     }
+    // }
 
     (class_info, class_functions)
+}
+
+fn count_objects(class_functions: &BTreeMap<String, BTreeMap<String, Vec<String>>>, what: &str) {
+    let mut counter_class = 0;
+    let mut counter_methods = 0;
+    let mut counter_arguments = 0;
+    for function_list in class_functions.values() {
+        counter_class += 1;
+        for arguments in function_list.values() {
+            counter_methods += 1;
+            counter_arguments += arguments.len();
+        }
+    }
+    println!("{} - Class: {}, Methods: {}, Arguments: {}", what, counter_class, counter_methods, counter_arguments);
 }

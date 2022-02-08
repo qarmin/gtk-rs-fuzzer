@@ -1,3 +1,5 @@
+pub const USE_PARENT_ITEMS: bool = true;
+
 pub const IGNORED_FUNCTIONS: &[&str] = &[
     // Non existent functions(probably bug in parsing files)
     "with_entry",               // ComboBox, ComboBoxText
@@ -13,14 +15,14 @@ pub const IGNORED_FUNCTIONS: &[&str] = &[
     "shows_arrow",              // DropDown
     "current_drop",             // DropTarget
     "is_gtk_hint_font_metrics", // Settings
+    "default_direction",        // Widget
     // Reported, but not fixed in used GTK/GTK-rs version
-    "emit_escape",    // https://github.com/gtk-rs/gtk4-rs/issues/870
-    "im_context",     // https://github.com/gtk-rs/gtk4-rs/issues/874
-    "insert_prefix",  // https://github.com/gtk-rs/gtk4-rs/issues/873
-    "drag_dest_item", // https://github.com/gtk-rs/gtk-rs-core/issues/537
-    "print_settings", // https://github.com/gtk-rs/gtk4-rs/issues/880
+    "emit_escape",      // https://github.com/gtk-rs/gtk4-rs/issues/870
+    "im_context",       // https://github.com/gtk-rs/gtk4-rs/issues/874
+    "insert_prefix",    // https://github.com/gtk-rs/gtk4-rs/issues/873
+    "drag_dest_item",   // https://github.com/gtk-rs/gtk-rs-core/issues/537
+    "print_settings",   // https://github.com/gtk-rs/gtk4-rs/issues/880
     "selected_printer", // https://github.com/gtk-rs/gtk4-rs/issues/882
-                      // TODO
 ];
 
 // List of classes which will be used(IGNORED_CLASSES NOT ignore classes from this array).
