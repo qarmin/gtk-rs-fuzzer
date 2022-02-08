@@ -1,3 +1,4 @@
+use std::any::Any;
 use crate::helpers::*;
 use gdk4::DragAction;
 use gtk4::builders::{PrinterBuilder, SettingsBuilder};
@@ -19,6 +20,165 @@ pub fn gget_activateaction() -> ActivateAction {
 }
 pub fn gget_appchooserbutton() -> AppChooserButton {
     AppChooserButton::new(&take_string())
+}
+// pub fn gget_applicationwindow() -> ApplicationWindow{
+//     ApplicationWindow::new()
+// }
+pub fn gget_binlayout() -> BinLayout{
+    BinLayout::new()
+}
+// pub fn gget_treemodelsort() -> TreeModelSort {
+//     TreeModelSort::with_model()
+// }
+pub fn gget_stringlist() -> StringList {
+    StringList::default()
+}
+pub fn gget_printoperation() -> PrintOperation {
+    PrintOperation::new()
+}
+pub fn gget_overlaylayout() -> OverlayLayout {
+    OverlayLayout::new()
+}
+pub fn gget_numericsorter() -> NumericSorter {
+    NumericSorter::default()
+}
+pub fn gget_multisorter() -> MultiSorter {
+    MultiSorter::new()
+}
+pub fn gget_stacksidebar() -> StackSidebar {
+    StackSidebar::new()
+}
+pub fn gget_shortcutlabel() -> ShortcutLabel {
+    ShortcutLabel::default()
+}
+pub fn gget_scrollbar() -> Scrollbar {
+    Scrollbar::default()
+}
+pub fn gget_immulticontext() -> IMMulticontext {
+    IMMulticontext::new()
+}
+pub fn gget_mediafile() -> MediaFile {
+    MediaFile::new()
+}
+pub fn gget_grid() -> Grid {
+    Grid::new()
+}
+pub fn gget_imcontextsimple() -> IMContextSimple {
+    IMContextSimple::new()
+}
+pub fn gget_listboxrow() -> ListBoxRow {
+    ListBoxRow::new()
+}
+pub fn gget_mediacontrols() -> MediaControls {
+    MediaControls::default()
+}
+pub fn gget_overlay() -> Overlay {
+    Overlay::new()
+}
+pub fn gget_popover() -> Popover {
+    Popover::new()
+}
+pub fn gget_scale() -> Scale {
+    Scale::default()
+}
+pub fn gget_scalebutton() -> ScaleButton {
+    ScaleButton::default()
+}
+pub fn gget_separator() -> Separator {
+    Separator::default()
+}
+// pub fn gget_shortcutssection() -> ShortcutsSection {
+//     ShortcutsSection::new()
+// }
+pub fn gget_stackswitcher() -> StackSwitcher {
+    StackSwitcher::new()
+}
+pub fn gget_statusbar() -> Statusbar {
+    Statusbar::new()
+}
+pub fn gget_textview() -> TextView {
+    TextView::new()
+}
+pub fn gget_togglebutton() -> ToggleButton {
+    ToggleButton::new()
+}
+pub fn gget_treeview() -> TreeView {
+    TreeView::new()
+}
+pub fn gget_windowhandle() -> WindowHandle {
+    WindowHandle::new()
+}
+pub fn gget_fixedlayout() -> FixedLayout {
+    FixedLayout::new()
+}
+pub fn gget_everyfilter() -> EveryFilter {
+    EveryFilter::new()
+}
+pub fn gget_filechoosernative() -> FileChooserNative {
+    FileChooserNative::default()
+}
+pub fn gget_flowboxchild() -> FlowBoxChild {
+    FlowBoxChild::new()
+}
+pub fn gget_fixed() -> Fixed {
+    Fixed::new()
+}
+pub fn gget_filechooserdialog() -> FileChooserDialog {
+    FileChooserDialog::default()
+}
+pub fn gget_fontchooserdialog() -> FontChooserDialog {
+    FontChooserDialog::default()
+}
+pub fn gget_gesturelongpress() -> GestureLongPress {
+    GestureLongPress::new()
+}
+pub fn gget_gesturedrag() -> GestureDrag {
+    GestureDrag::new()
+}
+pub fn gget_gestureclick() -> GestureClick {
+    GestureClick::new()
+}
+pub fn gget_glarea() -> GLArea {
+    GLArea::new()
+}
+pub fn gget_frame() -> Frame {
+    Frame::default()
+}
+pub fn gget_gesturepan() -> GesturePan {
+    GesturePan::new(stek_orientation())
+}
+pub fn gget_drawingarea() -> DrawingArea {
+    DrawingArea::new()
+}
+pub fn gget_checkbutton() -> CheckButton {
+    CheckButton::new()
+}
+pub fn gget_dialog() -> Dialog {
+    Dialog::new()
+}
+pub fn gget_button() -> Button {
+    Button::new()
+}
+pub fn gget_cellareabox() -> CellAreaBox {
+    CellAreaBox::new()
+}
+pub fn gget_cellrenderercombo() -> CellRendererCombo {
+    CellRendererCombo::new()
+}
+pub fn gget_cellrendererspin() -> CellRendererSpin {
+    CellRendererSpin::new()
+}
+pub fn gget_cellrenderertext() -> CellRendererText {
+    CellRendererText::new()
+}
+pub fn gget_box() -> Box{
+    Box::new(stek_orientation(), take_i32())
+}
+pub fn gget_alternativetrigger() -> AlternativeTrigger {
+    AlternativeTrigger::default()
+}
+pub fn gget_anyfilter() -> AnyFilter {
+    AnyFilter::default()
 }
 pub fn gget_appchooserdialog() -> AppChooserDialog {
     AppChooserDialog::default()

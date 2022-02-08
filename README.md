@@ -1,9 +1,15 @@
 # Gtk Rust Fuzzer
 Simple GTK Rust Fuzzer which aims to test all available classes and functions in GTK
 
-## Current status
-For now it tests only functions without any arguments, one per object.  
-Currently it cannot test functions from parent classes
+## What was fuzzed/done
+- Every function without arguments was tested
+- Tested also parent functions without arguments
+
+## TODO
+- Fuzz also functions from traits
+- Test also arguments of functions
+- Execute functions in random orders
+- Improve logging to be able to use copy pasted code from logs
 
 ## How to use it
 - Install GTK 4(can be probably easily changed to GTK4 if needed)

@@ -4,7 +4,7 @@
 
 mod settings;
 
-use crate::settings::{CLASSES_TO_USE, IGNORED_CLASSES, IGNORED_FUNCTIONS, USE_PARENT_ITEMS};
+use crate::settings::{CLASSES_TO_USE, IGNORED_CLASSES, IGNORED_FUNCTIONS, NUMBER_OF_REPEATS, USE_PARENT_ITEMS, USE_TRAIT_ITEMS};
 use std::collections::BTreeMap;
 use std::fs;
 use std::fs::OpenOptions;
@@ -15,8 +15,6 @@ const PATH_TO_GTK_RS: &str = "/home/rafal/Downloads/gtk4-rs/gtk4/src";
 const PATH_TO_GTK_RS_AUTO: &str = "/home/rafal/Downloads/gtk4-rs/gtk4/src/auto";
 
 const PATH_TO_PROJECT_FILE: &str = "/home/rafal/Projekty/Rust/gtk_rs_fuzzer/Project/src/ziemniak.rs";
-
-const NUMBER_OF_REPEATS: u32 = 10; // How many time repeat function executing to be sure that this function cause problems
 
 fn main() {
     let (class_info, class_functions) = collect_things();
@@ -46,11 +44,10 @@ pub fn execute_things(){{
 
     let mut st_save: Vec<String> = Vec::new();
     for (_index, (name_of_class, function_list)) in class_functions.iter().enumerate() {
-        // if name_of_class != "Label" {
+        // if _index <= 180 || _index > 1900 {
         //     continue;
-        // }
-        // if index > 10 {
-        //     continue;
+        // } else {
+        //     println!("{}. {}", _index, name_of_class);
         // }
         st_save.push(format!("\t// {}", name_of_class));
         st_save.push("\t{".to_string());
@@ -63,7 +60,7 @@ pub fn execute_things(){{
             if arguments.is_empty() {
                 st_save.push(format!("\t\tfor _i in 0..{}{{", NUMBER_OF_REPEATS));
                 st_save.push(format!("\t\t\tprintln!(\"Creating object {} - gget_{} - \");", name_of_class, name_of_class.to_ascii_lowercase()));
-                st_save.push(format!("\t\t\tlet _object{} = gget_{}();", object_number, name_of_class.to_ascii_lowercase()));
+                st_save.push(format!("\t\t\tlet _object{} = gget_{}(); // {}", object_number, name_of_class.to_ascii_lowercase(), name_of_class));
                 st_save.push(format!("\t\t\tprintln!(\"Trying to execute {}.{}()\");", name_of_class, function));
                 st_save.push(format!("\t\t\t_object{}.{}();", object_number, function));
                 st_save.push(format!("\t\t\tprintln!(\"Executed {}.{}()\");", name_of_class, function));
@@ -87,6 +84,8 @@ fn collect_things() -> (BTreeMap<String, Vec<String>>, BTreeMap<String, BTreeMap
     let mut class_info: BTreeMap<String, Vec<String>> = Default::default(); // Class + what extends e.g.   Label -> [Widget, LabelExt]
                                                                             // Can be removed
     let mut class_functions: BTreeMap<String, BTreeMap<String, Vec<String>>> = Default::default(); // Class + functions + arguments e.g. Label -> new -> [&str]
+
+    let mut traits: BTreeMap<String, BTreeMap<String, Vec<String>>> = Default::default();
 
     for path_dir in [PATH_TO_GTK_RS, PATH_TO_GTK_RS_AUTO] {
         let dir = fs::read_dir(path_dir).unwrap_or_else(|_| panic!("Cannot open dir {}", path_dir));
@@ -113,11 +112,14 @@ fn collect_things() -> (BTreeMap<String, Vec<String>>, BTreeMap<String, BTreeMap
             let mut function_name: String = "".to_string();
             let mut previous_arguments: String = "".to_string();
             let mut current_class: String = "".to_string();
+            let mut current_trait: String = "".to_string();
             let mut continue_function_declaration = false;
             for line in lines {
-                let line = line.trim();
+                let old_line = line;
+                let line = old_line.trim();
+                // GENERAL - continue when found ending
                 if continue_function_declaration {
-                    if line.ends_with("{") {
+                    if (!current_class.is_empty() && line.ends_with("{")) || (!current_trait.is_empty() && line.ends_with(";")) {
                         if line.contains(")") {
                             previous_arguments.push_str(&line[..line.find(")").unwrap()]);
                             if previous_arguments.contains("::") {
@@ -139,22 +141,23 @@ fn collect_things() -> (BTreeMap<String, Vec<String>>, BTreeMap<String, BTreeMap
                                 })
                                 .collect::<Vec<String>>();
 
-                            class_functions.entry(current_class.clone()).or_insert_with(Default::default);
-                            class_functions.get_mut(&current_class).unwrap().insert(function_name.clone(), parts.clone());
+                            if !current_class.is_empty() {
+                                class_functions.entry(current_class.clone()).or_insert_with(Default::default);
+                                class_functions.get_mut(&current_class).unwrap().insert(function_name.clone(), parts.clone());
+                            } else if !current_trait.is_empty() {
+                                traits.entry(current_trait.clone()).or_insert_with(Default::default);
+                                traits.get_mut(&current_trait).unwrap().insert(function_name.clone(), parts.clone());
+                            } else {
+                                panic!("")
+                            }
 
                             // println!("Arguments for multiline function {}, {:?}", function_name, parts);
-                        } else {
-                            panic!("HMMMMMMMMMMMMM");
+                            continue_function_declaration = false;
+                            previous_arguments.clear();
+                            function_name.clear();
                         }
-
-                        continue_function_declaration = false;
-                        previous_arguments.clear();
-                        function_name.clear();
                     } else {
                         previous_arguments.push_str(line);
-                        if line.contains("{") {
-                            panic!("HHHHHHHHHHHHHHHHHHHHh");
-                        }
                     }
                 } else if line.starts_with("pub fn ") && line.contains("(") && !current_class.is_empty() {
                     // println!("{}", line);
@@ -205,7 +208,10 @@ fn collect_things() -> (BTreeMap<String, Vec<String>>, BTreeMap<String, BTreeMap
                     }
 
                     // println!("found function \"{}\" for \"{}\"", function_name_local, current_class);
-                } else if line.contains("Object<ffi::") {
+                }
+                // Finds
+                else if line.contains("Object<ffi::") {
+                    current_trait.clear();
                     let t_help = "pub struct ";
                     if let Some(found_item) = line.find(t_help) {
                         let new_temp_line = &line[found_item + t_help.len()..];
@@ -259,13 +265,78 @@ fn collect_things() -> (BTreeMap<String, Vec<String>>, BTreeMap<String, BTreeMap
                         }
                     }
                 }
+                // Finds Ext
+                else if line.starts_with("pub trait ") && line.contains("Ext") && !line.contains("Manual") {
+                    current_class.clear();
+                    current_trait.clear();
+
+                    let t_help = "pub trait ";
+                    let temp_line = &line[t_help.len()..];
+                    if let Some(s_index) = temp_line.find(" ") {
+                        let ext_name = &temp_line[..s_index];
+                        let end_name = if ext_name.ends_with(':') { &ext_name[..ext_name.len() - 4] } else { &ext_name[..ext_name.len() - 3] };
+                        // println!("ZZZ {}, {}, {}, {}", line, temp_line, ext_name, end_name);
+                        // println!("{}     ,,,,      {}", end_name, ext_name);
+                        current_trait = end_name.to_string();
+                        traits.insert(end_name.to_string(), Default::default());
+                    }
+                } else if line.starts_with("fn ") && line.contains("(") && !current_trait.is_empty() {
+                    // println!("{}", line);
+                    let text_to_check = "fn ";
+                    let function_name_local = &line[text_to_check.len()..line.find("(").unwrap()];
+                    if function_name_local.contains("connect_") || function_name_local.contains("<") {
+                        continue; // Connect function are not supported
+                    }
+
+                    if line.ends_with(";") {
+                        // Means that this is one line function
+                        if line.contains("(") && line.contains(")") {
+                            let text_to_check = &line[line.find("(").unwrap() + 1..line.find(")").unwrap()];
+                            if text_to_check.contains("::") {
+                                continue_function_declaration = false;
+                                previous_arguments.clear();
+                                function_name.clear();
+                                continue; // Things like gio::Pango are not supported
+                            }
+                            let parts = text_to_check
+                                .split(",")
+                                .map(|e| e.replace(" ", ""))
+                                .filter(|e| e != "mutself" && e != "self" && e != "&self")
+                                .filter_map(|e| {
+                                    let split = e.split(":").map(|e| e.to_string()).collect::<Vec<String>>();
+                                    if split.len() == 2 {
+                                        return Some(split[1].clone());
+                                    }
+                                    None
+                                })
+                                .collect::<Vec<String>>();
+
+                            traits.entry(current_trait.clone()).or_insert_with(Default::default);
+                            traits.get_mut(&current_trait).unwrap().insert(function_name_local.to_string(), parts.clone());
+
+                            // println!("Arguments for function {}, {:?}", function_name_local, parts);
+                        } else {
+                            panic!("HMMMMMMMMMMMMM");
+                        }
+                    } else {
+                        if let Some(line_index) = line.find("(") {
+                            previous_arguments.push_str(&line[line_index..]);
+                        } else {
+                            panic!("Big HMMMM");
+                        }
+                        function_name = function_name_local.to_string();
+                        continue_function_declaration = true;
+                    }
+
+                    // println!("found function \"{}\" for \"{}\"", function_name_local, current_class);
+                }
             }
 
             // println!("Found proper {} file", name);
         }
     }
 
-    count_objects(&class_functions, "At start            ");
+    count_objects(&class_functions, &traits, "At start            ");
 
     // Extend classes with parent
     if USE_PARENT_ITEMS {
@@ -287,7 +358,25 @@ fn collect_things() -> (BTreeMap<String, Vec<String>>, BTreeMap<String, BTreeMap
         }
     }
 
-    count_objects(&class_functions, "After adding parents");
+    // Extend classes with parent
+    if USE_TRAIT_ITEMS {
+        for (name_of_class, used_traits) in &class_info {
+            if class_functions.contains_key(name_of_class) {
+                for used_trait in used_traits {
+                    if traits.contains_key(used_trait) {
+                        // println!("I'm in {}, {}", name_of_class, parent_class);
+                        class_functions.get_mut(name_of_class).unwrap().append(&mut traits.get(used_trait).unwrap().clone());
+                    } else {
+                        // println!("MISSING parent class: {}", parent_class); // TODO why is this missing?
+                    }
+                }
+            } else {
+                // println!("MISSING normal class: {}", name_of_class); // TODO why is this missing?
+            }
+        }
+    }
+
+    count_objects(&class_functions, &traits, "After adding parents");
 
     // Remove classes which won't be used
     if !CLASSES_TO_USE.is_empty() {
@@ -310,9 +399,13 @@ fn collect_things() -> (BTreeMap<String, Vec<String>>, BTreeMap<String, BTreeMap
         }
     }
 
-    count_objects(&class_functions, "End results         ");
-
-    //// DEBUG END
+    // {
+    //     for (name_of_class, function_list) in &traits {
+    //         for (name_of_function, _arguments) in function_list {
+    //             println!("{}.{} --- Trait", name_of_class, name_of_function)
+    //         }
+    //     }
+    // }
     // {
     //     for (name_of_class, function_list) in &class_functions {
     //         for (name_of_function, _arguments) in function_list {
@@ -326,13 +419,16 @@ fn collect_things() -> (BTreeMap<String, Vec<String>>, BTreeMap<String, BTreeMap
     //     }
     // }
 
+    count_objects(&class_functions, &traits, "End results         ");
+
     (class_info, class_functions)
 }
 
-fn count_objects(class_functions: &BTreeMap<String, BTreeMap<String, Vec<String>>>, what: &str) {
+fn count_objects(class_functions: &BTreeMap<String, BTreeMap<String, Vec<String>>>, traits: &BTreeMap<String, BTreeMap<String, Vec<String>>>, what: &str) {
     let mut counter_class = 0;
     let mut counter_methods = 0;
     let mut counter_arguments = 0;
+    let traits_number = traits.len();
     for function_list in class_functions.values() {
         counter_class += 1;
         for arguments in function_list.values() {
@@ -340,5 +436,5 @@ fn count_objects(class_functions: &BTreeMap<String, BTreeMap<String, Vec<String>
             counter_arguments += arguments.len();
         }
     }
-    println!("{} - Class: {}, Methods: {}, Arguments: {}", what, counter_class, counter_methods, counter_arguments);
+    println!("{} - Class: {}, Methods: {}, Arguments: {}, Traits: {}", what, counter_class, counter_methods, counter_arguments, traits_number);
 }

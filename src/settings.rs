@@ -1,21 +1,31 @@
 pub const USE_PARENT_ITEMS: bool = true;
+pub const USE_TRAIT_ITEMS: bool = true;
+pub const NUMBER_OF_REPEATS: u32 = 2; // How many time repeat function executing to be sure that this function cause problems
 
 pub const IGNORED_FUNCTIONS: &[&str] = &[
     // Non existent functions(probably bug in parsing files)
-    "with_entry",               // ComboBox, ComboBoxText
-    "toplevels",                // Window
-    "list_toplevels",           // Window
-    "default_icon_name",        // Window
-    "emit_activate",            // MenuButton, ColorButton, AppChooserButton
-    "is_primary",               // MenuButton
-    "is_indent_for_icon",       // TreeExpander
-    "default",                  // RecentManager
-    "must_always_show_arrow",   // MenuButton
-    "get",                      // AcrivateAction - probably this is static function
-    "shows_arrow",              // DropDown
-    "current_drop",             // DropTarget
-    "is_gtk_hint_font_metrics", // Settings
-    "default_direction",        // Widget
+    "with_entry",                 // ComboBox, ComboBoxText
+    "toplevels",                  // Window
+    "list_toplevels",             // Window
+    "default_icon_name",          // Window
+    "emit_activate",              // MenuButton, ColorButton, AppChooserButton
+    "is_primary",                 // MenuButton
+    "is_indent_for_icon",         // TreeExpander
+    "default",                    // RecentManager
+    "must_always_show_arrow",     // MenuButton
+    "get",                        // AcrivateAction - probably this is static function
+    "shows_arrow",                // DropDown
+    "current_drop",               // DropTarget
+    "is_gtk_hint_font_metrics",   // Settings
+    "default_direction",          // Widget
+    "stream_unprepared",          // MediaFile
+    "stream_ended",               // MediaFile
+    "surrounding_with_selection", // IMMulticontext
+    "surrounding_with_selection", // IMContextSimple
+    // Other
+    "alignment", // Rust error, multiple applicable items in scope
+    "font_map",  // Rust error, multiple applicable items in scope
+    "cursor",    // Rust error, multiple applicable items in scope
     // Reported, but not fixed in used GTK/GTK-rs version
     "emit_escape",      // https://github.com/gtk-rs/gtk4-rs/issues/870
     "im_context",       // https://github.com/gtk-rs/gtk4-rs/issues/874
@@ -23,6 +33,24 @@ pub const IGNORED_FUNCTIONS: &[&str] = &[
     "drag_dest_item",   // https://github.com/gtk-rs/gtk-rs-core/issues/537
     "print_settings",   // https://github.com/gtk-rs/gtk4-rs/issues/880
     "selected_printer", // https://github.com/gtk-rs/gtk4-rs/issues/882
+    "renderer",         // https://github.com/gtk-rs/gtk4-rs/issues/886
+    "surface",          // https://github.com/gtk-rs/gtk4-rs/issues/886
+    "content_type",     // https://github.com/gtk-rs/gtk4-rs/issues/887
+    // TODO
+    "request_mode",
+    "current_path_string",
+    "edit_widget",
+    "edited_cell",
+    "focus_cell",
+    "emit_popup",
+    "name",
+    "widget",
+    "current_folder",
+    "map",
+    "header_bar",
+    "realize",
+    "show", // TODO, fix this as fast as possible
+    "popup",
 ];
 
 // List of classes which will be used(IGNORED_CLASSES NOT ignore classes from this array).
@@ -46,15 +74,22 @@ pub const IGNORED_CLASSES: &[&str] = &[
     "TreeListRow",
     "TreeSelection",
     "Widget",
+    "TreeModelSort",
+    "ShortcutsSection",
+    // Other
+    "ApplicationWindow", // Only one ApplicationWindows can be created
+    "FileChooserWidget", // Create a lot of warnings(and possibly also crashes) "Too many open files"
     // Reported, but crashes etc. are expected
     "NamedAction",  // https://github.com/gtk-rs/gtk4-rs/issues/875
     "SignalAction", // Error same as in NamedAction
     "ListStore",    // https://github.com/gtk-rs/gtk4-rs/issues/878
     "TreeStore",    // https://github.com/gtk-rs/gtk4-rs/issues/878
     // Reported, but not fixed in used version GTK/GTK-rs
-    "PrintJob",         // https://github.com/gtk-rs/gtk4-rs/issues/881
-    "Printer",          // https://github.com/gtk-rs/gtk4-rs/issues/883
-    "SingleSelection",  // https://github.com/gtk-rs/gtk-rs-core/issues/539
-    "TreeListModel",    // https://github.com/gtk-rs/gtk-rs-core/issues/539
+    "PrintJob",        // https://github.com/gtk-rs/gtk4-rs/issues/881
+    "Printer",         // https://github.com/gtk-rs/gtk4-rs/issues/883
+    "SingleSelection", // https://github.com/gtk-rs/gtk-rs-core/issues/539
+    "TreeListModel",   // https://github.com/gtk-rs/gtk-rs-core/issues/539
     "ColumnViewColumn", // https://github.com/gtk-rs/gtk4-rs/issues/885
+                       // TODO
+                       // "Popover", // Select cause crash
 ];

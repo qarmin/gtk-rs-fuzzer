@@ -32,4 +32,19 @@ fn main() {
 const CRASHES: u64 = 0;
 fn crashes() {
     println!("TESTSTTSTSTSTSTSTST");
+    //  BinLayout.request_mode()
+    // CellAreaBox.current_path_string()
+    // CellAreaBox.edit_widget()
+    // CellAreaBox.edited_cell()
+    // CellAreaBox.focus_cell()
+    // ComboBoxText.emit_popup()
+    // DragSource.name()
+    // DragSource.widget()
+    // FileChooserDialog.current_folder()
+    // FontChooserWidget.map()
+    // MessageDialog.header_bar()
+    // Popover.realize()
+    // Popover.show()
+    // PopoverMenu.popup()
+    gtk4::AppChooserDialog::default().content_type();
 }
