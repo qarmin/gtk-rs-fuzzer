@@ -7,14 +7,16 @@ license = "MIT"
 version = "0.1.0"
 
 [dependencies]
-gdk4 = "0.4.6"
-gio = "0.15.4"
-glib = "0.15.4"
+#gdk4 = "0.4.6"
+#gio = "0.15.5"
+#glib = "0.15.5"
+#gtk4 = "0.4.6"
+
+gdk4 = {git = "https://github.com/gtk-rs/gtk4-rs"}
+gio = {git = "https://github.com/gtk-rs/gtk-rs-core"}
+glib = {git = "https://github.com/gtk-rs/gtk-rs-core"}
+gtk4 = {git = "https://github.com/gtk-rs/gtk4-rs"}
+
 
 rand = "0.8.4"
-
-[dependencies.gtk4]
-version = "0.4.6"
-default-features = false # just in case
-features = ["v4_2"]
 

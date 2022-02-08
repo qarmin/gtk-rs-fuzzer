@@ -1,17 +1,22 @@
 pub const IGNORED_FUNCTIONS: [&str; 34] = [
-    "with_entry",             // ComboBox, ComboBoxText
-    "toplevels",              // Window
-    "list_toplevels",         // Window
-    "default_icon_name",      // Window
-    "emit_activate",          // MenuButton, ColorButton, AppChooserButton
-    "is_primary",             // MenuButton
-    "is_indent_for_icon",     // TreeExpander
-    "default",                // RecentManager
-    "must_always_show_arrow", // MenuButton
-    "get",                    // AcrivateAction - probably this is static function
-    "shows_arrow",            // DropDown
-    "current_drop",           // DropTarget
-    "emit_escape",            // https://github.com/gtk-rs/gtk4-rs/issues/870
+    // Non existent functions(probably bug in parsing files)
+    "with_entry",               // ComboBox, ComboBoxText
+    "toplevels",                // Window
+    "list_toplevels",           // Window
+    "default_icon_name",        // Window
+    "emit_activate",            // MenuButton, ColorButton, AppChooserButton
+    "is_primary",               // MenuButton
+    "is_indent_for_icon",       // TreeExpander
+    "default",                  // RecentManager
+    "must_always_show_arrow",   // MenuButton
+    "get",                      // AcrivateAction - probably this is static function
+    "shows_arrow",              // DropDown
+    "current_drop",             // DropTarget
+    "is_gtk_hint_font_metrics", // Settings
+    // Reported, but not fixes in used GTK/GTK-rs version
+    "emit_escape",   // https://github.com/gtk-rs/gtk4-rs/issues/870
+    "im_context",    // https://github.com/gtk-rs/gtk4-rs/issues/874
+    "insert_prefix", // https://github.com/gtk-rs/gtk4-rs/issues/873
     // TODO
     "emit_stop_search",
     "emit_previous_match",
@@ -31,79 +36,38 @@ pub const IGNORED_FUNCTIONS: [&str; 34] = [
     "emit_select_all",
     "emit_activate_cursor_child",
     "drag_dest_item",
-    "im_context",
-    "insert_prefix",
-    "emit_escape",
 ];
 
-pub const IGNORED_CLASSES: [&str; 69] = [
+pub const IGNORED_CLASSES: [&str; 29] = [
     "ATContext",
     "AssistantPage",
-    "BoolFilter",
     "BuilderListItemFactory",
-    "ColorChooserDialog",
-    "ColumnView",
-    "ColumnViewColumn",
     "DragIcon",
-    "DropTargetAsync",
-    "Expander",
-    "FileChooserWidget",
-    "FilterListModel",
     "FixedLayoutChild",
-    "FlattenListModel",
     "GridLayoutChild",
-    "GridView",
-    "IconPaintable",
-    "KeyvalTrigger",
-    "Label",
-    "LinkButton",
     "ListItem",
-    "ListStore",
-    "ListView",
-    "LockButton",
     "MapListModel",
-    "MessageDialog",
-    "MnemonicAction",
-    "MnemonicTrigger",
-    "MultiSelection",
-    "NamedAction",
-    "NeverTrigger",
-    "NoSelection",
     "NotebookPage",
-    "NothingAction",
     "OverlayLayoutChild",
-    "PadController",
-    "PageSetupUnixDialog",
-    "Paned",
-    "PopoverMenu",
-    "PopoverMenuBar",
     "PrintContext",
-    "PrintJob",
-    "PrintUnixDialog",
-    "Printer",
-    "SelectionFilterModel",
-    "Settings",
-    "Shortcut",
-    "ShortcutsGroup",
-    "ShortcutsShortcut",
-    "ShortcutsWindow",
-    "SignalAction",
-    "SingleSelection",
-    "SizeGroup",
-    "SliceListModel",
-    "SortListModel",
-    "SpinButton",
     "StackPage",
-    "StringFilter",
-    "StringObject",
-    "StringSorter",
-    "TreeListModel",
     "TreeListRow",
-    "TreeListRowSorter",
     "TreeSelection",
-    "TreeStore",
-    "Viewport",
     "Widget",
-    "WidgetPaintable",
-    "WindowControls",
+    // Reported, but not fixed in used version
+    "NamedAction", // https://github.com/gtk-rs/gtk4-rs/issues/875
+    // TODO
+    "ColumnViewColumn",
+    "DropTarget",          // Reported
+    "DropTargetAsync",     // Reported
+    "FileChooserWidget",   // TODO .emit_desktop_folder()"
+    "ListStore",           // Append
+    "PageSetupUnixDialog", //PageSetupUnixDialog.print_settings()
+    "PrintJob",            // TODO
+    "PrintUnixDialog",     //PrintUnixDialog.selected_printer()
+    "Printer",             //Printer.capabilities()
+    "SignalAction",        // TODO creating
+    "SingleSelection",     //SingleSelection.model
+    "TreeListModel",       //TreeListModel.model()
+    "TreeStore",           // TODO creating
 ];

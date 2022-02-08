@@ -7,12 +7,12 @@ use std::fs::OpenOptions;
 use std::io::{BufWriter, Write};
 use std::path::PathBuf;
 
-const PATH_TO_GTK_RS: &str = "/home/rafal/Downloads/gtk4-rs-master/gtk4/src";
-const PATH_TO_GTK_RS_AUTO: &str = "/home/rafal/Downloads/gtk4-rs-master/gtk4/src/auto";
+const PATH_TO_GTK_RS: &str = "/home/rafal/Downloads/gtk4-rs/gtk4/src";
+const PATH_TO_GTK_RS_AUTO: &str = "/home/rafal/Downloads/gtk4-rs/gtk4/src/auto";
 
 const PATH_TO_PROJECT_FILE: &str = "/home/rafal/Projekty/Rust/gtk_rs_fuzzer/Project/src/ziemniak.rs";
 
-const NUMBER_OF_REPEATS: u32 = 100; // How many time repeat function executing to be sure that this function cause problems
+const NUMBER_OF_REPEATS: u32 = 10; // How many time repeat function executing to be sure that this function cause problems
 
 fn main() {
     let (class_info, class_functions) = collect_things();
@@ -52,15 +52,18 @@ pub fn execute_things(){{
         st_save.push("\t{".to_string());
         for (function, arguments) in function_list {
             // TODO create here an object
-            if function == "build" || function == "new" || function.contains("new_") || function == "builder" {
+            if function == "build" || function == "new" || function.contains("new_") || function.contains("emit_") || function == "builder" {
                 continue; // TODO check why
+                          // TODO Remove emits
             }
+            // TODO
             if arguments.is_empty() {
                 st_save.push(format!("\t\tfor _i in 0..{}{{", NUMBER_OF_REPEATS));
-                st_save.push(format!("\t\t\tlet _object{} = gget_{}();", object_number, name_of_class.to_ascii_lowercase(),));
-                st_save.push(format!("\t\t\tprintln!(\"Trying to execute {}.{}()\");", name_of_class, function,));
+                st_save.push(format!("\t\t\tprintln!(\"Creating object {}\");", name_of_class));
+                st_save.push(format!("\t\t\tlet _object{} = gget_{}();", object_number, name_of_class.to_ascii_lowercase()));
+                st_save.push(format!("\t\t\tprintln!(\"Trying to execute {}.{}()\");", name_of_class, function));
                 st_save.push(format!("\t\t\t_object{}.{}();", object_number, function));
-                st_save.push(format!("\t\t\tprintln!(\"Executed {}.{}()\");", name_of_class, function,));
+                st_save.push(format!("\t\t\tprintln!(\"Executed {}.{}()\");", name_of_class, function));
                 st_save.push("\t\t}".to_string());
 
                 object_number += 1;
@@ -81,7 +84,7 @@ fn collect_things() -> (BTreeMap<String, Vec<String>>, BTreeMap<String, BTreeMap
     let mut class_functions: BTreeMap<String, BTreeMap<String, Vec<String>>> = Default::default(); // Class + functions + arguments e.g. Label -> new -> [&str]
 
     for path_dir in [PATH_TO_GTK_RS, PATH_TO_GTK_RS_AUTO] {
-        let dir = fs::read_dir(path_dir).unwrap();
+        let dir = fs::read_dir(path_dir).expect(&format!("Cannot open dir {}", path_dir));
         for entry in dir {
             let entry_data = match entry {
                 Ok(t) => t,

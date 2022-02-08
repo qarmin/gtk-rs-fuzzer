@@ -2,7 +2,7 @@ use gtk4::*;
 use rand::prelude::SliceRandom;
 use rand::{thread_rng, Rng};
 
-const DEBUG_PRINTING: bool = false;
+const DEBUG_PRINTING: bool = true;
 pub fn debug_printing(what_to_print: &str) {
     if DEBUG_PRINTING {
         println!("Using argument \" {} \"", what_to_print);

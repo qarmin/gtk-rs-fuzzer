@@ -5,6 +5,7 @@ mod ziemniak;
 use crate::create_objects::*;
 use crate::ziemniak::execute_things;
 use gtk4::prelude::*;
+use gtk4::*;
 
 const CRASHES: u64 = 0;
 
@@ -27,6 +28,20 @@ fn main() {
 }
 
 fn crashes() {
+    for _j in 0..100 {
+        for _i in 0..10 {
+            let ff = NamedAction::new(&"");
+        }
+    }
+    // for _j in 0..10 {
+    //     let thing: Option<&ListItemFactory> = None;
+    //     ColumnViewColumn::new(Some("10"), thing);
+    // }
+    // ColumnView
+    // for _j in 0..10 {
+    //     let thing: Option<&ListItemFactory> = None;
+    //     ColumnViewColumn::new(Some("10"), thing);
+    // }
     // gtk4::DropTarget::new(glib::Type::BOOL, DragAction::COPY).formats();
     // gtk4::SearchEntry::new().emit_stop_search();
     // gtk4::SearchEntry::new().emit_previous_match();

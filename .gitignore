@@ -7,3 +7,5 @@
 
 Project/target
 Project/.idea/
+Project/src/ziemniak.rs
+Project/src/Cargo.lock
