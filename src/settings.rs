@@ -1,27 +1,15 @@
 pub const USE_PARENT_ITEMS: bool = true;
-pub const USE_TRAIT_ITEMS: bool = true;
+pub const USE_TRAIT_ITEMS: bool = false;
 pub const NUMBER_OF_REPEATS: u32 = 2; // How many time repeat function executing to be sure that this function cause problems
 
 pub const IGNORED_FUNCTIONS: &[&str] = &[
     // Non existent functions(probably bug in parsing files)
-    "with_entry",                 // ComboBox, ComboBoxText
-    "toplevels",                  // Window
-    "list_toplevels",             // Window
-    "default_icon_name",          // Window
-    "emit_activate",              // MenuButton, ColorButton, AppChooserButton
-    "is_primary",                 // MenuButton
-    "is_indent_for_icon",         // TreeExpander
-    "default",                    // RecentManager
-    "must_always_show_arrow",     // MenuButton
-    "get",                        // AcrivateAction - probably this is static function
-    "shows_arrow",                // DropDown
-    "current_drop",               // DropTarget
-    "is_gtk_hint_font_metrics",   // Settings
-    "default_direction",          // Widget
-    "stream_unprepared",          // MediaFile
-    "stream_ended",               // MediaFile
-    "surrounding_with_selection", // IMMulticontext
-    "surrounding_with_selection", // IMContextSimple
+    "set_show_arrow",            // DropDown
+    "add_suffix",                // FileFilter
+    "set_always_show_arrow",     // MenuButton
+    "set_primary",               // MenuButton
+    "set_gtk_hint_font_metrics", // Settings
+    "set_indent_for_icon",       // TreeExpander
     // Other
     "alignment", // Rust error, multiple applicable items in scope
     "font_map",  // Rust error, multiple applicable items in scope
@@ -49,7 +37,7 @@ pub const IGNORED_FUNCTIONS: &[&str] = &[
     "map",
     "header_bar",
     "realize",
-    "show", // TODO, fix this as fast as possible
+    // "show", // TODO, fix this as fast as possible
     "popup",
 ];
 
@@ -76,6 +64,10 @@ pub const IGNORED_CLASSES: &[&str] = &[
     "Widget",
     "TreeModelSort",
     "ShortcutsSection",
+    "Application",
+    "ShortcutTrigger",
+    "ShortcutAction",
+    "PasswordEntryBuffer",
     // Other
     "ApplicationWindow", // Only one ApplicationWindows can be created
     "FileChooserWidget", // Create a lot of warnings(and possibly also crashes) "Too many open files"
@@ -85,11 +77,11 @@ pub const IGNORED_CLASSES: &[&str] = &[
     "ListStore",    // https://github.com/gtk-rs/gtk4-rs/issues/878
     "TreeStore",    // https://github.com/gtk-rs/gtk4-rs/issues/878
     // Reported, but not fixed in used version GTK/GTK-rs
-    "PrintJob",        // https://github.com/gtk-rs/gtk4-rs/issues/881
-    "Printer",         // https://github.com/gtk-rs/gtk4-rs/issues/883
-    "SingleSelection", // https://github.com/gtk-rs/gtk-rs-core/issues/539
-    "TreeListModel",   // https://github.com/gtk-rs/gtk-rs-core/issues/539
+    "PrintJob",         // https://github.com/gtk-rs/gtk4-rs/issues/881
+    "Printer",          // https://github.com/gtk-rs/gtk4-rs/issues/883
+    "SingleSelection",  // https://github.com/gtk-rs/gtk-rs-core/issues/539
+    "TreeListModel",    // https://github.com/gtk-rs/gtk-rs-core/issues/539
     "ColumnViewColumn", // https://github.com/gtk-rs/gtk4-rs/issues/885
-                       // TODO
-                       // "Popover", // Select cause crash
+    // TODO
+    "Popover", // Select cause crash
 ];

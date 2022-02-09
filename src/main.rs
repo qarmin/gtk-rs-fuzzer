@@ -26,24 +26,28 @@ fn create_project_file(_class_info: BTreeMap<String, Vec<String>>, class_functio
     let file = OpenOptions::new().write(true).create(true).open(PATH_TO_PROJECT_FILE).unwrap();
     let mut file = BufWriter::new(file);
 
-    writeln!(
-        file,
-        "use crate::create_objects::*;
+    let start_text = r#####"
+use crate::create_objects::*;
 use crate::helpers::*;
 use gtk4::prelude::*;
 use gtk4::*;
+use std::fs;
+use std::fs::{File, OpenOptions};
+use std::io::Write;
 
-pub fn execute_things(){{
-
-"
-    )
-    .unwrap();
+pub fn execute_things(){
+    let mut file = OpenOptions::new().write(true).create(true).open("things.txt").unwrap();
+"#####;
+    writeln!(file, "{}", start_text).unwrap();
 
     // TODO here are full logic
     let mut object_number = 0;
 
     let mut st_save: Vec<String> = Vec::new();
     for (_index, (name_of_class, function_list)) in class_functions.iter().enumerate() {
+        // if name_of_class != "AboutDialog" {
+        //     continue;
+        // }
         // if _index <= 180 || _index > 1900 {
         //     continue;
         // } else {
@@ -53,21 +57,100 @@ pub fn execute_things(){{
         st_save.push("\t{".to_string());
         for (function, arguments) in function_list {
             // TODO create here an object
-            if function == "build" || function == "new" || function.contains("new_") || function == "builder" {
-                continue; // TODO check why
+            if function == "new" {
+                continue;
             }
-            // TODO
+            // if function == "build" || function == "new" || function.starts_with("new_") || function.starts_with("with_") || function == "builder" {
+            //     continue; // TODO check why
+            // }
+            // TODO Better object numbering(currently things are )
             if arguments.is_empty() {
-                st_save.push(format!("\t\tfor _i in 0..{}{{", NUMBER_OF_REPEATS));
-                st_save.push(format!("\t\t\tprintln!(\"Creating object {} - gget_{} - \");", name_of_class, name_of_class.to_ascii_lowercase()));
-                st_save.push(format!("\t\t\tlet _object{} = gget_{}(); // {}", object_number, name_of_class.to_ascii_lowercase(), name_of_class));
-                st_save.push(format!("\t\t\tprintln!(\"Trying to execute {}.{}()\");", name_of_class, function));
-                st_save.push(format!("\t\t\t_object{}.{}();", object_number, function));
-                st_save.push(format!("\t\t\tprintln!(\"Executed {}.{}()\");", name_of_class, function));
-                st_save.push("\t\t}".to_string());
+                // st_save.push(format!("\t\tfor _i in 0..{}{{", NUMBER_OF_REPEATS));
+                // st_save.push(format!("\t\t\tprintln!(\"Creating object {}\");", name_of_class));
+                // st_save.push(format!(
+                //     "\t\t\tprint_and_save_to_file(&mut file, \"let object{} = gget_{}(); // {}\");",
+                //     object_number,
+                //     name_of_class.to_ascii_lowercase(),
+                //     name_of_class
+                // ));
+                // st_save.push(format!("\t\t\tlet object_{} = gget_{}(); // {}", object_number, name_of_class.to_ascii_lowercase(), name_of_class));
+                // // st_save.push(format!("\t\t\tprintln!(\"Trying to execute {}.{}()\");", name_of_class, function));
+                // st_save.push(format!("\t\t\tprint_and_save_to_file(&mut file, \"object_{}.{}();\");", object_number, function));
+                // st_save.push(format!("\t\t\tobject_{}.{}();", object_number, function));
+                // // st_save.push(format!("\t\t\tprintln!(\"Executed {}.{}()\");", name_of_class, function));
+                // st_save.push("\t\t}".to_string());
+            } else {
+                // println!("{:?}", arguments);
+                let mut found_bad_thing: bool = false;
+                // TODO support for all arguments
+                for arg in arguments {
+                    found_bad_thing = match arg.as_str() {
+                        "bool" | "i32" | "u32" | "u64" | "i64" | "f32" | "f64" | "&str" => false,
+                        _ => {
+                            // println!("{:?}", arg);
+                            true
+                        }
+                    };
+                    if found_bad_thing {
+                        break;
+                    }
+                }
+                if !found_bad_thing {
+                    st_save.push(format!("\t\tfor _i in 0..{}{{", NUMBER_OF_REPEATS));
+                    st_save.push(format!(
+                        "\t\t\tprint_and_save_to_file(&mut file, \"let object_{} = gget_{}(); // {}\");",
+                        object_number,
+                        name_of_class.to_ascii_lowercase(),
+                        name_of_class
+                    ));
+                    st_save.push(format!("\t\t\tlet object_{} = gget_{}(); // {}", object_number, name_of_class.to_ascii_lowercase(), name_of_class));
+                    let mut function_number = 0;
+                    let mut result_arguments = format!("object_{}.{}(", object_number, function);
+                    for arg in arguments {
+                        let help_function_name = match arg.as_str() {
+                            "bool" => "take_bool",
+                            "i32" => "take_i32",
+                            "u32" => "take_u32",
+                            "u64" => "take_u64",
+                            "i64" => "take_i64",
+                            "f32" => "take_f32",
+                            "f64" => "take_f64",
+                            "&str" => "&take_string",
+                            _ => panic!("Not supported {}", arg),
+                        };
 
-                object_number += 1;
+                        st_save.push(format!("\t\t\tlet argument_{} = {}();", function_number, help_function_name));
+                        if function_number == arguments.len() - 1 {
+                            result_arguments += &format!("argument_{}", function_number);
+                        } else {
+                            result_arguments += &format!("argument_{},", function_number);
+                        }
+
+                        function_number += 1;
+                    }
+                    result_arguments += ");";
+
+                    let mut to_print_arguments = "".to_string();
+                    let mut to_print_arguments_variable = "".to_string();
+                    for i in 0..function_number {
+                        if i == function_number - 1 {
+                            to_print_arguments += "{}";
+                            to_print_arguments_variable += &format!("argument_{}", i)
+                        } else {
+                            to_print_arguments += "{},";
+                            to_print_arguments_variable += &format!("argument_{},", i)
+                        }
+                    }
+
+                    st_save.push(format!(
+                        "\t\t\tprint_and_save_to_file(&mut file, &format!(\"object_{}.{}({});\",{}));",
+                        object_number, function, to_print_arguments, to_print_arguments_variable
+                    ));
+                    st_save.push(format!("\t\t\t{}", result_arguments));
+                    st_save.push("\t\t}".to_string());
+                }
             }
+            object_number += 1;
         }
         st_save.push("\t}".to_string());
         let output = st_save.join("\n");
@@ -77,6 +160,12 @@ pub fn execute_things(){{
     }
 
     writeln!(file, "}}").unwrap();
+    let end_text = r####"
+    pub fn print_and_save_to_file(file: &mut File, what_to_save: &str) {
+    writeln!(file, "{}", what_to_save);
+    println!("\t{}", what_to_save);
+}"####;
+    writeln!(file, "{}", end_text).unwrap();
 }
 
 fn collect_things() -> (BTreeMap<String, Vec<String>>, BTreeMap<String, BTreeMap<String, Vec<String>>>) {
@@ -131,7 +220,7 @@ fn collect_things() -> (BTreeMap<String, Vec<String>>, BTreeMap<String, BTreeMap
                             let parts = previous_arguments
                                 .split(",")
                                 .map(|e| e.replace(" ", ""))
-                                .filter(|e| e != "mutself" && e != "self" && e != "&self")
+                                // .filter(|e| e != "mutself" && e != "self" && e != "&self")
                                 .filter_map(|e| {
                                     let split = e.split(":").map(|e| e.to_string()).collect::<Vec<String>>();
                                     if split.len() == 2 {
@@ -159,7 +248,9 @@ fn collect_things() -> (BTreeMap<String, Vec<String>>, BTreeMap<String, BTreeMap
                     } else {
                         previous_arguments.push_str(line);
                     }
-                } else if line.starts_with("pub fn ") && line.contains("(") && !current_class.is_empty() {
+                }
+                // Finds objects function
+                else if line.starts_with("pub fn ") && line.contains("(") && !current_class.is_empty() {
                     // println!("{}", line);
                     let text_to_check = "pub fn ";
                     let function_name_local = &line[text_to_check.len()..line.find("(").unwrap()];
@@ -177,10 +268,16 @@ fn collect_things() -> (BTreeMap<String, Vec<String>>, BTreeMap<String, BTreeMap
                                 function_name.clear();
                                 continue; // Things like gio::Pango are not supported
                             }
+                            if !(text_to_check.starts_with("&self") || text_to_check.starts_with("&mut self") || text_to_check.starts_with("self")) {
+                                if !text_to_check.is_empty() {
+                                    // println!("Ignoring {}", text_to_check);
+                                }
+                                continue;
+                            }
                             let parts = text_to_check
                                 .split(",")
                                 .map(|e| e.replace(" ", ""))
-                                .filter(|e| e != "mutself" && e != "self" && e != "&self")
+                                // .filter(|e| e != "mutself" && e != "self" && e != "&self")
                                 .filter_map(|e| {
                                     let split = e.split(":").map(|e| e.to_string()).collect::<Vec<String>>();
                                     if split.len() == 2 {
@@ -298,10 +395,16 @@ fn collect_things() -> (BTreeMap<String, Vec<String>>, BTreeMap<String, BTreeMap
                                 function_name.clear();
                                 continue; // Things like gio::Pango are not supported
                             }
+                            if !(text_to_check.starts_with("&self") || text_to_check.starts_with("&mut self") || text_to_check.starts_with("self")) {
+                                if !text_to_check.is_empty() {
+                                    // println!("Ignoring {}", text_to_check);
+                                }
+                                continue;
+                            }
                             let parts = text_to_check
                                 .split(",")
                                 .map(|e| e.replace(" ", ""))
-                                .filter(|e| e != "mutself" && e != "self" && e != "&self")
+                                // .filter(|e| e != "mutself" && e != "self" && e != "&self")
                                 .filter_map(|e| {
                                     let split = e.split(":").map(|e| e.to_string()).collect::<Vec<String>>();
                                     if split.len() == 2 {
@@ -327,8 +430,13 @@ fn collect_things() -> (BTreeMap<String, Vec<String>>, BTreeMap<String, BTreeMap
                         function_name = function_name_local.to_string();
                         continue_function_declaration = true;
                     }
-
-                    // println!("found function \"{}\" for \"{}\"", function_name_local, current_class);
+                }
+                // println!("found function \"{}\" for \"{}\"", function_name_local, current_class);
+                // } else if !line.is_empty() && !old_line.starts_with(" ") && !old_line.starts_with("\t") {
+                else if old_line.starts_with("impl ") && line.contains("Builder") {
+                    // println!("{}", old_line);
+                    current_class = "".to_string();
+                    current_trait = "".to_string();
                 }
             }
 
@@ -338,43 +446,43 @@ fn collect_things() -> (BTreeMap<String, Vec<String>>, BTreeMap<String, BTreeMap
 
     count_objects(&class_functions, &traits, "At start            ");
 
-    // Extend classes with parent
-    if USE_PARENT_ITEMS {
-        let base_functions = class_functions.clone(); // Needed to have same set of functions across all iterations
+    // // Extend classes with parent
+    // if USE_PARENT_ITEMS {
+    //     let base_functions = class_functions.clone(); // Needed to have same set of functions across all iterations
+    //
+    //     for (name_of_class, parent_classes) in &class_info {
+    //         if class_functions.contains_key(name_of_class) {
+    //             for parent_class in parent_classes {
+    //                 if class_functions.contains_key(parent_class) {
+    //                     // println!("I'm in {}, {}", name_of_class, parent_class);
+    //                     class_functions.get_mut(name_of_class).unwrap().append(&mut base_functions.get(parent_class).unwrap().clone());
+    //                 } else {
+    //                     // println!("MISSING parent class: {}", parent_class); // TODO why is this missing?
+    //                 }
+    //             }
+    //         } else {
+    //             // println!("MISSING normal class: {}", name_of_class); // TODO why is this missing?
+    //         }
+    //     }
+    // }
 
-        for (name_of_class, parent_classes) in &class_info {
-            if class_functions.contains_key(name_of_class) {
-                for parent_class in parent_classes {
-                    if class_functions.contains_key(parent_class) {
-                        // println!("I'm in {}, {}", name_of_class, parent_class);
-                        class_functions.get_mut(name_of_class).unwrap().append(&mut base_functions.get(parent_class).unwrap().clone());
-                    } else {
-                        // println!("MISSING parent class: {}", parent_class); // TODO why is this missing?
-                    }
-                }
-            } else {
-                // println!("MISSING normal class: {}", name_of_class); // TODO why is this missing?
-            }
-        }
-    }
-
-    // Extend classes with parent
-    if USE_TRAIT_ITEMS {
-        for (name_of_class, used_traits) in &class_info {
-            if class_functions.contains_key(name_of_class) {
-                for used_trait in used_traits {
-                    if traits.contains_key(used_trait) {
-                        // println!("I'm in {}, {}", name_of_class, parent_class);
-                        class_functions.get_mut(name_of_class).unwrap().append(&mut traits.get(used_trait).unwrap().clone());
-                    } else {
-                        // println!("MISSING parent class: {}", parent_class); // TODO why is this missing?
-                    }
-                }
-            } else {
-                // println!("MISSING normal class: {}", name_of_class); // TODO why is this missing?
-            }
-        }
-    }
+    // // Extend classes with parent
+    // if USE_TRAIT_ITEMS {
+    //     for (name_of_class, used_traits) in &class_info {
+    //         if class_functions.contains_key(name_of_class) {
+    //             for used_trait in used_traits {
+    //                 if traits.contains_key(used_trait) {
+    //                     // println!("I'm in {}, {}", name_of_class, parent_class);
+    //                     class_functions.get_mut(name_of_class).unwrap().append(&mut traits.get(used_trait).unwrap().clone());
+    //                 } else {
+    //                     // println!("MISSING parent class: {}", parent_class); // TODO why is this missing?
+    //                 }
+    //             }
+    //         } else {
+    //             // println!("MISSING normal class: {}", name_of_class); // TODO why is this missing?
+    //         }
+    //     }
+    // }
 
     count_objects(&class_functions, &traits, "After adding parents");
 
@@ -399,6 +507,43 @@ fn collect_things() -> (BTreeMap<String, Vec<String>>, BTreeMap<String, BTreeMap
         }
     }
 
+    // Print all classes + functions + arguments
+    // {
+    //     for (name_of_class, function_list) in &class_functions {
+    //         for (name_of_function, arguments) in function_list {
+    //             let mut what = format!("{}.{}(", name_of_class, name_of_function);
+    //             for index in 0..arguments.len() {
+    //                 what += "\"";
+    //                 what += &arguments[index];
+    //                 what += "\"";
+    //                 if index != arguments.len() - 1 {
+    //                     what += ",";
+    //                 }
+    //             }
+    //             what += ")";
+    //
+    //             println!("{}", what);
+    //         }
+    //     }
+    // }
+    // {
+    //     for (name_of_class, function_list) in &traits {
+    //         for (name_of_function, arguments) in function_list {
+    //             let mut what = format!("{}.{}(", name_of_class, name_of_function);
+    //             for index in 0..arguments.len() {
+    //                 what += "\"";
+    //                 what += &arguments[index];
+    //                 what += "\"";
+    //                 if index != arguments.len() - 1 {
+    //                     what += ",";
+    //                 }
+    //             }
+    //             what += ")";
+    //
+    //             println!("{}", what);
+    //         }
+    //     }
+    // }
     // {
     //     for (name_of_class, function_list) in &traits {
     //         for (name_of_function, _arguments) in function_list {

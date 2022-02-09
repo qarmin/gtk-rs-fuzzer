@@ -1,4 +1,3 @@
-use std::any::Any;
 use crate::helpers::*;
 use gdk4::DragAction;
 use gtk4::builders::{PrinterBuilder, SettingsBuilder};
@@ -9,6 +8,48 @@ use rand::{thread_rng, Rng};
 // pub fn gget_atcontext() -> ATContext {
 //     ATContext::new()
 // }
+// pub fn gget_passwordentrybuffer() -> PasswordEntryBuffer {
+//     PasswordEntryBuffer::new()
+// }
+pub fn gget_adjustment() -> Adjustment {
+    Adjustment::default()
+}
+// pub fn gget_application() -> Application {
+//     Application::default()
+// }
+pub fn gget_constraintguide() -> ConstraintGuide {
+    ConstraintGuide::default()
+}
+pub fn gget_textchildanchor() -> TextChildAnchor {
+    TextChildAnchor::default()
+}
+// pub fn gget_shortcutaction() -> ShortcutAction {
+//     ShortcutAction::parse_string(&take_string())
+// }
+pub fn gget_textbuffer() -> TextBuffer {
+    TextBuffer::default()
+}
+// pub fn gget_shortcuttrigger() -> ShortcutTrigger {
+//     ShortcutTrigger::parse_string()
+// }
+pub fn gget_textmark() -> TextMark {
+    TextMark::default()
+}
+pub fn gget_mountoperation() -> MountOperation {
+    MountOperation::default()
+}
+pub fn gget_entrybuffer() -> EntryBuffer {
+    EntryBuffer::default()
+}
+pub fn gget_entry() -> Entry {
+    Entry::default()
+}
+pub fn gget_texttag() -> TextTag {
+    TextTag::default()
+}
+pub fn gget_emojichooser() -> EmojiChooser {
+    EmojiChooser::new()
+}
 pub fn gget_aboutdialog() -> AboutDialog {
     AboutDialog::new()
 }
@@ -24,7 +65,7 @@ pub fn gget_appchooserbutton() -> AppChooserButton {
 // pub fn gget_applicationwindow() -> ApplicationWindow{
 //     ApplicationWindow::new()
 // }
-pub fn gget_binlayout() -> BinLayout{
+pub fn gget_binlayout() -> BinLayout {
     BinLayout::new()
 }
 // pub fn gget_treemodelsort() -> TreeModelSort {
@@ -145,7 +186,7 @@ pub fn gget_frame() -> Frame {
     Frame::default()
 }
 pub fn gget_gesturepan() -> GesturePan {
-    GesturePan::new(stek_orientation())
+    GesturePan::new(stek_orientation().0)
 }
 pub fn gget_drawingarea() -> DrawingArea {
     DrawingArea::new()
@@ -171,8 +212,8 @@ pub fn gget_cellrendererspin() -> CellRendererSpin {
 pub fn gget_cellrenderertext() -> CellRendererText {
     CellRendererText::new()
 }
-pub fn gget_box() -> Box{
-    Box::new(stek_orientation(), take_i32())
+pub fn gget_box() -> Box {
+    Box::new(stek_orientation().0, take_i32())
 }
 pub fn gget_alternativetrigger() -> AlternativeTrigger {
     AlternativeTrigger::default()
@@ -203,7 +244,7 @@ pub fn gget_boolfilter() -> BoolFilter {
     BoolFilter::new(expression)
 }
 pub fn gget_boxlayout() -> BoxLayout {
-    BoxLayout::new(stek_orientation())
+    BoxLayout::new(stek_orientation().0)
 }
 pub fn gget_builder() -> Builder {
     Builder::new()
@@ -293,7 +334,7 @@ pub fn gget_dropdown() -> DropDown {
     DropDown::new(thing2, thing)
 }
 pub fn gget_droptarget() -> DropTarget {
-    DropTarget::new(stek_glib_type(), DragAction::COPY)
+    DropTarget::new(stek_glib_type().0, DragAction::COPY)
 }
 pub fn gget_droptargetasync() -> DropTargetAsync {
     DropTargetAsync::default()
@@ -403,7 +444,7 @@ pub fn gget_listbox() -> ListBox {
 //     ListItem::new()
 // }
 pub fn gget_liststore() -> ListStore {
-    ListStore::new(&[stek_glib_type()])
+    ListStore::new(&[stek_glib_type().0])
 }
 pub fn gget_listview() -> ListView {
     ListView::default()
@@ -598,7 +639,7 @@ pub fn gget_treelistrowsorter() -> TreeListRowSorter {
 //     TreeSelection::def()
 // }
 pub fn gget_treestore() -> TreeStore {
-    TreeStore::new(&[stek_glib_type()])
+    TreeStore::new(&[stek_glib_type().0])
 }
 pub fn gget_treeviewcolumn() -> TreeViewColumn {
     TreeViewColumn::new()

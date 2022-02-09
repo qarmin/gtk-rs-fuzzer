@@ -3,6 +3,7 @@
 *.iml
 *~
 *#
+*.txt
 
 
 Project/target

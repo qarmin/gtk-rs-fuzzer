@@ -29,10 +29,12 @@ fn main() {
     application.run();
 }
 
-const CRASHES: u64 = 0;
+const CRASHES: u64 = 1;
 fn crashes() {
     println!("TESTSTTSTSTSTSTSTST");
-    //  BinLayout.request_mode()
+    let object_95 = gget_assistant(); // Assistant
+    object_95.set_current_page(-78900);
+    // BinLayout.request_mode()
     // CellAreaBox.current_path_string()
     // CellAreaBox.edit_widget()
     // CellAreaBox.edited_cell()
@@ -46,5 +48,5 @@ fn crashes() {
     // Popover.realize()
     // Popover.show()
     // PopoverMenu.popup()
-    gtk4::AppChooserDialog::default().content_type();
+    // gtk4::AppChooserDialog::default().content_type();
 }
