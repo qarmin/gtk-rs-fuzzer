@@ -4,7 +4,7 @@
 
 mod settings;
 
-use crate::settings::{CLASSES_TO_USE, FUNCTIONS_TO_USE, IGNORED_CLASSES, IGNORED_FUNCTIONS, NUMBER_OF_REPEATS, USE_PARENT_ITEMS, USE_TRAIT_ITEMS};
+use crate::settings::{CLASSES_TO_USE, ENUMS_ETC, FUNCTIONS_TO_USE, IGNORED_CLASSES, IGNORED_FUNCTIONS, NUMBER_OF_REPEATS, USE_PARENT_ITEMS, USE_TRAIT_ITEMS};
 use std::collections::BTreeMap;
 use std::fs;
 use std::fs::OpenOptions;
@@ -40,11 +40,11 @@ pub fn execute_things(){
 "#####;
 
     // Basic function to
-    // <<funkction_arguments>> - list of functions and its names
+    // <<function_arguments>> - list of functions and its names
     // <<number_of_functions>> - number of functions
     let basic_function = r#####"
 pub fn run_tests(check_all_things: bool, classes_to_check: Vec<String>, functions_to_check: Vec<String>) {
-    let all_things: [(fn(&Vec<String>) -> (), &str); <<number_of_functions>>] = [<<funkction_arguments>>];
+    let all_things: [(fn(&Vec<String>) -> (), &str); <<number_of_functions>>] = [<<function_arguments>>];
 
     if check_all_things {
         for (function, _name) in all_things {
@@ -137,7 +137,7 @@ pub fn fct(thing: &<<type>>) -> &<<type>> {
         // if name_of_class != "AboutDialog" {
         //     continue;
         // }
-        if (30..35).contains(&_index) {
+        if (0..35).contains(&_index) {
             println!("{}. {}", _index, name_of_class);
         } else {
             continue;
@@ -174,9 +174,19 @@ pub fn fct(thing: &<<type>>) -> &<<type>> {
                     }
                     found_bad_thing = match arg.as_str() {
                         "bool" | "i32" | "u32" | "u64" | "i64" | "f32" | "f64" | "&str" => false,
-                        _ => {
-                            println!("{:?}", arg);
-                            true
+                        thing => {
+                            if IGNORED_CLASSES.contains(&thing) {
+                                println!("NOT {}", thing);
+                                true
+                            } else {
+                                if thing.chars().all(|e| e.is_alphabetic()) {
+                                    println!("Supported {:?}", arg);
+                                    false
+                                } else {
+                                    println!("NOT {:?}", arg);
+                                    true
+                                }
+                            }
                         }
                     };
                     if found_bad_thing {
@@ -191,26 +201,39 @@ pub fn fct(thing: &<<type>>) -> &<<type>> {
                     let mut to_print_arguments_variable = "".to_string();
 
                     for arg_index in 0..arguments.len() {
-                        println!("AAA arguments {}", arguments.len());
                         let mut is_option_type = false;
+                        let mut reference = "";
                         let mut arg = arguments[arg_index].clone();
                         if arg.starts_with("Option<") {
                             is_option_type = true;
                             arg = arg.strip_prefix("Option<").unwrap().to_string();
                             arg = arg.strip_suffix(">").unwrap().to_string();
                         }
+                        if arg.starts_with("&") && arg != "&str" {
+                            reference = "&";
+                            arg = arg[1..].to_string();
+                        }
+
+                        let mut stek = "";
                         let help_function_name = match arg.as_str() {
-                            "bool" => "take_bool",
-                            "i32" => "take_i32",
-                            "u32" => "take_u32",
-                            "u64" => "take_u64",
-                            "i64" => "take_i64",
-                            "f32" => "take_f32",
-                            "f64" => "take_f64",
-                            "&str" => "&take_string",
-                            _ => panic!("Not supported {}", arg),
+                            "bool" => "take_bool".to_string(),
+                            "i32" => "take_i32".to_string(),
+                            "u32" => "take_u32".to_string(),
+                            "u64" => "take_u64".to_string(),
+                            "i64" => "take_i64".to_string(),
+                            "f32" => "take_f32".to_string(),
+                            "f64" => "take_f64".to_string(),
+                            "&str" => "&take_string".to_string(),
+                            thing => {
+                                if !ENUMS_ETC.contains(&thing) {
+                                    format!("gget_{}", thing.to_lowercase())
+                                } else {
+                                    stek = ".0";
+                                    format!("stek_{}", thing.to_lowercase())
+                                }
+                            } // _ => panic!("Not supported {}", arg),
                         };
-                        creating_arguments += &format!("let argument_{} = {}();", arg_index, help_function_name);
+                        creating_arguments += &format!("let argument_{} = {}(){}; // {}", arg_index, help_function_name, stek, arg);
                         if arg_index != arguments.len() - 1 {
                             creating_arguments += "\n\t\t\t";
                         }
@@ -218,9 +241,9 @@ pub fn fct(thing: &<<type>>) -> &<<type>> {
                         let comma_after = if arg_index == arguments.len() - 1 { "".to_string() } else { ",".to_string() };
 
                         if is_option_type {
-                            result_arguments += &format!("Some(argument_{}){}", arg_index, comma_after);
+                            result_arguments += &format!("Some({}argument_{}){}", reference, arg_index, comma_after);
                         } else {
-                            result_arguments += &format!("argument_{}{}", arg_index, comma_after);
+                            result_arguments += &format!("{}argument_{}{}", reference, arg_index, comma_after);
                         }
 
                         let default_formatter = match is_option_type {
@@ -229,9 +252,9 @@ pub fn fct(thing: &<<type>>) -> &<<type>> {
                         };
                         if arg == "&str" {
                             if is_option_type {
-                                to_print_arguments += &format!("Some(\\\"{{}}\\\"){}", comma_after);
+                                to_print_arguments += &format!("Some({}\\\"{{}}\\\"){}", reference, comma_after);
                             } else {
-                                to_print_arguments += &format!("\\\"{{}}\\\"{}", comma_after);
+                                to_print_arguments += &format!("{}\\\"{{}}\\\"{}", reference, comma_after);
                             }
                         } else {
                             to_print_arguments += &format!("{}{}", default_formatter, comma_after);
@@ -472,7 +495,11 @@ fn collect_things() -> (BTreeMap<String, Vec<String>>, BTreeMap<String, BTreeMap
                     let temp_line = &line[t_help.len()..];
                     if let Some(s_index) = temp_line.find(" ") {
                         let ext_name = &temp_line[..s_index];
-                        let end_name = if ext_name.ends_with(':') { &ext_name[..ext_name.len() - 4] } else { &ext_name[..ext_name.len() - 3] };
+                        let end_name = if ext_name.ends_with(':') {
+                            &ext_name[..ext_name.len() - 4]
+                        } else {
+                            &ext_name[..ext_name.len() - 3]
+                        };
                         // println!("ZZZ {}, {}, {}, {}", line, temp_line, ext_name, end_name);
                         // println!("{}     ,,,,      {}", end_name, ext_name);
                         current_trait = end_name.to_string();
@@ -553,7 +580,10 @@ fn collect_things() -> (BTreeMap<String, Vec<String>>, BTreeMap<String, BTreeMap
                 for parent_class in parent_classes {
                     if class_functions.contains_key(parent_class) {
                         // println!("I'm in {}, {}", name_of_class, parent_class);
-                        class_functions.get_mut(name_of_class).unwrap().append(&mut base_functions.get(parent_class).unwrap().clone());
+                        class_functions
+                            .get_mut(name_of_class)
+                            .unwrap()
+                            .append(&mut base_functions.get(parent_class).unwrap().clone());
                     } else {
                         // println!("MISSING parent class: {}", parent_class); // TODO why is this missing?
                     }
@@ -690,5 +720,8 @@ fn count_objects(class_functions: &BTreeMap<String, BTreeMap<String, Vec<String>
             counter_arguments += arguments.len();
         }
     }
-    println!("{} - Class: {}, Methods: {}, Arguments: {}, Traits: {}", what, counter_class, counter_methods, counter_arguments, traits_number);
+    println!(
+        "{} - Class: {}, Methods: {}, Arguments: {}, Traits: {}",
+        what, counter_class, counter_methods, counter_arguments, traits_number
+    );
 }
