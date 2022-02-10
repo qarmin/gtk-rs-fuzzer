@@ -56,20 +56,23 @@ pub fn take_f32() -> f32 {
     debug_printing(&to_return.to_string());
     to_return
 }
+pub fn take_usize() -> usize {
+    let to_return: usize = thread_rng().gen_range(0..100000);
+
+    debug_printing(&to_return.to_string());
+    to_return
+}
+pub fn take_char() -> char {
+    let to_return: char = thread_rng().gen_range(0..127) as u8 as char;
+
+    debug_printing(&to_return.to_string());
+    to_return
+}
 
 pub fn take_bool() -> bool {
     let to_return: bool = rand::random::<bool>();
 
     debug_printing(&to_return.to_string());
-    to_return
-}
-pub fn stek_orientation() -> (Orientation, String) {
-    let to_return = if rand::random::<bool>() {
-        (Orientation::Horizontal, "Orientation::Horizontal".to_string())
-    } else {
-        (Orientation::Vertical, "Orientation::Vertical".to_string())
-    };
-    debug_printing(&to_return.1);
     to_return
 }
 
@@ -105,202 +108,3 @@ pub fn stek_glib_type() -> (glib::Type, String) {
     debug_printing(&to_return.1);
     return to_return;
 }
-
-const CONSTRAINT_STRENGTH_TYPE: [(ConstraintStrength, &str); 4] = [
-    (ConstraintStrength::Strong, "ConstraintStrength::Strong"),
-    (ConstraintStrength::Medium, "ConstraintStrength::Medium"),
-    (ConstraintStrength::Weak, "ConstraintStrength::Weak"),
-    (ConstraintStrength::Required, "ConstraintStrength::Required"),
-];
-
-pub fn stek_constraintstrength() -> (ConstraintStrength, String) {
-    let to_return = CONSTRAINT_STRENGTH_TYPE.choose(&mut rand::thread_rng()).unwrap();
-    let to_return = (to_return.0, to_return.1.to_string());
-
-    debug_printing(&to_return.1);
-    return to_return;
-}
-
-const LICENSE_TYPE: [(License, &str); 18] = [
-    (License::Unknown, "License::Unknown"),
-    (License::Custom, "License::Custom"),
-    (License::Gpl20, "License::Gpl20"),
-    (License::Gpl30, "License::Gpl30"),
-    (License::Lgpl21, "License::Lgpl21"),
-    (License::Lgpl30, "License::Lgpl30"),
-    (License::Bsd, "License::Bsd"),
-    (License::MitX11, "License::MitX11"),
-    (License::Artistic, "License::Artistic"),
-    (License::Gpl20Only, "License::Gpl20Only"),
-    (License::Gpl30Only, "License::Gpl30Only"),
-    (License::Lgpl21Only, "License::Lgpl21Only"),
-    (License::Lgpl30Only, "License::Lgpl30Only"),
-    (License::Agpl30, "License::Agpl30"),
-    (License::Agpl30Only, "License::Agpl30Only"),
-    (License::Bsd3, "License::Bsd3"),
-    (License::Apache20, "License::Apache20"),
-    (License::Mpl20, "License::Mpl20"),
-];
-
-pub fn stek_license() -> (License, String) {
-    let to_return = LICENSE_TYPE.choose(&mut rand::thread_rng()).unwrap();
-    let to_return = (to_return.0, to_return.1.to_string());
-
-    debug_printing(&to_return.1);
-    return to_return;
-}
-const BASELINE_TYPE: [(BaselinePosition, &str); 3] = [
-    (BaselinePosition::Top, "BaselinePosition::Top"),
-    (BaselinePosition::Bottom, "BaselinePosition::Bottom"),
-    (BaselinePosition::Center, "BaselinePosition::Center"),
-];
-
-pub fn stek_baselineposition() -> (BaselinePosition, String) {
-    let to_return = BASELINE_TYPE.choose(&mut rand::thread_rng()).unwrap();
-    let to_return = (to_return.0, to_return.1.to_string());
-
-    debug_printing(&to_return.1);
-    return to_return;
-}
-
-const CellRendererAccelMode_TYPE: [(CellRendererAccelMode, &str); 2] = [(CellRendererAccelMode::Gtk, "CellRendererAccelMode::Gtk"), (CellRendererAccelMode::Other, "CellRendererAccelMode::Other")];
-
-pub fn stek_cellrendereraccelmode() -> (CellRendererAccelMode, String) {
-    let to_return = CellRendererAccelMode_TYPE.choose(&mut rand::thread_rng()).unwrap();
-    let to_return = (to_return.0, to_return.1.to_string());
-
-    debug_printing(&to_return.1);
-    return to_return;
-}
-
-const iconsize_TYPE: [(IconSize, &str); 3] = [(IconSize::Inherit, "IconSize::Inherit"), (IconSize::Normal, "IconSize::Normal"), (IconSize::Large, "IconSize::Large")];
-
-pub fn stek_iconsize() -> (IconSize, String) {
-    let to_return = iconsize_TYPE.choose(&mut rand::thread_rng()).unwrap();
-    let to_return = (to_return.0, to_return.1.to_string());
-
-    debug_printing(&to_return.1);
-    return to_return;
-}
-
-const pickflags_TYPE: [(PickFlags, &str); 3] = [
-    (PickFlags::DEFAULT, "PickFlags::DEFAULT"),
-    (PickFlags::INSENSITIVE, "PickFlags::INSENSITIVE"),
-    (PickFlags::NON_TARGETABLE, "PickFlags::NON_TARGETABLE"),
-];
-
-pub fn stek_pickflags() -> (PickFlags, String) {
-    let to_return = pickflags_TYPE.choose(&mut rand::thread_rng()).unwrap();
-    let to_return = (to_return.0, to_return.1.to_string());
-
-    debug_printing(&to_return.1);
-    return to_return;
-}
-
-const directiontype_TYPE: [(DirectionType, &str); 6] = [
-    (DirectionType::TabForward, "DirectionType::TabForward"),
-    (DirectionType::TabBackward, "DirectionType::TabBackward"),
-    (DirectionType::Up, "DirectionType::Up"),
-    (DirectionType::Down, "DirectionType::Down"),
-    (DirectionType::Left, "DirectionType::Left"),
-    (DirectionType::Right, "DirectionType::Right"),
-];
-
-pub fn stek_directiontype() -> (DirectionType, String) {
-    let to_return = directiontype_TYPE.choose(&mut rand::thread_rng()).unwrap();
-    let to_return = (to_return.0, to_return.1.to_string());
-
-    debug_printing(&to_return.1);
-    return to_return;
-}
-
-// TODO
-const accessibleproperty_TYPE: [(AccessibleProperty, &str); 1] = [(AccessibleProperty::Autocomplete, "AccessibleProperty::Autocomplete")];
-
-pub fn stek_accessibleproperty() -> (AccessibleProperty, String) {
-    let to_return = accessibleproperty_TYPE.choose(&mut rand::thread_rng()).unwrap();
-    let to_return = (to_return.0, to_return.1.to_string());
-
-    debug_printing(&to_return.1);
-    return to_return;
-}
-
-// TODO
-const accessiblerole_TYPE: [(AccessibleRole, &str); 1] = [(AccessibleRole::Alert, "AccessibleRole::Alert")];
-
-pub fn stek_accessiblerole() -> (AccessibleRole, String) {
-    let to_return = accessiblerole_TYPE.choose(&mut rand::thread_rng()).unwrap();
-    let to_return = (to_return.0, to_return.1.to_string());
-
-    debug_printing(&to_return.1);
-    return to_return;
-}
-const textdirection_TYPE: [(TextDirection, &str); 1] = [(TextDirection::None, "TextDirection::None")];
-
-pub fn stek_textdirection() -> (TextDirection, String) {
-    let to_return = textdirection.choose(&mut rand::thread_rng()).unwrap();
-    let to_return = (to_return.0, to_return.1.to_string());
-
-    debug_printing(&to_return.1);
-    return to_return;
-}
-
-const align_TYPE: [(Align, &str); 1] = [(Align::Fill, "Align::Fill")];
-
-pub fn stek_align() -> (Align, String) {
-    let to_return = align_TYPE.choose(&mut rand::thread_rng()).unwrap();
-    let to_return = (to_return.0, to_return.1.to_string());
-
-    debug_printing(&to_return.1);
-    return to_return;
-}
-
-const overflow_TYPE: [(Overflow, &str); 1] = [(Overflow::Visible, "Overflow::Visible")];
-
-pub fn stek_overflow() -> (Overflow, String) {
-    let to_return = overflow_TYPE.choose(&mut rand::thread_rng()).unwrap();
-    let to_return = (to_return.0, to_return.1.to_string());
-
-    debug_printing(&to_return.1);
-    return to_return;
-}
-
-const stateflags_TYPE: [(StateFlags, &str); 1] = [(StateFlags::NORMAL, "StateFlags::NORMAL")];
-
-pub fn stek_stateflags() -> (StateFlags, String) {
-    let to_return = stateflags_TYPE.choose(&mut rand::thread_rng()).unwrap();
-    let to_return = (to_return.0, to_return.1.to_string());
-
-    debug_printing(&to_return.1);
-    return to_return;
-}
-const accessiblerelation_TYPE: [(AccessibleRelation, &str); 1] = [(AccessibleRelation::NORMAL, "AccessibleRelation::NORMAL")];
-
-pub fn stek_accessiblerelation() -> (AccessibleRelation, String) {
-    let to_return = accessiblerelation_TYPE.choose(&mut rand::thread_rng()).unwrap();
-    let to_return = (to_return.0, to_return.1.to_string());
-
-    debug_printing(&to_return.1);
-    return to_return;
-}
-
-// pub fn fsf(){
-//     StateFlags::
-// }
-
-// // TODO
-// const SMOLL_TYPE: [(NORMALL, &str); 1] = [(NORMALL::NORMAL, "NORMALL::NORMAL")];
-//
-// pub fn stek_SMOLL() -> (NORMALL, String) {
-//     let to_return = SMOLL_TYPE.choose(&mut rand::thread_rng()).unwrap();
-//     let to_return = (to_return.0, to_return.1.to_string());
-//
-//     debug_printing(&to_return.1);
-//     return to_return;
-// }
-//
-//
-//
-//
-// SMOLL
-// NORMALL

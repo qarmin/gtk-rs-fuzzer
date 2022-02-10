@@ -1,3 +1,4 @@
+use crate::enum_things::*;
 use crate::helpers::*;
 use gdk4::DragAction;
 use gtk4::builders::{PrinterBuilder, SettingsBuilder};
@@ -133,6 +134,16 @@ pub fn gget_separator() -> Separator {
 }
 // pub fn gget_shortcutssection() -> ShortcutsSection {
 //     ShortcutsSection::new()
+// }
+// pub fn gget_printcapabilities() -> PrintCapabilities {
+//     PrintCapabilities::defa()
+// }
+// pub fn gget_eventcontrollerscrollflags() -> EventControllerScrollFlags {
+//     EventControllerScrollFlags::de()
+// }
+// Bitflags
+// pub fn gget_inputhints() -> InputHints {
+//     InputHints::de()
 // }
 pub fn gget_stackswitcher() -> StackSwitcher {
     StackSwitcher::new()

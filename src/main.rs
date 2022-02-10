@@ -4,7 +4,7 @@
 
 mod settings;
 
-use crate::settings::{CLASSES_TO_USE, ENUMS_ETC, FUNCTIONS_TO_USE, IGNORED_CLASSES, IGNORED_FUNCTIONS, NUMBER_OF_REPEATS, USE_PARENT_ITEMS, USE_TRAIT_ITEMS};
+use crate::settings::{CLASSES_TO_USE, FUNCTIONS_TO_USE, IGNORED_CLASSES, IGNORED_ENUMS, IGNORED_FUNCTIONS, NUMBER_OF_REPEATS, USE_PARENT_ITEMS, USE_TRAIT_ITEMS};
 use std::collections::BTreeMap;
 use std::fs;
 use std::fs::OpenOptions;
@@ -15,12 +15,88 @@ const PATH_TO_GTK_RS: &str = "/home/rafal/Downloads/gtk4-rs/gtk4/src";
 const PATH_TO_GTK_RS_AUTO: &str = "/home/rafal/Downloads/gtk4-rs/gtk4/src/auto";
 
 const PATH_TO_PROJECT_FILE: &str = "/home/rafal/Projekty/Rust/gtk_rs_fuzzer/Project/src/ziemniak.rs";
+const PATH_TO_ENUM_FILE: &str = "/home/rafal/Projekty/Rust/gtk_rs_fuzzer/Project/src/enum_things.rs";
 
 fn main() {
-    let (class_info, class_functions) = collect_things();
-    create_project_file(class_info, class_functions)
+    let (class_info, class_functions, traits, enums) = collect_things();
+    create_enums_file(&class_info, &class_functions, &traits, &enums);
+    create_project_file(class_info, class_functions, traits, enums)
 }
-fn create_project_file(_class_info: BTreeMap<String, Vec<String>>, class_functions: BTreeMap<String, BTreeMap<String, Vec<String>>>) {
+fn create_enums_file(
+    _class_info: &BTreeMap<String, Vec<String>>,
+    _class_functions: &BTreeMap<String, BTreeMap<String, Vec<String>>>,
+    _traits: &BTreeMap<String, BTreeMap<String, Vec<String>>>,
+    enums: &BTreeMap<String, Vec<String>>,
+) {
+    let _ = fs::remove_file(PATH_TO_PROJECT_FILE);
+
+    let file = OpenOptions::new().write(true).truncate(true).create(true).open(PATH_TO_ENUM_FILE).unwrap();
+    let mut file = BufWriter::new(file);
+
+    let enum_start = r#####"
+use crate::create_objects::*;
+use crate::helpers::*;
+use gtk4::prelude::*;
+use gtk4::*;
+use std::fs;
+use std::fs::{File, OpenOptions};
+use rand::prelude::*;
+use std::io::Write;"#####;
+    writeln!(file, "{}", enum_start).unwrap();
+
+    // enum_arguments - arguments
+    // type - type
+    // type_lowercase - type in lowercase
+    // type_uppercase - type in uppercase
+    // number - number of constants
+    let single_enum_template = r#####"
+const ENUM_<<type_uppercase>>_TYPE: [(<<type>>, &str); <<number>>] = [
+    <<enum_arguments>>
+];
+
+pub fn stek_<<type_lowercase>>() -> (<<type>>, String) {
+    let to_return = ENUM_<<type_uppercase>>_TYPE.choose(&mut rand::thread_rng()).unwrap();
+    let to_return = (to_return.0, to_return.1.to_string());
+
+    debug_printing(&to_return.1);
+    return to_return;
+}
+"#####;
+
+    for (name_of_enum, constant_list) in enums {
+        if IGNORED_ENUMS.contains(&name_of_enum.as_str()) {
+            continue;
+        }
+
+        let mut to_write = single_enum_template
+            .replace("<<type>>", name_of_enum)
+            .replace("<<number>>", &constant_list.len().to_string())
+            .replace("<<type_lowercase>>", &name_of_enum.to_lowercase())
+            .replace("<<type_uppercase>>", &name_of_enum.to_uppercase());
+        let mut arguments = "".to_string();
+        for (index, constant) in constant_list.iter().enumerate() {
+            let th = format!("{}::{}", name_of_enum, constant);
+            arguments += &format!("({},\"{}\")", th, th);
+            if index != constant_list.len() - 1 {
+                arguments += ",";
+            }
+            arguments += "\n";
+            if index != constant_list.len() - 1 {
+                arguments += "    ";
+            }
+        }
+        to_write = to_write.replace("<<enum_arguments>>", &arguments);
+        assert!(!to_write.contains("<<"));
+        writeln!(file, "{}", to_write).unwrap();
+    }
+}
+
+fn create_project_file(
+    _class_info: BTreeMap<String, Vec<String>>,
+    class_functions: BTreeMap<String, BTreeMap<String, Vec<String>>>,
+    _traits: BTreeMap<String, BTreeMap<String, Vec<String>>>,
+    enums: BTreeMap<String, Vec<String>>,
+) {
     let _ = fs::remove_file(PATH_TO_PROJECT_FILE);
 
     let file = OpenOptions::new().write(true).truncate(true).create(true).open(PATH_TO_PROJECT_FILE).unwrap();
@@ -29,6 +105,7 @@ fn create_project_file(_class_info: BTreeMap<String, Vec<String>>, class_functio
     let start_text = r#####"
 use crate::create_objects::*;
 use crate::helpers::*;
+use crate::enum_things::*;
 use gtk4::prelude::*;
 use gtk4::*;
 use std::fs;
@@ -42,7 +119,7 @@ pub fn execute_things(){
     // Basic function to
     // <<function_arguments>> - list of functions and its names
     // <<number_of_functions>> - number of functions
-    let basic_function = r#####"
+    let _basic_function = r#####"
 pub fn run_tests(check_all_things: bool, classes_to_check: Vec<String>, functions_to_check: Vec<String>) {
     let all_things: [(fn(&Vec<String>) -> (), &str); <<number_of_functions>>] = [<<function_arguments>>];
 
@@ -62,7 +139,7 @@ pub fn run_tests(check_all_things: bool, classes_to_check: Vec<String>, function
 
     // <<type>> - type of used item
     // <<logic_to_execute>> - logic how to run this thing
-    let unit_class = r#####"
+    let _unit_class = r#####"
 pub fn things_on(check_all_things: bool, functions_to_check: &Vec<String>) {
     let functions: [(fn(&<<type>>) -> &<<type>>, &str); 1] = [(fct, "fct")];
 
@@ -74,7 +151,7 @@ pub fn things_on(check_all_things: bool, functions_to_check: &Vec<String>) {
 
     // <<type>> - type of used item
     // <<executed_functions>> - logic how to run this thing
-    let unit_function = r#####"
+    let _unit_function = r#####"
 pub fn fct(thing: &<<type>>) -> &<<type>> {
     <<executed_functions>>
     thing
@@ -85,7 +162,7 @@ pub fn fct(thing: &<<type>>) -> &<<type>> {
     // <<type>> - type of used item
     // <<method>> - used method
     // <<create_object>> - create_object_function
-    let zero_things = r#####"
+    let _zero_things = r#####"
         println!("Creating object <<type>>");
         print_and_save_to_file(&mut file, "let object_<<number>> = <<create_object>>(); // <<type>>");
         let object_<<number>> = <<create_object>>(); // <<type>>
@@ -137,7 +214,7 @@ pub fn fct(thing: &<<type>>) -> &<<type>> {
         // if name_of_class != "AboutDialog" {
         //     continue;
         // }
-        if (0..35).contains(&_index) {
+        if (0..200).contains(&_index) {
             // println!("{}. {}", _index, name_of_class);
         } else {
             continue;
@@ -173,9 +250,9 @@ pub fn fct(thing: &<<type>>) -> &<<type>> {
                         arg = arg.strip_suffix(">").unwrap().to_string();
                     }
                     found_bad_thing = match arg.as_str() {
-                        "bool" | "i32" | "u32" | "u64" | "i64" | "f32" | "f64" | "&str" => false,
+                        "bool" | "i32" | "u32" | "u64" | "i64" | "f32" | "f64" | "usize" | "char" | "&str" => false,
                         thing => {
-                            if IGNORED_CLASSES.contains(&thing) {
+                            if IGNORED_CLASSES.contains(&thing) || IGNORED_ENUMS.contains(&thing) {
                                 // println!("NOT {}", thing);
                                 true
                             } else {
@@ -223,9 +300,11 @@ pub fn fct(thing: &<<type>>) -> &<<type>> {
                             "i64" => "take_i64".to_string(),
                             "f32" => "take_f32".to_string(),
                             "f64" => "take_f64".to_string(),
+                            "usize" => "take_usize".to_string(),
+                            "char" => "take_char".to_string(),
                             "&str" => "&take_string".to_string(),
                             thing => {
-                                if !ENUMS_ETC.contains(&thing) {
+                                if !enums.contains_key(thing) {
                                     format!("gget_{}", thing.to_lowercase())
                                 } else {
                                     stek = ".0";
@@ -292,7 +371,12 @@ pub fn fct(thing: &<<type>>) -> &<<type>> {
     writeln!(file, "{}", end_text).unwrap();
 }
 
-fn collect_things() -> (BTreeMap<String, Vec<String>>, BTreeMap<String, BTreeMap<String, Vec<String>>>) {
+fn collect_things() -> (
+    BTreeMap<String, Vec<String>>,
+    BTreeMap<String, BTreeMap<String, Vec<String>>>,
+    BTreeMap<String, BTreeMap<String, Vec<String>>>,
+    BTreeMap<String, Vec<String>>,
+) {
     // Do not modify result of this variable
     let mut class_info: BTreeMap<String, Vec<String>> = Default::default(); // Class + what extends e.g.   Label -> [Widget, LabelExt]
                                                                             // Can be removed
@@ -567,9 +651,11 @@ fn collect_things() -> (BTreeMap<String, Vec<String>>, BTreeMap<String, BTreeMap
                     let end_help = " {";
                     let end_name = &line[t_help.len()..line.len() - end_help.len()];
 
-                    current_enum = end_name.to_string();
-                    enums.insert(end_name.to_string(), Default::default());
-                    counter = 1;
+                    if !end_name.contains("<") {
+                        current_enum = end_name.to_string();
+                        enums.insert(end_name.to_string(), Default::default());
+                        counter = 1;
+                    }
                 } else if old_line.starts_with("}") {
                     counter -= 1;
                     if counter == 0 {
@@ -730,7 +816,7 @@ fn collect_things() -> (BTreeMap<String, Vec<String>>, BTreeMap<String, BTreeMap
 
     count_objects(&class_functions, &traits, &enums, "End results         ");
 
-    (class_info, class_functions)
+    (class_info, class_functions, traits, enums)
 }
 
 fn count_objects(
@@ -743,6 +829,7 @@ fn count_objects(
     let mut counter_methods = 0;
     let mut counter_arguments = 0;
     let traits_number = traits.len();
+    let all_traits: usize = traits.iter().map(|(_e, b)| b.len()).sum();
     let enums_number = enums.len();
     let all_enums: usize = enums.iter().map(|(_e, b)| b.len()).sum();
     for function_list in class_functions.values() {
@@ -753,7 +840,7 @@ fn count_objects(
         }
     }
     println!(
-        "{} - Class: {}, Methods: {}, Arguments: {}, Traits: {}, Enums: {}({})",
-        what, counter_class, counter_methods, counter_arguments, traits_number, enums_number, all_enums
+        "{} - Class: {}, Methods: {}, Arguments: {}, Traits: {}({}), Enums: {}({})",
+        what, counter_class, counter_methods, counter_arguments, traits_number, all_traits, enums_number, all_enums
     );
 }

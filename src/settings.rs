@@ -3,7 +3,7 @@ pub const USE_TRAIT_ITEMS: bool = true;
 pub const NUMBER_OF_REPEATS: u32 = 2; // How many time repeat function executing to be sure that this function cause problems
 
 pub const IGNORED_FUNCTIONS: &[&str] = &[
-    // Non existent functions(probably bug in parsing files)
+    // Non existent functions(probably bug in parsing files or this will be available in 4.6 + versions)
     "set_show_arrow",            // DropDown
     "add_suffix",                // FileFilter
     "set_always_show_arrow",     // MenuButton
@@ -19,6 +19,7 @@ pub const IGNORED_FUNCTIONS: &[&str] = &[
     "must_always_show_arrow",    // MenuButton
     "child",                     // MenuButton
     "is_indent_for_icon",        // TreeExpander
+    "compute_cursor_extents",    // Text
     // Rust error, multiple applicable items in scope
     "alignment",
     "font_map",
@@ -107,7 +108,7 @@ pub const IGNORED_FUNCTIONS: &[&str] = &[
     "set_visible",
     "show",
     "set_language",
-    "",
+    "emit_move_cursor",
     "",
     "",
     "",
@@ -118,6 +119,17 @@ pub const FUNCTIONS_TO_USE: &[&str] = &[];
 // List of classes which will be used(IGNORED_CLASSES NOT ignore classes from this array).
 // If empty, all classes which are not present in IGNORED_CLASSES are used
 pub const CLASSES_TO_USE: &[&str] = &[];
+
+pub const IGNORED_ENUMS: &[&str] = &[
+    "SymbolicColor",
+    "NaturalWrapMode",
+    "State",
+    "EventControllerScrollFlags", // Bitflags
+    "InputHints",                 // Bitflags
+    "StateFlags",                 // BitFlags
+    "PickFlags",                  // Bitflags
+    "FontChooserLevel",           // Bitflags
+];
 
 pub const IGNORED_CLASSES: &[&str] = &[
     // Classes, which objects I can't create
@@ -143,6 +155,7 @@ pub const IGNORED_CLASSES: &[&str] = &[
     "ShortcutAction",
     "PasswordEntryBuffer",
     "Tooltip",
+    "PrintCapabilities",
     // Other
     "ApplicationWindow", // Only one ApplicationWindows can be created
     "FileChooserWidget", // Create a lot of warnings(and possibly also crashes) "Too many open files"
@@ -159,24 +172,6 @@ pub const IGNORED_CLASSES: &[&str] = &[
     "ColumnViewColumn", // https://github.com/gtk-rs/gtk4-rs/issues/885
     // TODO
     "Popover", // Select cause crash
-];
-
-pub const ENUMS_ETC: &[&str] = &[
-    "ConstraintStrength",
-    "Orientation",
-    "IconSize",
-    "CellRendererAccelMode",
-    "License",
-    "BaselinePosition",
-    "CellRendererAccelMode",
-    "AccessibleRole",
-    "Align",
-    "TextDirection",
-    "StateFlags",
-    "Overflow",
-    "AccessibleProperty",
-    "DirectionType",
-    "PickFlags",
 ];
 
 // TO REPORT
@@ -215,3 +210,7 @@ pub const ENUMS_ETC: &[&str] = &[
 //
 // let object_281 = gget_cellrendereraccel(); // CellRendererAccel
 // object_281.set_language(Some("-39344"));
+//
+// let object_385 = gget_flowbox(); // FlowBox
+// object_385.emit_move_cursor(MovementStep::DisplayLineEnds,-43800,false,false);
+//
