@@ -35,8 +35,8 @@ use std::fs;
 use std::fs::{File, OpenOptions};
 use std::io::Write;
 
-//pub fn execute_things(){
-//    let mut file = OpenOptions::new().write(true).truncate(true).create(true).open("things.txt").unwrap();
+pub fn execute_things(){
+    let mut file = OpenOptions::new().write(true).truncate(true).create(true).open("things.txt").unwrap();
 "#####;
 
     // Basic function to
@@ -80,23 +80,71 @@ pub fn fct(thing: &<<type>>) -> &<<type>> {
     thing
 }
 "#####;
+
+    // <<number>> - just any number
+    // <<type>> - type of used item
+    // <<method>> - used method
+    // <<create_object>> - create_object_function
+    let zero_things = r#####"
+        println!("Creating object <<type>>");
+        print_and_save_to_file(&mut file, "let object_<<number>> = <<create_object>>(); // <<type>>");
+        let object_<<number>> = <<create_object>>(); // <<type>>
+        print_and_save_to_file(&mut file, "object_<<number>>.<<method>>();");
+        object_<<number>>.<<method>>();
+"#####;
+
+    // <<number>> - just any number
+    // <<type>> - type of used item
+    // <<method>> - used method
+    // <<create_object>> - create_object_function
+    // <<number_of_repeats>> - number of repeats
+    let zero_things_old = r#####"
+        for _i in 0..<<number_of_repeats>>{
+            println!("Creating object <<type>>");
+            print_and_save_to_file(&mut file, "let object_<<number>> = gget_<<create_object>>(); // <<type>>");
+            let object_<<number>> = gget_<<create_object>>(); // <<type>>
+            print_and_save_to_file(&mut file, "object_<<number>>.<<method>>();");
+            object_<<number>>.<<method>>();
+        }
+"#####;
+
+    // <<number>> - just any number
+    // <<type>> - type of used item
+    // <<method>> - used method
+    // <<create_object>> - create_object_function
+    // <<number_of_repeats>> - number of repeats
+    // <<creating_arguments>> - creating arguments
+    // <<argument_names>> - argument names like argument1, argument2, argument3 etc.
+    // <<format_arguments>> - {},{},{} - exactly same number as arguments
+    // <<argument_names_proper>> - argument names like argument1, argument2, argument3 etc.,but with proper formatting (e.g. with added Some() wrap)
+    let multiple_things_old = r#####"
+        for _i in 0..<<number_of_repeats>>{
+            println!("Creating object <<type>>");
+            print_and_save_to_file(&mut file, "let object_<<number>> = gget_<<create_object>>(); // <<type>>");
+            let object_<<number>> = gget_<<create_object>>(); // <<type>>
+            <<creating_arguments>>
+			print_and_save_to_file(&mut file, &format!("object_<<number>>.<<method>>(<<format_arguments>>);",<<argument_names>>));
+            object_<<number>>.<<method>>(<<argument_names_proper>>);
+        }
+"#####;
+
     writeln!(file, "{}", start_text).unwrap();
 
-    // TODO here are full logic
     let mut object_number = 0;
 
-    let mut st_save: Vec<String> = Vec::new();
+    let mut changed_text = "".to_string();
     for (_index, (name_of_class, function_list)) in class_functions.iter().enumerate() {
         // if name_of_class != "AboutDialog" {
         //     continue;
         // }
-        if (0..10).contains(&_index) {
+        if (30..35).contains(&_index) {
             println!("{}. {}", _index, name_of_class);
         } else {
             continue;
         }
-        st_save.push(format!("\t// {}", name_of_class));
-        st_save.push("\t{".to_string());
+
+        writeln!(file, "\t//{}", name_of_class).unwrap();
+        writeln!(file, "\t{{").unwrap();
         for (function, arguments) in function_list {
             // TODO create here an object
             if function == "new" {
@@ -108,20 +156,12 @@ pub fn fct(thing: &<<type>>) -> &<<type>> {
             // }
 
             if arguments.is_empty() {
-                st_save.push(format!("\t\tfor _i in 0..{}{{", NUMBER_OF_REPEATS));
-                st_save.push(format!("\t\t\tprintln!(\"Creating object {}\");", name_of_class));
-                st_save.push(format!(
-                    "\t\t\tprint_and_save_to_file(&mut file, \"let object_{} = gget_{}(); // {}\");",
-                    object_number,
-                    name_of_class.to_ascii_lowercase(),
-                    name_of_class
-                ));
-                st_save.push(format!("\t\t\tlet object_{} = gget_{}(); // {}", object_number, name_of_class.to_ascii_lowercase(), name_of_class));
-                // st_save.push(format!("\t\t\tprintln!(\"Trying to execute {}.{}()\");", name_of_class, function));
-                st_save.push(format!("\t\t\tprint_and_save_to_file(&mut file, \"object_{}.{}();\");", object_number, function));
-                st_save.push(format!("\t\t\tobject_{}.{}();", object_number, function));
-                // st_save.push(format!("\t\t\tprintln!(\"Executed {}.{}()\");", name_of_class, function));
-                st_save.push("\t\t}".to_string());
+                changed_text = zero_things_old
+                    .replace("<<number>>", &object_number.to_string())
+                    .replace("<<type>>", name_of_class)
+                    .replace("<<method>>", function)
+                    .replace("<<create_object>>", &name_of_class.to_ascii_lowercase())
+                    .replace("<<number_of_repeats>>", &NUMBER_OF_REPEATS.to_string());
             } else {
                 // println!("{:?}", arguments);
                 let mut found_bad_thing: bool = false;
@@ -144,20 +184,14 @@ pub fn fct(thing: &<<type>>) -> &<<type>> {
                     }
                 }
                 if !found_bad_thing {
-                    st_save.push(format!("\t\tfor _i in 0..{}{{", NUMBER_OF_REPEATS));
-                    st_save.push(format!(
-                        "\t\t\tprint_and_save_to_file(&mut file, \"let object_{} = gget_{}(); // {}\");",
-                        object_number,
-                        name_of_class.to_ascii_lowercase(),
-                        name_of_class
-                    ));
-                    st_save.push(format!("\t\t\tlet object_{} = gget_{}(); // {}", object_number, name_of_class.to_ascii_lowercase(), name_of_class));
-                    let mut result_arguments = format!("object_{}.{}(", object_number, function);
+                    let mut result_arguments = "".to_string();
+                    let mut creating_arguments = "".to_string();
 
                     let mut to_print_arguments = "".to_string();
                     let mut to_print_arguments_variable = "".to_string();
 
                     for arg_index in 0..arguments.len() {
+                        println!("AAA arguments {}", arguments.len());
                         let mut is_option_type = false;
                         let mut arg = arguments[arg_index].clone();
                         if arg.starts_with("Option<") {
@@ -176,8 +210,10 @@ pub fn fct(thing: &<<type>>) -> &<<type>> {
                             "&str" => "&take_string",
                             _ => panic!("Not supported {}", arg),
                         };
-
-                        st_save.push(format!("\t\t\tlet argument_{} = {}();", arg_index, help_function_name));
+                        creating_arguments += &format!("let argument_{} = {}();", arg_index, help_function_name);
+                        if arg_index != arguments.len() - 1 {
+                            creating_arguments += "\n\t\t\t";
+                        }
 
                         let comma_after = if arg_index == arguments.len() - 1 { "".to_string() } else { ",".to_string() };
 
@@ -203,24 +239,25 @@ pub fn fct(thing: &<<type>>) -> &<<type>> {
 
                         to_print_arguments_variable += &format!("argument_{}{}", arg_index, comma_after);
                     }
-                    result_arguments += ");";
 
-                    st_save.push(format!(
-                        "\t\t\tprint_and_save_to_file(&mut file, &format!(\"object_{}.{}({});\",{}));",
-                        object_number, function, to_print_arguments, to_print_arguments_variable
-                    ));
-                    st_save.push(format!("\t\t\t{}", result_arguments));
-                    st_save.push("\t\t}".to_string());
+                    changed_text = multiple_things_old
+                        .replace("<<number>>", &object_number.to_string())
+                        .replace("<<type>>", name_of_class)
+                        .replace("<<method>>", function)
+                        .replace("<<create_object>>", &name_of_class.to_ascii_lowercase())
+                        .replace("<<number_of_repeats>>", &NUMBER_OF_REPEATS.to_string())
+                        .replace("<<creating_arguments>>", &creating_arguments)
+                        .replace("<<argument_names>>", &to_print_arguments_variable)
+                        .replace("<<format_arguments>>", &to_print_arguments)
+                        .replace("<<argument_names_proper>>", &result_arguments);
                 }
             }
 
             object_number += 1;
+            assert!(!changed_text.contains("<<"));
+            writeln!(file, "{}", changed_text).unwrap();
         }
-        st_save.push("\t}".to_string());
-        let output = st_save.join("\n");
-        writeln!(file, "{}", output).unwrap();
-
-        st_save.clear();
+        writeln!(file, "\t}}").unwrap();
     }
 
     writeln!(file, "}}").unwrap();
