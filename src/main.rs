@@ -35,8 +35,50 @@ use std::fs;
 use std::fs::{File, OpenOptions};
 use std::io::Write;
 
-pub fn execute_things(){
-    let mut file = OpenOptions::new().write(true).truncate(true).create(true).open("things.txt").unwrap();
+//pub fn execute_things(){
+//    let mut file = OpenOptions::new().write(true).truncate(true).create(true).open("things.txt").unwrap();
+"#####;
+
+    // Basic function to
+    // <<funkction_arguments>> - list of functions and its names
+    // <<number_of_functions>> - number of functions
+    let basic_function = r#####"
+pub fn run_tests(check_all_things: bool, classes_to_check: Vec<String>, functions_to_check: Vec<String>) {
+    let all_things: [(fn(&Vec<String>) -> (), &str); <<number_of_functions>>] = [<<funkction_arguments>>];
+
+    if check_all_things {
+        for (function, _name) in all_things {
+            function(check_all_things, &functions_to_check);
+        }
+    } else {
+        for (function, name_of_class) in all_things {
+            if classes_to_check.iter().any(|e| e == name_of_class) {
+                function(check_all_things, &functions_to_check);
+            }
+        }
+    }
+}
+"#####;
+
+    // <<type>> - type of used item
+    // <<logic_to_execute>> - logic how to run this thing
+    let unit_class = r#####"
+pub fn things_on(check_all_things: bool, functions_to_check: &Vec<String>) {
+    let functions: [(fn(&<<type>>) -> &<<type>>, &str); 1] = [(fct, "fct")];
+
+    <<logic_to_execute>>
+
+    println!("AA")
+}
+"#####;
+
+    // <<type>> - type of used item
+    // <<executed_functions>> - logic how to run this thing
+    let unit_function = r#####"
+pub fn fct(thing: &<<type>>) -> &<<type>> {
+    <<executed_functions>>
+    thing
+}
 "#####;
     writeln!(file, "{}", start_text).unwrap();
 
@@ -48,7 +90,7 @@ pub fn execute_things(){
         // if name_of_class != "AboutDialog" {
         //     continue;
         // }
-        if (90..150).contains(&_index) {
+        if (0..10).contains(&_index) {
             println!("{}. {}", _index, name_of_class);
         } else {
             continue;
@@ -171,6 +213,7 @@ pub fn execute_things(){
                     st_save.push("\t\t}".to_string());
                 }
             }
+
             object_number += 1;
         }
         st_save.push("\t}".to_string());

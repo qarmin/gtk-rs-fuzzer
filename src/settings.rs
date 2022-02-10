@@ -1,5 +1,5 @@
 pub const USE_PARENT_ITEMS: bool = true;
-pub const USE_TRAIT_ITEMS: bool = true;
+pub const USE_TRAIT_ITEMS: bool = false;
 pub const NUMBER_OF_REPEATS: u32 = 2; // How many time repeat function executing to be sure that this function cause problems
 
 pub const IGNORED_FUNCTIONS: &[&str] = &[
