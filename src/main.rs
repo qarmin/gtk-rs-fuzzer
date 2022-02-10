@@ -4,7 +4,7 @@
 
 mod settings;
 
-use crate::settings::{CLASSES_TO_USE, IGNORED_CLASSES, IGNORED_FUNCTIONS, NUMBER_OF_REPEATS, USE_PARENT_ITEMS, USE_TRAIT_ITEMS};
+use crate::settings::{CLASSES_TO_USE, FUNCTIONS_TO_USE, IGNORED_CLASSES, IGNORED_FUNCTIONS, NUMBER_OF_REPEATS, USE_PARENT_ITEMS, USE_TRAIT_ITEMS};
 use std::collections::BTreeMap;
 use std::fs;
 use std::fs::OpenOptions;
@@ -23,7 +23,7 @@ fn main() {
 fn create_project_file(_class_info: BTreeMap<String, Vec<String>>, class_functions: BTreeMap<String, BTreeMap<String, Vec<String>>>) {
     let _ = fs::remove_file(PATH_TO_PROJECT_FILE);
 
-    let file = OpenOptions::new().write(true).create(true).open(PATH_TO_PROJECT_FILE).unwrap();
+    let file = OpenOptions::new().write(true).truncate(true).create(true).open(PATH_TO_PROJECT_FILE).unwrap();
     let mut file = BufWriter::new(file);
 
     let start_text = r#####"
@@ -36,7 +36,7 @@ use std::fs::{File, OpenOptions};
 use std::io::Write;
 
 pub fn execute_things(){
-    let mut file = OpenOptions::new().write(true).create(true).open("things.txt").unwrap();
+    let mut file = OpenOptions::new().write(true).truncate(true).create(true).open("things.txt").unwrap();
 "#####;
     writeln!(file, "{}", start_text).unwrap();
 
@@ -48,11 +48,11 @@ pub fn execute_things(){
         // if name_of_class != "AboutDialog" {
         //     continue;
         // }
-        // if _index <= 180 || _index > 1900 {
-        //     continue;
-        // } else {
-        //     println!("{}. {}", _index, name_of_class);
-        // }
+        if (90..150).contains(&_index) {
+            println!("{}. {}", _index, name_of_class);
+        } else {
+            continue;
+        }
         st_save.push(format!("\t// {}", name_of_class));
         st_save.push("\t{".to_string());
         for (function, arguments) in function_list {
@@ -60,34 +60,40 @@ pub fn execute_things(){
             if function == "new" {
                 continue;
             }
-            // if function == "build" || function == "new" || function.starts_with("new_") || function.starts_with("with_") || function == "builder" {
-            //     continue; // TODO check why
-            // }
             // TODO Better object numbering(currently things are )
+            // if !arguments.is_empty() {
+            //     continue;
+            // }
+
             if arguments.is_empty() {
-                // st_save.push(format!("\t\tfor _i in 0..{}{{", NUMBER_OF_REPEATS));
-                // st_save.push(format!("\t\t\tprintln!(\"Creating object {}\");", name_of_class));
-                // st_save.push(format!(
-                //     "\t\t\tprint_and_save_to_file(&mut file, \"let object{} = gget_{}(); // {}\");",
-                //     object_number,
-                //     name_of_class.to_ascii_lowercase(),
-                //     name_of_class
-                // ));
-                // st_save.push(format!("\t\t\tlet object_{} = gget_{}(); // {}", object_number, name_of_class.to_ascii_lowercase(), name_of_class));
-                // // st_save.push(format!("\t\t\tprintln!(\"Trying to execute {}.{}()\");", name_of_class, function));
-                // st_save.push(format!("\t\t\tprint_and_save_to_file(&mut file, \"object_{}.{}();\");", object_number, function));
-                // st_save.push(format!("\t\t\tobject_{}.{}();", object_number, function));
-                // // st_save.push(format!("\t\t\tprintln!(\"Executed {}.{}()\");", name_of_class, function));
-                // st_save.push("\t\t}".to_string());
+                st_save.push(format!("\t\tfor _i in 0..{}{{", NUMBER_OF_REPEATS));
+                st_save.push(format!("\t\t\tprintln!(\"Creating object {}\");", name_of_class));
+                st_save.push(format!(
+                    "\t\t\tprint_and_save_to_file(&mut file, \"let object_{} = gget_{}(); // {}\");",
+                    object_number,
+                    name_of_class.to_ascii_lowercase(),
+                    name_of_class
+                ));
+                st_save.push(format!("\t\t\tlet object_{} = gget_{}(); // {}", object_number, name_of_class.to_ascii_lowercase(), name_of_class));
+                // st_save.push(format!("\t\t\tprintln!(\"Trying to execute {}.{}()\");", name_of_class, function));
+                st_save.push(format!("\t\t\tprint_and_save_to_file(&mut file, \"object_{}.{}();\");", object_number, function));
+                st_save.push(format!("\t\t\tobject_{}.{}();", object_number, function));
+                // st_save.push(format!("\t\t\tprintln!(\"Executed {}.{}()\");", name_of_class, function));
+                st_save.push("\t\t}".to_string());
             } else {
                 // println!("{:?}", arguments);
                 let mut found_bad_thing: bool = false;
                 // TODO support for all arguments
                 for arg in arguments {
+                    let mut arg = arg.clone();
+                    if arg.starts_with("Option<") {
+                        arg = arg.strip_prefix("Option<").unwrap().to_string();
+                        arg = arg.strip_suffix(">").unwrap().to_string();
+                    }
                     found_bad_thing = match arg.as_str() {
                         "bool" | "i32" | "u32" | "u64" | "i64" | "f32" | "f64" | "&str" => false,
                         _ => {
-                            // println!("{:?}", arg);
+                            println!("{:?}", arg);
                             true
                         }
                     };
@@ -104,9 +110,19 @@ pub fn execute_things(){
                         name_of_class
                     ));
                     st_save.push(format!("\t\t\tlet object_{} = gget_{}(); // {}", object_number, name_of_class.to_ascii_lowercase(), name_of_class));
-                    let mut function_number = 0;
                     let mut result_arguments = format!("object_{}.{}(", object_number, function);
-                    for arg in arguments {
+
+                    let mut to_print_arguments = "".to_string();
+                    let mut to_print_arguments_variable = "".to_string();
+
+                    for arg_index in 0..arguments.len() {
+                        let mut is_option_type = false;
+                        let mut arg = arguments[arg_index].clone();
+                        if arg.starts_with("Option<") {
+                            is_option_type = true;
+                            arg = arg.strip_prefix("Option<").unwrap().to_string();
+                            arg = arg.strip_suffix(">").unwrap().to_string();
+                        }
                         let help_function_name = match arg.as_str() {
                             "bool" => "take_bool",
                             "i32" => "take_i32",
@@ -119,28 +135,33 @@ pub fn execute_things(){
                             _ => panic!("Not supported {}", arg),
                         };
 
-                        st_save.push(format!("\t\t\tlet argument_{} = {}();", function_number, help_function_name));
-                        if function_number == arguments.len() - 1 {
-                            result_arguments += &format!("argument_{}", function_number);
+                        st_save.push(format!("\t\t\tlet argument_{} = {}();", arg_index, help_function_name));
+
+                        let comma_after = if arg_index == arguments.len() - 1 { "".to_string() } else { ",".to_string() };
+
+                        if is_option_type {
+                            result_arguments += &format!("Some(argument_{}){}", arg_index, comma_after);
                         } else {
-                            result_arguments += &format!("argument_{},", function_number);
+                            result_arguments += &format!("argument_{}{}", arg_index, comma_after);
                         }
 
-                        function_number += 1;
+                        let default_formatter = match is_option_type {
+                            true => "Some({})",
+                            false => "{}",
+                        };
+                        if arg == "&str" {
+                            if is_option_type {
+                                to_print_arguments += &format!("Some(\\\"{{}}\\\"){}", comma_after);
+                            } else {
+                                to_print_arguments += &format!("\\\"{{}}\\\"{}", comma_after);
+                            }
+                        } else {
+                            to_print_arguments += &format!("{}{}", default_formatter, comma_after);
+                        }
+
+                        to_print_arguments_variable += &format!("argument_{}{}", arg_index, comma_after);
                     }
                     result_arguments += ");";
-
-                    let mut to_print_arguments = "".to_string();
-                    let mut to_print_arguments_variable = "".to_string();
-                    for i in 0..function_number {
-                        if i == function_number - 1 {
-                            to_print_arguments += "{}";
-                            to_print_arguments_variable += &format!("argument_{}", i)
-                        } else {
-                            to_print_arguments += "{},";
-                            to_print_arguments_variable += &format!("argument_{},", i)
-                        }
-                    }
 
                     st_save.push(format!(
                         "\t\t\tprint_and_save_to_file(&mut file, &format!(\"object_{}.{}({});\",{}));",
@@ -430,10 +451,7 @@ fn collect_things() -> (BTreeMap<String, Vec<String>>, BTreeMap<String, BTreeMap
                         function_name = function_name_local.to_string();
                         continue_function_declaration = true;
                     }
-                }
-                // println!("found function \"{}\" for \"{}\"", function_name_local, current_class);
-                // } else if !line.is_empty() && !old_line.starts_with(" ") && !old_line.starts_with("\t") {
-                else if old_line.starts_with("impl ") && line.contains("Builder") {
+                } else if old_line.starts_with("impl ") && line.contains("Builder") {
                     // println!("{}", old_line);
                     current_class = "".to_string();
                     current_trait = "".to_string();
@@ -446,43 +464,43 @@ fn collect_things() -> (BTreeMap<String, Vec<String>>, BTreeMap<String, BTreeMap
 
     count_objects(&class_functions, &traits, "At start            ");
 
-    // // Extend classes with parent
-    // if USE_PARENT_ITEMS {
-    //     let base_functions = class_functions.clone(); // Needed to have same set of functions across all iterations
-    //
-    //     for (name_of_class, parent_classes) in &class_info {
-    //         if class_functions.contains_key(name_of_class) {
-    //             for parent_class in parent_classes {
-    //                 if class_functions.contains_key(parent_class) {
-    //                     // println!("I'm in {}, {}", name_of_class, parent_class);
-    //                     class_functions.get_mut(name_of_class).unwrap().append(&mut base_functions.get(parent_class).unwrap().clone());
-    //                 } else {
-    //                     // println!("MISSING parent class: {}", parent_class); // TODO why is this missing?
-    //                 }
-    //             }
-    //         } else {
-    //             // println!("MISSING normal class: {}", name_of_class); // TODO why is this missing?
-    //         }
-    //     }
-    // }
+    // Extend classes with parent functions
+    if USE_PARENT_ITEMS {
+        let base_functions = class_functions.clone(); // Needed to have same set of functions across all iterations
 
-    // // Extend classes with parent
-    // if USE_TRAIT_ITEMS {
-    //     for (name_of_class, used_traits) in &class_info {
-    //         if class_functions.contains_key(name_of_class) {
-    //             for used_trait in used_traits {
-    //                 if traits.contains_key(used_trait) {
-    //                     // println!("I'm in {}, {}", name_of_class, parent_class);
-    //                     class_functions.get_mut(name_of_class).unwrap().append(&mut traits.get(used_trait).unwrap().clone());
-    //                 } else {
-    //                     // println!("MISSING parent class: {}", parent_class); // TODO why is this missing?
-    //                 }
-    //             }
-    //         } else {
-    //             // println!("MISSING normal class: {}", name_of_class); // TODO why is this missing?
-    //         }
-    //     }
-    // }
+        for (name_of_class, parent_classes) in &class_info {
+            if class_functions.contains_key(name_of_class) {
+                for parent_class in parent_classes {
+                    if class_functions.contains_key(parent_class) {
+                        // println!("I'm in {}, {}", name_of_class, parent_class);
+                        class_functions.get_mut(name_of_class).unwrap().append(&mut base_functions.get(parent_class).unwrap().clone());
+                    } else {
+                        // println!("MISSING parent class: {}", parent_class); // TODO why is this missing?
+                    }
+                }
+            } else {
+                // println!("MISSING normal class: {}", name_of_class); // TODO why is this missing?
+            }
+        }
+    }
+
+    // Extend classes with traits functions
+    if USE_TRAIT_ITEMS {
+        for (name_of_class, used_traits) in &class_info {
+            if class_functions.contains_key(name_of_class) {
+                for used_trait in used_traits {
+                    if traits.contains_key(used_trait) {
+                        // println!("I'm in {}, {}", name_of_class, parent_class);
+                        class_functions.get_mut(name_of_class).unwrap().append(&mut traits.get(used_trait).unwrap().clone());
+                    } else {
+                        // println!("MISSING parent class: {}", parent_class); // TODO why is this missing?
+                    }
+                }
+            } else {
+                // println!("MISSING normal class: {}", name_of_class); // TODO why is this missing?
+            }
+        }
+    }
 
     count_objects(&class_functions, &traits, "After adding parents");
 
@@ -500,10 +518,21 @@ fn collect_things() -> (BTreeMap<String, Vec<String>>, BTreeMap<String, BTreeMap
         }
     }
 
-    // Remove ignored functions
-    for ignored in IGNORED_FUNCTIONS {
-        for functions in class_functions.values_mut() {
-            functions.remove(&ignored.to_string());
+    // Remove functions which won't be used
+    if !FUNCTIONS_TO_USE.is_empty() {
+        let keys = class_functions.clone();
+        for (name_of_class, function_list) in keys {
+            for (function, _) in function_list {
+                if !FUNCTIONS_TO_USE.iter().any(|e| *e == function) {
+                    class_functions.get_mut(&name_of_class).unwrap().remove(&function);
+                }
+            }
+        }
+    } else {
+        for ignored in IGNORED_FUNCTIONS {
+            for functions in class_functions.values_mut() {
+                functions.remove(&ignored.to_string());
+            }
         }
     }
 

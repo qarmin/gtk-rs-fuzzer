@@ -19,7 +19,7 @@ fn main() {
 
         window.show();
 
-        if CRASHES == 1 {
+        if CRASHES == 0 {
             crashes();
         } else {
             execute_things();
@@ -32,8 +32,6 @@ fn main() {
 const CRASHES: u64 = 1;
 fn crashes() {
     println!("TESTSTTSTSTSTSTSTST");
-    let object_95 = gget_assistant(); // Assistant
-    object_95.set_current_page(-78900);
     // BinLayout.request_mode()
     // CellAreaBox.current_path_string()
     // CellAreaBox.edit_widget()

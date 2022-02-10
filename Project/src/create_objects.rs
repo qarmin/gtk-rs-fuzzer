@@ -17,6 +17,9 @@ pub fn gget_adjustment() -> Adjustment {
 // pub fn gget_application() -> Application {
 //     Application::default()
 // }
+pub fn gget_eventcontrollerscroll() -> EventControllerScroll {
+    EventControllerScroll::default()
+}
 pub fn gget_constraintguide() -> ConstraintGuide {
     ConstraintGuide::default()
 }
@@ -428,6 +431,9 @@ pub fn gget_keyvaltrigger() -> KeyvalTrigger {
     let thing2 = gdk::ModifierType::SHIFT_MASK;
     KeyvalTrigger::new(thing, thing2)
 }
+// pub fn gget_tooltip() -> Tooltip {
+//     Tooltip::()
+// }
 pub fn gget_label() -> Label {
     Label::default()
 }
