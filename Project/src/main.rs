@@ -8,7 +8,7 @@ mod helpers;
 mod ziemniak;
 
 use crate::create_objects::*;
-use crate::ziemniak::execute_things;
+use crate::ziemniak::run_tests;
 use gtk4::prelude::*;
 use gtk4::*;
 
@@ -23,8 +23,8 @@ fn main() {
         if CRASHES == 0 {
             crashes();
         } else {
-            execute_things();
-            // run_tests(true, Vec::new(), Vec::new());
+            // execute_things();
+            run_tests(false, Vec::new(), Vec::new());
         }
     });
 

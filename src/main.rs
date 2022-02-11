@@ -4,9 +4,7 @@
 
 mod settings;
 
-use crate::settings::{
-    CLASSES_TO_USE, FUNCTIONS_TO_USE, IGNORED_CLASSES, IGNORED_ENUMS, IGNORED_FUNCTIONS, NUMBER_OF_REPEATS, RANGE_OF_USED_CLASSES, USE_PARENT_ITEMS, USE_TRAIT_ITEMS,
-};
+use crate::settings::*;
 use std::collections::BTreeMap;
 use std::fs;
 use std::fs::OpenOptions;
@@ -113,105 +111,104 @@ use gtk4::*;
 use std::fs;
 use std::fs::{File, OpenOptions};
 use std::io::Write;
+use rand::prelude::*;
 
-pub fn execute_things(){
-    let mut file = OpenOptions::new().write(true).truncate(true).create(true).open("things.txt").unwrap();
 "#####;
 
     // Basic function to
     // <<function_arguments>> - list of functions and its names
     // <<number_of_functions>> - number of functions
-    let _basic_function = r#####"
+    let basic_function = r#####"
 pub fn run_tests(check_all_things: bool, classes_to_check: Vec<String>, functions_to_check: Vec<String>) {
-    let all_things: [(fn(&Vec<String>) -> (), &str); <<number_of_functions>>] = [<<function_arguments>>];
+    let mut file = OpenOptions::new().write(true).truncate(true).create(true).open("things.txt").unwrap();
 
-    if check_all_things {
-        for (function, _name) in all_things {
-            function(check_all_things, &functions_to_check);
-        }
-    } else {
-        for (function, name_of_class) in all_things {
-            if classes_to_check.iter().any(|e| e == name_of_class) {
-                function(check_all_things, &functions_to_check);
-            }
-        }
+    let all_classes: [(fn(&mut File, bool, &Vec<String>) -> (), &str); <<number_of_functions>>] = [<<function_arguments>>];
+    
+    // if check_all_things {
+    for (function, _name) in all_classes {
+        function(&mut file, check_all_things, &functions_to_check);
     }
+    // } else {
+    //     for (function, name_of_class) in all_classes {
+    //         if classes_to_check.iter().any(|e| e == name_of_class) {
+    //             function(&mut file, check_all_things, &functions_to_check);
+    //         }
+    //     }
+    // }
 }
 "#####;
 
     // <<type>> - type of used item
+    // <<type_lowercase>> - type of used item
     // <<logic_to_execute>> - logic how to run this thing
-    let _unit_class = r#####"
-pub fn things_on(check_all_things: bool, functions_to_check: &Vec<String>) {
-    let functions: [(fn(&<<type>>) -> &<<type>>, &str); 1] = [(fct, "fct")];
+    // <<function_list>> - list of functions
+    // <<function_number>> - number of functions
+    // <<function_class_name>> - number of functions
+    let unit_class = r#####"
+pub fn <<function_class_name>>(file: &mut File,check_all_things: bool, functions_to_check: &Vec<String>) {
+    let functions: [(for<'a, 'b> fn(&'a mut File, &'b <<type>>) -> &'b <<type>>, &str); <<function_number>>] = [<<function_list>>];
 
-    <<logic_to_execute>>
+
+    println!("Creating object <<type>>");
+    print_and_save_to_file(file, "let thing = gget_<<type_lowercase>>(); // <<type>>");
+    let object = gget_<<type_lowercase>>();
+    let mut object_ref = &object;
+
+    if check_all_things {
+        println!("C");
+        for (function, _name_of_func) in functions {
+            object_ref = function(file, object_ref);
+        }
+    } else {
+        if !functions_to_check.is_empty() {
+            println!("B");
+            for i in functions_to_check {
+                for (func, name) in functions {
+                    if name == i {
+                        object_ref = func(file, object_ref);
+                        break;
+                    }
+                }
+            }
+        } else {
+            println!("A");
+            for _i in 0..(functions.len()*5) {
+                let fnc = functions.choose(&mut rand::thread_rng()).unwrap().0;
+                object_ref = fnc(file, object_ref);
+            }
+        }
+    }
 
     println!("AA")
 }
 "#####;
 
+    // <<function_name>> - function name
     // <<type>> - type of used item
-    // <<executed_functions>> - logic how to run this thing
-    let _unit_function = r#####"
-pub fn fct(thing: &<<type>>) -> &<<type>> {
-    <<executed_functions>>
+    // <<method>> - used method
+    let unit_function = r#####"
+pub fn <<function_name>><'a,'b>(file: &'a mut File, thing: &'b <<type>>) -> &'b <<type>> {
+    print_and_save_to_file(file, "thing.<<method>>();");
+    thing.<<method>>();
     thing
 }
 "#####;
 
-    // <<number>> - just any number
-    // <<type>> - type of used item
-    // <<method>> - used method
     // <<create_object>> - create_object_function
     let _zero_things = r#####"
         println!("Creating object <<type>>");
-        print_and_save_to_file(&mut file, "let object_<<number>> = <<create_object>>(); // <<type>>");
+        print_and_save_to_file(file, "let object_<<number>> = <<create_object>>(); // <<type>>");
         let object_<<number>> = <<create_object>>(); // <<type>>
-        print_and_save_to_file(&mut file, "object_<<number>>.<<method>>();");
-        object_<<number>>.<<method>>();
-"#####;
-
-    // <<number>> - just any number
-    // <<type>> - type of used item
-    // <<method>> - used method
-    // <<create_object>> - create_object_function
-    // <<number_of_repeats>> - number of repeats
-    let zero_things_old = r#####"
-        for _i in 0..<<number_of_repeats>>{
-            println!("Creating object <<type>>");
-            print_and_save_to_file(&mut file, "let object_<<number>> = gget_<<create_object>>(); // <<type>>");
-            let object_<<number>> = gget_<<create_object>>(); // <<type>>
-            print_and_save_to_file(&mut file, "object_<<number>>.<<method>>();");
-            object_<<number>>.<<method>>();
-        }
-"#####;
-
-    // <<number>> - just any number
-    // <<type>> - type of used item
-    // <<method>> - used method
-    // <<create_object>> - create_object_function
-    // <<number_of_repeats>> - number of repeats
-    // <<creating_arguments>> - creating arguments
-    // <<argument_names>> - argument names like argument1, argument2, argument3 etc.
-    // <<format_arguments>> - {},{},{} - exactly same number as arguments
-    // <<argument_names_proper>> - argument names like argument1, argument2, argument3 etc.,but with proper formatting (e.g. with added Some() wrap)
-    let multiple_things_old = r#####"
-        for _i in 0..<<number_of_repeats>>{
-            println!("Creating object <<type>>");
-            print_and_save_to_file(&mut file, "let object_<<number>> = gget_<<create_object>>(); // <<type>>");
-            let object_<<number>> = gget_<<create_object>>(); // <<type>>
-            <<creating_arguments>>
-			print_and_save_to_file(&mut file, &format!("object_<<number>>.<<method>>(<<format_arguments>>);",<<argument_names>>));
-            object_<<number>>.<<method>>(<<argument_names_proper>>);
-        }
 "#####;
 
     writeln!(file, "{}", start_text).unwrap();
 
-    let mut object_number = 0;
+    struct ClassUnit {
+        a_method: String,
+        a_function_name: String,
+    }
+    let mut cu: BTreeMap<String, Vec<ClassUnit>> = Default::default();
 
-    let mut changed_text = "".to_string();
     for (_index, (name_of_class, function_list)) in class_functions.iter().enumerate() {
         // if name_of_class != "AboutDialog" {
         //     continue;
@@ -222,25 +219,24 @@ pub fn fct(thing: &<<type>>) -> &<<type>> {
             continue;
         }
 
-        writeln!(file, "\t//{}", name_of_class).unwrap();
-        writeln!(file, "\t{{").unwrap();
         for (function, arguments) in function_list {
             // TODO create here an object
             if function == "new" {
                 continue;
             }
-            // TODO Better object numbering(currently things are )
-            // if !arguments.is_empty() {
-            //     continue;
-            // }
+            if !arguments.is_empty() {
+                continue;
+            }
 
             if arguments.is_empty() {
-                changed_text = zero_things_old
-                    .replace("<<number>>", &object_number.to_string())
-                    .replace("<<type>>", name_of_class)
-                    .replace("<<method>>", function)
-                    .replace("<<create_object>>", &name_of_class.to_ascii_lowercase())
-                    .replace("<<number_of_repeats>>", &NUMBER_OF_REPEATS.to_string());
+                let function_name = format!("fct_{}_{}", name_of_class.to_lowercase(), function);
+
+                let new_cu: ClassUnit = ClassUnit {
+                    a_method: function.clone(),
+                    a_function_name: function_name,
+                };
+                cu.entry(name_of_class.clone()).or_insert_with(Default::default);
+                cu.get_mut(name_of_class).unwrap().push(new_cu);
             } else {
                 // println!("{:?}", arguments);
                 let mut found_bad_thing: bool = false;
@@ -344,27 +340,68 @@ pub fn fct(thing: &<<type>>) -> &<<type>> {
                         to_print_arguments_variable += &format!("argument_{}{}", arg_index, comma_after);
                     }
 
-                    changed_text = multiple_things_old
-                        .replace("<<number>>", &object_number.to_string())
-                        .replace("<<type>>", name_of_class)
-                        .replace("<<method>>", function)
-                        .replace("<<create_object>>", &name_of_class.to_ascii_lowercase())
-                        .replace("<<number_of_repeats>>", &NUMBER_OF_REPEATS.to_string())
-                        .replace("<<creating_arguments>>", &creating_arguments)
-                        .replace("<<argument_names>>", &to_print_arguments_variable)
-                        .replace("<<format_arguments>>", &to_print_arguments)
-                        .replace("<<argument_names_proper>>", &result_arguments);
+                    // changed_text = multiple_things_old
+                    //     .replace("<<number>>", &object_number.to_string())
+                    //     .replace("<<type>>", name_of_class)
+                    //     .replace("<<method>>", function)
+                    //     .replace("<<create_object>>", &name_of_class.to_ascii_lowercase())
+                    //     .replace("<<number_of_repeats>>", &NUMBER_OF_REPEATS.to_string())
+                    //     .replace("<<creating_arguments>>", &creating_arguments)
+                    //     .replace("<<argument_names>>", &to_print_arguments_variable)
+                    //     .replace("<<format_arguments>>", &to_print_arguments)
+                    //     .replace("<<argument_names_proper>>", &result_arguments);
                 }
             }
-
-            object_number += 1;
-            assert!(!changed_text.contains("<<"));
-            writeln!(file, "{}", changed_text).unwrap();
         }
-        writeln!(file, "\t}}").unwrap();
     }
 
-    writeln!(file, "}}").unwrap();
+    let mut list_of_function_classes = "".to_string();
+    for (index, (name_of_class, _functions)) in cu.iter().enumerate() {
+        list_of_function_classes += &format!("(cls_{},\"{}\")", name_of_class.to_lowercase(), name_of_class);
+        if index != cu.len() - 1 {
+            list_of_function_classes += ",";
+        }
+    }
+
+    let base_functions = basic_function
+        .replace("<<function_arguments>>", &list_of_function_classes)
+        .replace("<<number_of_functions>>", &cu.len().to_string());
+    writeln!(file, "{}", base_functions).unwrap();
+
+    for (class_name, functions) in cu {
+        let mut arguments = "".to_string();
+        for (index, f) in functions.iter().enumerate() {
+            arguments += &format!("({},\"{}\")", f.a_function_name, f.a_function_name);
+            if index != functions.len() - 1 {
+                arguments += ",";
+            }
+        }
+
+        let fcn = format!("cls_{}", class_name.to_lowercase());
+
+        let end_class = unit_class
+            .replace("<<type>>", &class_name)
+            .replace("<<type_lowercase>>", &class_name.to_lowercase())
+            .replace("<<logic_to_execute>>", "//TODODODODODODODODODODODODOD")
+            .replace("<<function_list>>", &arguments)
+            .replace("<<function_class_name>>", &fcn)
+            .replace("<<function_number>>", &functions.len().to_string());
+        assert!(!end_class.contains("<<"));
+
+        write!(file, "{}", end_class).unwrap();
+        for i in functions {
+            // <<function_name>> - function name
+            // <<type>> - type of used item
+            // <<method>> - used method
+            let single_function = unit_function
+                .replace("<<function_name>>", &i.a_function_name)
+                .replace("<<type>>", &class_name)
+                .replace("<<method>>", &i.a_method);
+            assert!(!single_function.contains("<<"));
+            write!(file, "{}", single_function).unwrap();
+        }
+    }
+
     let end_text = r####"
     pub fn print_and_save_to_file(file: &mut File, what_to_save: &str) {
     writeln!(file, "{}", what_to_save);
