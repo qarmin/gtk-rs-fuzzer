@@ -1,7 +1,7 @@
 use crate::enum_things::*;
 use crate::helpers::*;
 use gdk4::DragAction;
-use gtk4::builders::{PrinterBuilder, SettingsBuilder};
+use gtk4::builders::SettingsBuilder;
 use gtk4::prelude::*;
 use gtk4::*;
 use rand::{thread_rng, Rng};
@@ -236,7 +236,8 @@ pub fn gget_anyfilter() -> AnyFilter {
     AnyFilter::default()
 }
 pub fn gget_appchooserdialog() -> AppChooserDialog {
-    AppChooserDialog::default()
+    let expression: Option<&Window> = None;
+    AppChooserDialog::for_content_type(expression, DialogFlags::all(), &take_string())
 }
 pub fn gget_appchooserwidget() -> AppChooserWidget {
     AppChooserWidget::new(&take_string())
@@ -539,18 +540,18 @@ pub fn gget_popovermenubar() -> PopoverMenuBar {
 // pub fn gget_printcontext() -> PrintContext {
 //     PrintContext::new()
 // }
-pub fn gget_printjob() -> PrintJob {
-    PrintJob::default()
-}
+// pub fn gget_printjob() -> PrintJob {
+//     PrintJob::default()
+// }
 pub fn gget_printsettings() -> PrintSettings {
     PrintSettings::new()
 }
 pub fn gget_printunixdialog() -> PrintUnixDialog {
     PrintUnixDialog::default()
 }
-pub fn gget_printer() -> Printer {
-    PrinterBuilder::build(Default::default())
-}
+// pub fn gget_printer() ->  {
+//     PrinterBuilder::build(Default::default())
+// }
 pub fn gget_progressbar() -> ProgressBar {
     ProgressBar::new()
 }

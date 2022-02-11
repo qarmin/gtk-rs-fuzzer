@@ -1,6 +1,10 @@
+use std::ops::Range;
+
 pub const USE_PARENT_ITEMS: bool = true;
-pub const USE_TRAIT_ITEMS: bool = true;
+pub const USE_TRAIT_ITEMS: bool = false;
 pub const NUMBER_OF_REPEATS: u32 = 2; // How many time repeat function executing to be sure that this function cause problems
+
+pub const RANGE_OF_USED_CLASSES: Range<usize> = 4..5;
 
 pub const IGNORED_FUNCTIONS: &[&str] = &[
     // Non existent functions(probably bug in parsing files or this will be available in 4.6 + versions)
@@ -20,6 +24,8 @@ pub const IGNORED_FUNCTIONS: &[&str] = &[
     "child",                     // MenuButton
     "is_indent_for_icon",        // TreeExpander
     "compute_cursor_extents",    // Text
+    // Other
+    "set_direction", // Some parsing problem
     // Rust error, multiple applicable items in scope
     "alignment",
     "font_map",
@@ -156,6 +162,8 @@ pub const IGNORED_CLASSES: &[&str] = &[
     "PasswordEntryBuffer",
     "Tooltip",
     "PrintCapabilities",
+    "Printer",
+    "PrintJob",
     // Other
     "ApplicationWindow", // Only one ApplicationWindows can be created
     "FileChooserWidget", // Create a lot of warnings(and possibly also crashes) "Too many open files"

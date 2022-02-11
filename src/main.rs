@@ -4,7 +4,9 @@
 
 mod settings;
 
-use crate::settings::{CLASSES_TO_USE, FUNCTIONS_TO_USE, IGNORED_CLASSES, IGNORED_ENUMS, IGNORED_FUNCTIONS, NUMBER_OF_REPEATS, USE_PARENT_ITEMS, USE_TRAIT_ITEMS};
+use crate::settings::{
+    CLASSES_TO_USE, FUNCTIONS_TO_USE, IGNORED_CLASSES, IGNORED_ENUMS, IGNORED_FUNCTIONS, NUMBER_OF_REPEATS, RANGE_OF_USED_CLASSES, USE_PARENT_ITEMS, USE_TRAIT_ITEMS,
+};
 use std::collections::BTreeMap;
 use std::fs;
 use std::fs::OpenOptions;
@@ -214,7 +216,7 @@ pub fn fct(thing: &<<type>>) -> &<<type>> {
         // if name_of_class != "AboutDialog" {
         //     continue;
         // }
-        if (0..200).contains(&_index) {
+        if (RANGE_OF_USED_CLASSES).contains(&_index) {
             // println!("{}. {}", _index, name_of_class);
         } else {
             continue;
