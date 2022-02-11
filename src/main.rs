@@ -119,22 +119,32 @@ use rand::prelude::*;
     // <<function_arguments>> - list of functions and its names
     // <<number_of_functions>> - number of functions
     let basic_function = r#####"
-pub fn run_tests(check_all_things: bool, classes_to_check: Vec<String>, functions_to_check: Vec<String>) {
+pub struct SettingsTaker {
+    pub(crate) ignored_functions: Vec<String>,
+    pub(crate) allowed_functions: Vec<String>,
+    pub(crate) ignored_classes: Vec<String>,
+    pub(crate) allowed_classes: Vec<String>,
+    pub(crate) repeating_number: u32,
+}
+
+pub fn run_tests(st: SettingsTaker) {
     let mut file = OpenOptions::new().write(true).truncate(true).create(true).open("things.txt").unwrap();
 
-    let all_classes: [(fn(&mut File, bool, &Vec<String>) -> (), &str); <<number_of_functions>>] = [<<function_arguments>>];
+    let all_classes: [(fn(&mut File, &SettingsTaker) -> (), &str); <<number_of_functions>>] = [<<function_arguments>>];
     
-    // if check_all_things {
-    for (function, _name) in all_classes {
-        function(&mut file, check_all_things, &functions_to_check);
+    if st.allowed_classes.is_empty() {
+        for (function, name) in all_classes {
+            if !st.ignored_classes.contains(&name.to_string()) {
+                function(&mut file, &st);
+            }
+        }
+    } else {
+        for (function, name) in all_classes {
+            if st.allowed_classes.contains(&name.to_string()) {
+                function(&mut file, &st);
+            }
+        }
     }
-    // } else {
-    //     for (function, name_of_class) in all_classes {
-    //         if classes_to_check.iter().any(|e| e == name_of_class) {
-    //             function(&mut file, check_all_things, &functions_to_check);
-    //         }
-    //     }
-    // }
 }
 "#####;
 
@@ -145,41 +155,26 @@ pub fn run_tests(check_all_things: bool, classes_to_check: Vec<String>, function
     // <<function_number>> - number of functions
     // <<function_class_name>> - number of functions
     let unit_class = r#####"
-pub fn <<function_class_name>>(file: &mut File,check_all_things: bool, functions_to_check: &Vec<String>) {
-    let functions: [(for<'a, 'b> fn(&'a mut File, &'b <<type>>) -> &'b <<type>>, &str); <<function_number>>] = [<<function_list>>];
+pub fn <<function_class_name>>(file: &mut File, st: &SettingsTaker) {
+    let functions: [(fn(&mut File, &<<type>>) -> (), &str); <<function_number>>] = [<<function_list>>];
 
 
-    println!("Creating object <<type>>");
+    println!("////////// Creating object <<type>>");
     print_and_save_to_file(file, "let thing = gget_<<type_lowercase>>(); // <<type>>");
     let object = gget_<<type_lowercase>>();
-    let mut object_ref = &object;
+    let object_ref = &object;
 
-    if check_all_things {
-        println!("C");
-        for (function, _name_of_func) in functions {
-            object_ref = function(file, object_ref);
-        }
-    } else {
-        if !functions_to_check.is_empty() {
-            println!("B");
-            for i in functions_to_check {
-                for (func, name) in functions {
-                    if name == i {
-                        object_ref = func(file, object_ref);
-                        break;
-                    }
-                }
-            }
-        } else {
-            println!("A");
-            for _i in 0..(functions.len()*5) {
-                let fnc = functions.choose(&mut rand::thread_rng()).unwrap().0;
-                object_ref = fnc(file, object_ref);
-            }
-        }
+    let mut functions_to_check: Vec<(fn(&mut File, &<<type>>) -> (), &str)> = Vec::new();
+    functions
+        .into_iter()
+        .filter(|e| !st.ignored_functions.contains(&e.1.to_string()))
+        .for_each(|e| functions_to_check.push(e));
+                 
+    // Random by default
+    for _i in 0..(functions_to_check.len() * st.repeating_number as usize) {
+        let function = functions_to_check.choose(&mut rand::thread_rng()).unwrap().0;
+        function(file, object_ref);
     }
-
-    println!("AA")
 }
 "#####;
 
@@ -187,18 +182,10 @@ pub fn <<function_class_name>>(file: &mut File,check_all_things: bool, functions
     // <<type>> - type of used item
     // <<method>> - used method
     let unit_function = r#####"
-pub fn <<function_name>><'a,'b>(file: &'a mut File, thing: &'b <<type>>) -> &'b <<type>> {
+pub fn <<function_name>>(file: &mut File, thing: &<<type>>) {
     print_and_save_to_file(file, "thing.<<method>>();");
     thing.<<method>>();
-    thing
 }
-"#####;
-
-    // <<create_object>> - create_object_function
-    let _zero_things = r#####"
-        println!("Creating object <<type>>");
-        print_and_save_to_file(file, "let object_<<number>> = <<create_object>>(); // <<type>>");
-        let object_<<number>> = <<create_object>>(); // <<type>>
 "#####;
 
     writeln!(file, "{}", start_text).unwrap();

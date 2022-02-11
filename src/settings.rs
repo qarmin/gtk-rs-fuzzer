@@ -4,7 +4,7 @@ pub const USE_PARENT_ITEMS: bool = true;
 pub const USE_TRAIT_ITEMS: bool = false;
 // pub const NUMBER_OF_REPEATS: u32 = 2; // How many time repeat function executing to be sure that this function cause problems
 
-pub const RANGE_OF_USED_CLASSES: Range<usize> = 0..30;
+pub const RANGE_OF_USED_CLASSES: Range<usize> = 0..200;
 
 pub const IGNORED_FUNCTIONS: &[&str] = &[
     // Non existent functions(probably bug in parsing files or this will be available in 4.6 + versions)
@@ -115,6 +115,15 @@ pub const IGNORED_FUNCTIONS: &[&str] = &[
     "show",
     "set_language",
     "emit_move_cursor",
+    "to_node",
+    "gl_shader_pop_texture",
+    "pop",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
     "",
     "",
     "",
@@ -181,44 +190,3 @@ pub const IGNORED_CLASSES: &[&str] = &[
     // TODO
     "Popover", // Select cause crash
 ];
-
-// TO REPORT
-// let object_283 = FontButton::new(); // FontButton
-// object_283.preview_text();
-//
-// let object_438 = gget_fontchooserwidget(); // FontChooserWidget
-// object_438.map();
-//
-// let object_348 = gget_icontheme(); // IconTheme
-// object_348.theme_name();
-//
-// let object_163 = gget_linkbutton(); // LinkButton
-// object_163.uri();
-//
-// let object_112 = gget_linkbutton(); // LinkButton
-// object_112.set_detailed_action_name("");
-//
-// let object_1070 = gget_messagedialog(); // MessageDialog
-// object_1070.header_bar();
-//
-// let object_597 = gget_paned(); // Paned
-// object_597.emit_cycle_handle_focus(true);
-//
-// let object_92 = gget_popovermenu(); // PopoverMenu
-// object_92.popup();
-//
-// let object_100 = gget_popovermenu(); // PopoverMenu
-// object_100.realize();
-//
-// let object_149 = gget_popovermenu(); // PopoverMenu
-// object_149.set_visible(true);
-//
-// let object_153 = gget_popovermenu(); // PopoverMenu
-// object_153.show();
-//
-// let object_281 = gget_cellrendereraccel(); // CellRendererAccel
-// object_281.set_language(Some("-39344"));
-//
-// let object_385 = gget_flowbox(); // FlowBox
-// object_385.emit_move_cursor(MovementStep::DisplayLineEnds,-43800,false,false);
-//
