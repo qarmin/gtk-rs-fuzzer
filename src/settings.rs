@@ -1,7 +1,7 @@
 use std::ops::Range;
 
 pub const USE_PARENT_ITEMS: bool = true;
-pub const USE_TRAIT_ITEMS: bool = false;
+pub const USE_TRAIT_ITEMS: bool = true;
 // pub const NUMBER_OF_REPEATS: u32 = 2; // How many time repeat function executing to be sure that this function cause problems
 
 pub const RANGE_OF_USED_CLASSES: Range<usize> = 0..200;
@@ -112,7 +112,7 @@ pub const IGNORED_FUNCTIONS: &[&str] = &[
     "popup",
     "realize",
     "set_visible",
-    "show",
+    "show", // Block instead a Popover
     "set_language",
     "emit_move_cursor",
     "to_node",
@@ -188,5 +188,5 @@ pub const IGNORED_CLASSES: &[&str] = &[
     "TreeListModel",    // https://github.com/gtk-rs/gtk-rs-core/issues/539
     "ColumnViewColumn", // https://github.com/gtk-rs/gtk4-rs/issues/885
     // TODO
-    "Popover", // Select cause crash
+    "Popover", // show cause crash
 ];

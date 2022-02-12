@@ -188,14 +188,36 @@ pub fn <<function_name>>(file: &mut File, thing: &<<type>>) {
 }
 "#####;
 
+    // <<function_name>> - function name
+    // <<type>> - type of used item
+    // <<method>> - used method
+    // <<println_brackets>> - {} in println to pretty print results
+    // <<argument_names>> - arguments names
+    // <<argument_names_proper>> - {} in println to pretty print results
+    // <<creating_arguments>> - arguments creation
+    let unit_multiple_function = r#####"
+pub fn <<function_name>>(file: &mut File, thing: &<<type>>) {
+    <<creating_arguments>>
+    print_and_save_to_file(file, &format!("thing.<<method>>(<<println_brackets>>);",<<argument_names>>));
+    thing.<<method>>(<<argument_names_proper>>);
+}
+"#####;
+
     writeln!(file, "{}", start_text).unwrap();
 
     struct ClassUnit {
         a_method: String,
         a_function_name: String,
+        a_println_brackets: String,
+        a_argument_names: String,
+        a_creating_arguments: String,
+        a_argument_names_proper: String,
     }
     let mut cu: BTreeMap<String, Vec<ClassUnit>> = Default::default();
 
+    let mut produced_functions = 0;
+    let mut produced_empty_functions = 0;
+    let mut produced_multiple_functions = 0;
     for (_index, (name_of_class, function_list)) in class_functions.iter().enumerate() {
         // if name_of_class != "AboutDialog" {
         //     continue;
@@ -206,24 +228,27 @@ pub fn <<function_name>>(file: &mut File, thing: &<<type>>) {
             continue;
         }
 
-        for (function, arguments) in function_list {
+        'all: for (function, arguments) in function_list {
             // TODO create here an object
             if function == "new" {
                 continue;
             }
-            if !arguments.is_empty() {
-                continue;
-            }
+            // if !arguments.is_empty() {
+            //     continue;
+            // }
+
+            let function_name = format!("fct_{}_{}", name_of_class.to_lowercase(), function);
+
+            let mut new_cu: ClassUnit = ClassUnit {
+                a_method: function.clone(),
+                a_function_name: function_name,
+                a_creating_arguments: "".to_string(),
+                a_argument_names: "".to_string(),
+                a_println_brackets: "".to_string(),
+                a_argument_names_proper: "".to_string(),
+            };
 
             if arguments.is_empty() {
-                let function_name = format!("fct_{}_{}", name_of_class.to_lowercase(), function);
-
-                let new_cu: ClassUnit = ClassUnit {
-                    a_method: function.clone(),
-                    a_function_name: function_name,
-                };
-                cu.entry(name_of_class.clone()).or_insert_with(Default::default);
-                cu.get_mut(name_of_class).unwrap().push(new_cu);
             } else {
                 // println!("{:?}", arguments);
                 let mut found_bad_thing: bool = false;
@@ -252,7 +277,7 @@ pub fn <<function_name>>(file: &mut File, thing: &<<type>>) {
                         }
                     };
                     if found_bad_thing {
-                        break;
+                        continue 'all; // Not supported argument
                     }
                 }
                 if !found_bad_thing {
@@ -327,20 +352,17 @@ pub fn <<function_name>>(file: &mut File, thing: &<<type>>) {
                         to_print_arguments_variable += &format!("argument_{}{}", arg_index, comma_after);
                     }
 
-                    // changed_text = multiple_things_old
-                    //     .replace("<<number>>", &object_number.to_string())
-                    //     .replace("<<type>>", name_of_class)
-                    //     .replace("<<method>>", function)
-                    //     .replace("<<create_object>>", &name_of_class.to_ascii_lowercase())
-                    //     .replace("<<number_of_repeats>>", &NUMBER_OF_REPEATS.to_string())
-                    //     .replace("<<creating_arguments>>", &creating_arguments)
-                    //     .replace("<<argument_names>>", &to_print_arguments_variable)
-                    //     .replace("<<format_arguments>>", &to_print_arguments)
-                    //     .replace("<<argument_names_proper>>", &result_arguments);
+                    new_cu.a_creating_arguments = creating_arguments;
+                    new_cu.a_argument_names = to_print_arguments_variable;
+                    new_cu.a_println_brackets = to_print_arguments;
+                    new_cu.a_argument_names_proper = result_arguments;
                 }
             }
+            cu.entry(name_of_class.clone()).or_insert_with(Default::default);
+            cu.get_mut(name_of_class).unwrap().push(new_cu);
         }
     }
+    produced_functions += 1;
 
     let mut list_of_function_classes = "".to_string();
     for (index, (name_of_class, _functions)) in cu.iter().enumerate() {
@@ -377,17 +399,38 @@ pub fn <<function_name>>(file: &mut File, thing: &<<type>>) {
 
         write!(file, "{}", end_class).unwrap();
         for i in functions {
+            produced_functions += 1;
             // <<function_name>> - function name
             // <<type>> - type of used item
             // <<method>> - used method
-            let single_function = unit_function
-                .replace("<<function_name>>", &i.a_function_name)
-                .replace("<<type>>", &class_name)
-                .replace("<<method>>", &i.a_method);
+            let single_function = match i.a_creating_arguments.is_empty() {
+                true => {
+                    produced_empty_functions += 1;
+                    unit_function
+                        .replace("<<function_name>>", &i.a_function_name)
+                        .replace("<<type>>", &class_name)
+                        .replace("<<method>>", &i.a_method)
+                }
+                false => {
+                    produced_multiple_functions += 1;
+                    unit_multiple_function
+                        .replace("<<function_name>>", &i.a_function_name)
+                        .replace("<<type>>", &class_name)
+                        .replace("<<method>>", &i.a_method)
+                        .replace("<<creating_arguments>>", &i.a_creating_arguments)
+                        .replace("<<argument_names>>", &i.a_argument_names)
+                        .replace("<<println_brackets>>", &i.a_println_brackets)
+                        .replace("<<argument_names_proper>>", &i.a_argument_names_proper)
+                }
+            };
             assert!(!single_function.contains("<<"));
             write!(file, "{}", single_function).unwrap();
         }
     }
+    println!(
+        "Produced {} functions({} empty, {} multiple)",
+        produced_functions, produced_empty_functions, produced_multiple_functions
+    );
 
     let end_text = r####"
     pub fn print_and_save_to_file(file: &mut File, what_to_save: &str) {
