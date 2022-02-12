@@ -24,7 +24,7 @@ fn main() {
 
         let sf = read_from_file();
 
-        if TEST == 1 {
+        if TEST == 0 {
             crashes();
         } else {
             // execute_things();
@@ -35,28 +35,24 @@ fn main() {
     application.run();
 }
 
-const TEST: u64 = 0;
+const TEST: u64 = 1;
 fn crashes() {
     println!("TESTSTTSTSTSTSTSTST");
-    let thing = Snapshot::default(); // Snapshot
-    thing.to_node();
-    thing.to_node();
 }
-// let thing = gget_iconview(); // IconView
-// thing.init_template();
-// thing.set_drag_dest_item(Some(TreePath { inner: Boxed { inner: 0x615000096b70 }, phantom: PhantomData }),DropAbove);
 
 fn read_from_file() -> SettingsTaker {
     let string: String = match fs::read_to_string("settings.txt") {
         Ok(t) => t,
         Err(_) => {
+            println!("Missing settings.txt file");
             return SettingsTaker {
                 ignored_functions: vec![],
                 allowed_functions: vec![],
                 ignored_classes: vec![],
                 allowed_classes: vec![],
                 repeating_number: 3,
-            }
+                all_repeating_number: 1,
+            };
         }
     };
 
@@ -66,6 +62,7 @@ fn read_from_file() -> SettingsTaker {
         ignored_classes: vec![],
         allowed_classes: vec![],
         repeating_number: 3,
+        all_repeating_number: 1,
     };
 
     enum MODES {
@@ -75,6 +72,7 @@ fn read_from_file() -> SettingsTaker {
         IgnoredClasses,
         AllowedClasses,
         Repeating,
+        AllRepeating,
     }
 
     let mut current_mode: MODES = MODES::None;
@@ -90,6 +88,8 @@ fn read_from_file() -> SettingsTaker {
             current_mode = MODES::AllowedClasses;
         } else if new_line == "repeating_number:" {
             current_mode = MODES::Repeating;
+        } else if new_line == "all_repeating_number:" {
+            current_mode = MODES::AllRepeating;
         } else {
             if !new_line.is_empty() {
                 match current_mode {
@@ -100,6 +100,11 @@ fn read_from_file() -> SettingsTaker {
                     MODES::Repeating => {
                         if let Ok(number) = new_line.parse() {
                             st.repeating_number = number;
+                        }
+                    }
+                    MODES::AllRepeating => {
+                        if let Ok(number) = new_line.parse() {
+                            st.all_repeating_number = number;
                         }
                     }
                     MODES::None => println!("SETTING: Missing mode for {}", new_line),
@@ -136,6 +141,7 @@ fn read_from_file() -> SettingsTaker {
             }
         }
         println!("Repeating - {}", st.repeating_number);
+        println!("All Repeating - {}", st.all_repeating_number);
         println!("End settings loading");
     }
 

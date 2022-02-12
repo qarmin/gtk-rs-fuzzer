@@ -126,6 +126,7 @@ pub struct SettingsTaker {
     pub(crate) ignored_classes: Vec<String>,
     pub(crate) allowed_classes: Vec<String>,
     pub(crate) repeating_number: u32,
+    pub(crate) all_repeating_number: u32,
 }
 
 pub fn run_tests(st: SettingsTaker) {
@@ -133,16 +134,18 @@ pub fn run_tests(st: SettingsTaker) {
 
     let all_classes: [(fn(&mut File, &SettingsTaker) -> (), &str); <<number_of_functions>>] = [<<function_arguments>>];
     
-    if st.allowed_classes.is_empty() {
-        for (function, name) in all_classes {
-            if !st.ignored_classes.contains(&name.to_string()) {
-                function(&mut file, &st);
+    for _i in 0..st.all_repeating_number {
+        if st.allowed_classes.is_empty() {
+            for (function, name) in all_classes {
+                if !st.ignored_classes.contains(&name.to_string()) {
+                    function(&mut file, &st);
+                }
             }
-        }
-    } else {
-        for (function, name) in all_classes {
-            if st.allowed_classes.contains(&name.to_string()) {
-                function(&mut file, &st);
+        } else {
+            for (function, name) in all_classes {
+                if st.allowed_classes.contains(&name.to_string()) {
+                    function(&mut file, &st);
+                }
             }
         }
     }
@@ -156,18 +159,18 @@ pub fn run_tests(st: SettingsTaker) {
     // <<function_class_name>> - number of functions
     let unit_class = r#####"
 pub fn <<function_class_name>>(file: &mut File, st: &SettingsTaker) {
-    let functions: [(fn(&mut File, &<<type>>) -> (), &str); <<function_number>>] = [<<function_list>>];
+    let functions: [(fn(&mut File, &<<type>>) -> (), &str, &str); <<function_number>>] = [<<function_list>>]; // function, function_name_in_rust, function_name 
 
 
     println!("////////// Creating object <<type>>");
-    print_and_save_to_file(file, "let thing = gget_<<type_lowercase>>(); // <<type>>");
-    let object = gget_<<type_lowercase>>();
+    print_and_save_to_file(file, "\nlet thing = gget_<<type_lowercase>>().0; // <<type>>");
+    let (object,_get_string_todo) = gget_<<type_lowercase>>();
     let object_ref = &object;
 
-    let mut functions_to_check: Vec<(fn(&mut File, &<<type>>) -> (), &str)> = Vec::new();
+    let mut functions_to_check: Vec<(fn(&mut File, &<<type>>) -> (), &str, &str)> = Vec::new();
     functions
         .into_iter()
-        .filter(|e| !st.ignored_functions.contains(&e.1.to_string()))
+        .filter(|e| !st.ignored_functions.contains(&e.2.to_string()))
         .for_each(|e| functions_to_check.push(e));
                  
     // Random by default
@@ -327,8 +330,8 @@ pub fn <<function_name>>(file: &mut File, thing: &<<type>>) {
                             "&str" => "&take_string".to_string(),
                             "&[&str]" => "take_vec_string".to_string(),
                             thing => {
-                                is_object = true;
                                 if !enums.contains_key(thing) {
+                                    is_object = true;
                                     format!("gget_{}", thing.to_lowercase())
                                 } else {
                                     stek = ".0";
@@ -336,7 +339,13 @@ pub fn <<function_name>>(file: &mut File, thing: &<<type>>) {
                                 }
                             } // _ => panic!("Not supported {}", arg),
                         };
-                        creating_arguments += &format!("let argument_{} = {}(){}; // {}", arg_index, help_function_name, stek, arg);
+
+                        if is_object {
+                            creating_arguments += &format!("let (argument_{},object_string_{}) = {}(){}; // {}", arg_index, arg_index, help_function_name, stek, arg);
+                        } else {
+                            creating_arguments += &format!("let argument_{} = {}(){}; // {}", arg_index, help_function_name, stek, arg);
+                        }
+
                         if arg == "&[&str]" {
                             creating_arguments += "\n\t";
                             creating_arguments += &format!("let argument_{} = get_vector_str_from_string(&argument_{}); // {}", arg_index, arg_index, arg);
@@ -369,16 +378,20 @@ pub fn <<function_name>>(file: &mut File, thing: &<<type>>) {
                                 add_to_print = format!("{}\\\"{{}}\\\"{}", reference, comma_after);
                             }
                         } else {
-                            add_to_print = format!("{}{}", default_formatter, comma_after);
+                            add_to_print = format!("{}{}{}", reference, default_formatter, comma_after);
                         }
 
-                        if is_object || arg == "&[&str]" {
+                        if arg == "&[&str]" {
                             to_print_arguments += &add_to_print.replace("{}", "{:?}");
                         } else {
                             to_print_arguments += &add_to_print;
                         }
 
-                        to_print_arguments_variable += &format!("argument_{}{}", arg_index, comma_after);
+                        if is_object {
+                            to_print_arguments_variable += &format!("object_string_{}{}", arg_index, comma_after);
+                        } else {
+                            to_print_arguments_variable += &format!("argument_{}{}", arg_index, comma_after);
+                        }
                     }
 
                     new_cu.a_creating_arguments = creating_arguments;
@@ -409,7 +422,7 @@ pub fn <<function_name>>(file: &mut File, thing: &<<type>>) {
     for (class_name, functions) in cu {
         let mut arguments = "".to_string();
         for (index, f) in functions.iter().enumerate() {
-            arguments += &format!("({},\"{}\")", f.a_function_name, f.a_function_name);
+            arguments += &format!("({},\"{}\",\"{}\")", f.a_function_name, f.a_function_name, f.a_method);
             if index != functions.len() - 1 {
                 arguments += ",";
             }
