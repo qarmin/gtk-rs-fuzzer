@@ -261,10 +261,11 @@ pub fn <<function_name>>(file: &mut File, thing: &<<type>>) {
                         arg = arg.strip_prefix("Option<").unwrap().to_string();
                         arg = arg.strip_suffix(">").unwrap().to_string();
                     }
+
                     found_bad_thing = match arg.as_str() {
                         "bool" | "i32" | "u32" | "u64" | "i64" | "f32" | "f64" | "usize" | "char" | "&str" | "&[&str]" => false,
                         thing => {
-                            if IGNORED_CLASSES.contains(&thing) || IGNORED_ENUMS.contains(&thing) {
+                            if IGNORED_CLASSES.contains(&thing) || IGNORED_ENUMS.contains(&thing) || IGNORED_CLASSES.contains(&&thing[1..thing.len()]) {
                                 // println!("NOT {}", thing);
                                 true
                             } else {
@@ -272,10 +273,15 @@ pub fn <<function_name>>(file: &mut File, thing: &<<type>>) {
                                     // println!("Supported {:?}", arg);
                                     false
                                 } else {
-                                    // println!("NOT {:?}", arg);
-                                    ignored_arguments.entry(arg.clone()).or_insert(0);
-                                    *ignored_arguments.get_mut(&arg).unwrap() += 1;
-                                    true
+                                    if thing.contains("<") || thing.contains("[") {
+                                        // println!("NOT {:?}", arg);
+                                        ignored_arguments.entry(arg.clone()).or_insert(0);
+                                        *ignored_arguments.get_mut(&arg).unwrap() += 1;
+                                        true
+                                    } else {
+                                        // println!("YES {:?}", arg);
+                                        false
+                                    }
                                 }
                             }
                         }
@@ -292,6 +298,7 @@ pub fn <<function_name>>(file: &mut File, thing: &<<type>>) {
                     let mut to_print_arguments_variable = "".to_string();
 
                     for arg_index in 0..arguments.len() {
+                        let mut is_object = false;
                         let mut is_option_type = false;
                         let mut reference = "";
                         let mut arg = arguments[arg_index].clone();
@@ -320,6 +327,7 @@ pub fn <<function_name>>(file: &mut File, thing: &<<type>>) {
                             "&str" => "&take_string".to_string(),
                             "&[&str]" => "take_vec_string".to_string(),
                             thing => {
+                                is_object = true;
                                 if !enums.contains_key(thing) {
                                     format!("gget_{}", thing.to_lowercase())
                                 } else {
@@ -352,6 +360,7 @@ pub fn <<function_name>>(file: &mut File, thing: &<<type>>) {
                             false => "{}",
                         };
 
+                        // TODO missing printing
                         let add_to_print;
                         if arg == "&str" {
                             if is_option_type {
@@ -363,7 +372,7 @@ pub fn <<function_name>>(file: &mut File, thing: &<<type>>) {
                             add_to_print = format!("{}{}", default_formatter, comma_after);
                         }
 
-                        if arg == "&[&str]" {
+                        if is_object || arg == "&[&str]" {
                             to_print_arguments += &add_to_print.replace("{}", "{:?}");
                         } else {
                             to_print_arguments += &add_to_print;

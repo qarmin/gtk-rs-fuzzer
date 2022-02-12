@@ -42,6 +42,9 @@ fn crashes() {
     thing.to_node();
     thing.to_node();
 }
+// let thing = gget_iconview(); // IconView
+// thing.init_template();
+// thing.set_drag_dest_item(Some(TreePath { inner: Boxed { inner: 0x615000096b70 }, phantom: PhantomData }),DropAbove);
 
 fn read_from_file() -> SettingsTaker {
     let string: String = match fs::read_to_string("settings.txt") {
