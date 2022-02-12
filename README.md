@@ -7,11 +7,13 @@ It finds bugs inside GTK functions, GTK exported  and also GTK-rs
 - Tested also parent functions without arguments
 - Fuzz also functions from traits
 - Test arguments(enums, objects, primitive objects)
+- Ability to copy paste code from output file, to reproduce crash
+- Execute functions in random orders
+- Fast compilation(Compilation 1000 functions with 20 lines in Rust is faster than compiling 20000 line function, did you know that?)
 
 ## TODO
-- Execute functions in random orders
-- Improve logging to be able to use copy pasted code from logs
-- Speedup everything - for now it works by replacing source code, but recompliling is a long process (20k lines - 2 minutes, but even 200k of source code can be produced)
+- Ability to use `IsA<Type>` arguments
+- 100% crash free setting(needs to find and ignore invalid settings)
 
 ## How to use it
 - Install GTK 4(can be probably easily changed to GTK4 if needed)

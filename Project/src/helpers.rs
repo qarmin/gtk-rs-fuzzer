@@ -8,6 +8,11 @@ pub fn debug_printing(what_to_print: &str) {
         println!("Using argument \"{}\"(text length {})", what_to_print, what_to_print.len());
     }
 }
+pub fn debug_printing_vec(what_to_print: &Vec<String>) {
+    if DEBUG_PRINTING {
+        println!("Using argument \"{:?}\"(text length {})", what_to_print, what_to_print.len());
+    }
+}
 
 pub fn take_string() -> String {
     let to_return;
@@ -20,6 +25,18 @@ pub fn take_string() -> String {
     debug_printing(&to_return);
     to_return
 }
+
+pub fn take_vec_string() -> Vec<String> {
+    let mut to_return = Vec::new();
+
+    for _i in 0..thread_rng().gen_range(0..10) {
+        to_return.push(take_string());
+    }
+
+    debug_printing_vec(&to_return);
+    to_return
+}
+
 pub fn take_i32() -> i32 {
     let to_return: i32 = thread_rng().gen_range(-100000..100000);
 
@@ -107,4 +124,12 @@ pub fn stek_glib_type() -> (glib::Type, String) {
 
     debug_printing(&to_return.1);
     return to_return;
+}
+
+pub fn get_vector_str_from_string<'a>(fff: &'a Vec<String>) -> Vec<&'a str> {
+    let mut vec: Vec<&str> = Vec::new();
+    for i in fff {
+        vec.push(i);
+    }
+    vec
 }

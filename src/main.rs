@@ -5,6 +5,7 @@
 mod settings;
 
 use crate::settings::*;
+use std::cmp::Ordering;
 use std::collections::BTreeMap;
 use std::fs;
 use std::fs::OpenOptions;
@@ -150,7 +151,6 @@ pub fn run_tests(st: SettingsTaker) {
 
     // <<type>> - type of used item
     // <<type_lowercase>> - type of used item
-    // <<logic_to_execute>> - logic how to run this thing
     // <<function_list>> - list of functions
     // <<function_number>> - number of functions
     // <<function_class_name>> - number of functions
@@ -215,6 +215,8 @@ pub fn <<function_name>>(file: &mut File, thing: &<<type>>) {
     }
     let mut cu: BTreeMap<String, Vec<ClassUnit>> = Default::default();
 
+    let mut ignored_arguments: BTreeMap<String, u32> = Default::default();
+
     let mut produced_functions = 0;
     let mut produced_empty_functions = 0;
     let mut produced_multiple_functions = 0;
@@ -260,7 +262,7 @@ pub fn <<function_name>>(file: &mut File, thing: &<<type>>) {
                         arg = arg.strip_suffix(">").unwrap().to_string();
                     }
                     found_bad_thing = match arg.as_str() {
-                        "bool" | "i32" | "u32" | "u64" | "i64" | "f32" | "f64" | "usize" | "char" | "&str" => false,
+                        "bool" | "i32" | "u32" | "u64" | "i64" | "f32" | "f64" | "usize" | "char" | "&str" | "&[&str]" => false,
                         thing => {
                             if IGNORED_CLASSES.contains(&thing) || IGNORED_ENUMS.contains(&thing) {
                                 // println!("NOT {}", thing);
@@ -271,6 +273,8 @@ pub fn <<function_name>>(file: &mut File, thing: &<<type>>) {
                                     false
                                 } else {
                                     // println!("NOT {:?}", arg);
+                                    ignored_arguments.entry(arg.clone()).or_insert(0);
+                                    *ignored_arguments.get_mut(&arg).unwrap() += 1;
                                     true
                                 }
                             }
@@ -296,7 +300,8 @@ pub fn <<function_name>>(file: &mut File, thing: &<<type>>) {
                             arg = arg.strip_prefix("Option<").unwrap().to_string();
                             arg = arg.strip_suffix(">").unwrap().to_string();
                         }
-                        if arg.starts_with("&") && arg != "&str" {
+
+                        if arg.starts_with("&") && arg != "&str" && arg != "&[&str]" {
                             reference = "&";
                             arg = arg[1..].to_string();
                         }
@@ -313,6 +318,7 @@ pub fn <<function_name>>(file: &mut File, thing: &<<type>>) {
                             "usize" => "take_usize".to_string(),
                             "char" => "take_char".to_string(),
                             "&str" => "&take_string".to_string(),
+                            "&[&str]" => "take_vec_string".to_string(),
                             thing => {
                                 if !enums.contains_key(thing) {
                                     format!("gget_{}", thing.to_lowercase())
@@ -323,8 +329,14 @@ pub fn <<function_name>>(file: &mut File, thing: &<<type>>) {
                             } // _ => panic!("Not supported {}", arg),
                         };
                         creating_arguments += &format!("let argument_{} = {}(){}; // {}", arg_index, help_function_name, stek, arg);
+                        if arg == "&[&str]" {
+                            creating_arguments += "\n\t";
+                            creating_arguments += &format!("let argument_{} = get_vector_str_from_string(&argument_{}); // {}", arg_index, arg_index, arg);
+                            creating_arguments += "\n\t";
+                            creating_arguments += &format!("let argument_{} = argument_{}.as_slice(); // {}", arg_index, arg_index, arg);
+                        }
                         if arg_index != arguments.len() - 1 {
-                            creating_arguments += "\n\t\t\t";
+                            creating_arguments += "\n\t";
                         }
 
                         let comma_after = if arg_index == arguments.len() - 1 { "".to_string() } else { ",".to_string() };
@@ -339,14 +351,22 @@ pub fn <<function_name>>(file: &mut File, thing: &<<type>>) {
                             true => "Some({})",
                             false => "{}",
                         };
+
+                        let add_to_print;
                         if arg == "&str" {
                             if is_option_type {
-                                to_print_arguments += &format!("Some({}\\\"{{}}\\\"){}", reference, comma_after);
+                                add_to_print = format!("Some({}\\\"{{}}\\\"){}", reference, comma_after);
                             } else {
-                                to_print_arguments += &format!("{}\\\"{{}}\\\"{}", reference, comma_after);
+                                add_to_print = format!("{}\\\"{{}}\\\"{}", reference, comma_after);
                             }
                         } else {
-                            to_print_arguments += &format!("{}{}", default_formatter, comma_after);
+                            add_to_print = format!("{}{}", default_formatter, comma_after);
+                        }
+
+                        if arg == "&[&str]" {
+                            to_print_arguments += &add_to_print.replace("{}", "{:?}");
+                        } else {
+                            to_print_arguments += &add_to_print;
                         }
 
                         to_print_arguments_variable += &format!("argument_{}{}", arg_index, comma_after);
@@ -391,7 +411,6 @@ pub fn <<function_name>>(file: &mut File, thing: &<<type>>) {
         let end_class = unit_class
             .replace("<<type>>", &class_name)
             .replace("<<type_lowercase>>", &class_name.to_lowercase())
-            .replace("<<logic_to_execute>>", "//TODODODODODODODODODODODODOD")
             .replace("<<function_list>>", &arguments)
             .replace("<<function_class_name>>", &fcn)
             .replace("<<function_number>>", &functions.len().to_string());
@@ -432,6 +451,17 @@ pub fn <<function_name>>(file: &mut File, thing: &<<type>>) {
         produced_functions, produced_empty_functions, produced_multiple_functions
     );
 
+    if !ignored_arguments.is_empty() {
+        let mut vec_results: Vec<(_, _)> = Vec::new();
+        for i in ignored_arguments {
+            vec_results.push(i);
+        }
+        vec_results.sort_by(|e, f| if e.1 > f.1 { Ordering::Greater } else { Ordering::Less });
+        for (argument, counter) in vec_results {
+            println!("{} was used {} times", argument, counter);
+        }
+    }
+
     let end_text = r####"
     pub fn print_and_save_to_file(file: &mut File, what_to_save: &str) {
     writeln!(file, "{}", what_to_save);
@@ -453,6 +483,9 @@ fn collect_things() -> (
 
     let mut traits: BTreeMap<String, BTreeMap<String, Vec<String>>> = Default::default();
     let mut enums: BTreeMap<String, Vec<String>> = Default::default();
+
+    let mut number_of_ignored_functions: u32 = 0;
+    let mut number_of_ignored_gio_etc_functions: u32 = 0;
 
     for path_dir in [PATH_TO_GTK_RS, PATH_TO_GTK_RS_AUTO] {
         let dir = fs::read_dir(path_dir).unwrap_or_else(|_| panic!("Cannot open dir {}", path_dir));
@@ -548,9 +581,11 @@ fn collect_things() -> (
                                 continue_function_declaration = false;
                                 previous_arguments.clear();
                                 function_name.clear();
+                                number_of_ignored_gio_etc_functions += 1;
                                 continue; // Things like gio::Pango are not supported
                             }
                             if !(text_to_check.starts_with("&self") || text_to_check.starts_with("&mut self") || text_to_check.starts_with("self")) {
+                                number_of_ignored_functions += 1;
                                 continue;
                             }
                             let parts = text_to_check
@@ -667,6 +702,7 @@ fn collect_things() -> (
                     let text_to_check = "fn ";
                     let function_name_local = &line[text_to_check.len()..line.find("(").unwrap()];
                     if function_name_local.contains("connect_") || function_name_local.contains("<") {
+                        number_of_ignored_functions += 1;
                         continue; // Connect function are not supported
                     }
 
@@ -678,9 +714,11 @@ fn collect_things() -> (
                                 continue_function_declaration = false;
                                 previous_arguments.clear();
                                 function_name.clear();
+                                number_of_ignored_gio_etc_functions += 1;
                                 continue; // Things like gio::Pango are not supported
                             }
                             if !(text_to_check.starts_with("&self") || text_to_check.starts_with("&mut self") || text_to_check.starts_with("self")) {
+                                number_of_ignored_functions += 1;
                                 continue;
                             }
                             let parts = text_to_check
@@ -748,6 +786,11 @@ fn collect_things() -> (
             // println!("Found proper {} file", name);
         }
     }
+
+    println!(
+        "Ignored functions(connect, static methods etc.) - {}, Ignored functions(gdk, gio etc. arguments) - {}",
+        number_of_ignored_functions, number_of_ignored_gio_etc_functions
+    );
 
     count_objects(&class_functions, &traits, &enums, "At start            ");
 

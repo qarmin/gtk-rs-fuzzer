@@ -4,7 +4,7 @@ pub const USE_PARENT_ITEMS: bool = true;
 pub const USE_TRAIT_ITEMS: bool = true;
 // pub const NUMBER_OF_REPEATS: u32 = 2; // How many time repeat function executing to be sure that this function cause problems
 
-pub const RANGE_OF_USED_CLASSES: Range<usize> = 0..200;
+pub const RANGE_OF_USED_CLASSES: Range<usize> = 0..10;
 
 pub const IGNORED_FUNCTIONS: &[&str] = &[
     // Non existent functions(probably bug in parsing files or this will be available in 4.6 + versions)
@@ -144,6 +144,7 @@ pub const IGNORED_ENUMS: &[&str] = &[
     "StateFlags",                 // BitFlags
     "PickFlags",                  // Bitflags
     "FontChooserLevel",           // Bitflags
+    "IconLookupFlags",            // BitFlags
 ];
 
 pub const IGNORED_CLASSES: &[&str] = &[
