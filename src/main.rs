@@ -127,6 +127,7 @@ pub struct SettingsTaker {
     pub(crate) allowed_classes: Vec<String>,
     pub(crate) repeating_number: u32,
     pub(crate) all_repeating_number: u32,
+    pub(crate) number_of_max_executed_function: i32,
 }
 
 pub fn run_tests(st: SettingsTaker) {
@@ -163,8 +164,8 @@ pub fn <<function_class_name>>(file: &mut File, st: &SettingsTaker) {
 
 
     println!("////////// Creating object <<type>>");
-    print_and_save_to_file(file, "\nlet thing = gget_<<type_lowercase>>().0; // <<type>>");
-    let (object,_get_string_todo) = gget_<<type_lowercase>>();
+    let (object,get_string_todo) = gget_<<type_lowercase>>();
+    print_and_save_to_file(file, &format!("\nlet thing = {}; // <<type>>",get_string_todo));
     let object_ref = &object;
 
     let mut functions_to_check: Vec<(fn(&mut File, &<<type>>) -> (), &str, &str)> = Vec::new();
@@ -172,9 +173,15 @@ pub fn <<function_class_name>>(file: &mut File, st: &SettingsTaker) {
         .into_iter()
         .filter(|e| !st.ignored_functions.contains(&e.2.to_string()))
         .for_each(|e| functions_to_check.push(e));
-                 
+     
+    let number_of_function = if st.number_of_max_executed_function > 0{
+        st.number_of_max_executed_function as usize
+    } else {
+        functions_to_check.len() * st.repeating_number as usize
+    };
+    
     // Random by default
-    for _i in 0..(functions_to_check.len() * st.repeating_number as usize) {
+    for _i in 0..number_of_function {
         let function = functions_to_check.choose(&mut rand::thread_rng()).unwrap().0;
         function(file, object_ref);
     }
@@ -272,19 +279,22 @@ pub fn <<function_name>>(file: &mut File, thing: &<<type>>) {
                                 // println!("NOT {}", thing);
                                 true
                             } else {
+                                // Normal classes like Label
                                 if thing.chars().all(|e| e.is_alphabetic()) {
                                     // println!("Supported {:?}", arg);
                                     false
-                                } else {
-                                    if thing.contains("<") || thing.contains("[") {
-                                        // println!("NOT {:?}", arg);
-                                        ignored_arguments.entry(arg.clone()).or_insert(0);
-                                        *ignored_arguments.get_mut(&arg).unwrap() += 1;
-                                        true
-                                    } else {
-                                        // println!("YES {:?}", arg);
-                                        false
-                                    }
+                                }
+                                //
+                                else if thing.contains("<") || thing.contains("[") {
+                                    println!("NOT {:?}", arg);
+                                    ignored_arguments.entry(arg.clone()).or_insert(0);
+                                    *ignored_arguments.get_mut(&arg).unwrap() += 1;
+                                    true
+                                }
+                                // Supports e.g. &Label
+                                else {
+                                    // println!("YES {:?}", arg);
+                                    false
                                 }
                             }
                         }
@@ -347,6 +357,7 @@ pub fn <<function_name>>(file: &mut File, thing: &<<type>>) {
                         }
 
                         if arg == "&[&str]" {
+                            reference = "&";
                             creating_arguments += "\n\t";
                             creating_arguments += &format!("let argument_{} = get_vector_str_from_string(&argument_{}); // {}", arg_index, arg_index, arg);
                             creating_arguments += "\n\t";
@@ -365,7 +376,14 @@ pub fn <<function_name>>(file: &mut File, thing: &<<type>>) {
                         }
 
                         let default_formatter = match is_option_type {
-                            true => "Some({})",
+                            true => {
+                                if reference == "&" {
+                                    reference = "";
+                                    "Some({}).as_ref()"
+                                } else {
+                                    "Some({})"
+                                }
+                            }
                             false => "{}",
                         };
 
@@ -505,6 +523,8 @@ fn collect_things() -> (
 
     let mut traits: BTreeMap<String, BTreeMap<String, Vec<String>>> = Default::default();
     let mut enums: BTreeMap<String, Vec<String>> = Default::default();
+
+    let mut children_of_class: BTreeMap<String, Vec<String>> = Default::default();
 
     let mut number_of_ignored_functions: u32 = 0;
     let mut number_of_ignored_gio_etc_functions: u32 = 0;
@@ -808,6 +828,20 @@ fn collect_things() -> (
             // println!("Found proper {} file", name);
         }
     }
+
+    for (class, parents) in &class_info {
+        if !IGNORED_CLASSES.contains(&class.as_str()) {
+            for parent in parents {
+                children_of_class.entry(parent.clone()).or_insert_with(Default::default);
+                children_of_class.get_mut(parent).unwrap().push(class.to_string());
+            }
+        }
+    }
+    // for (parent, classes_begin) in children_of_class {
+    //     for begin in classes_begin {
+    //         println!("{}.{}", parent, begin);
+    //     }
+    // }
 
     println!(
         "Ignored functions(connect, static methods etc.) - {}, Ignored functions(gdk, gio etc. arguments) - {}",

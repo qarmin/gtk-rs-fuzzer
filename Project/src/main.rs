@@ -52,6 +52,7 @@ fn read_from_file() -> SettingsTaker {
                 allowed_classes: vec![],
                 repeating_number: 3,
                 all_repeating_number: 1,
+                number_of_max_executed_function: -1,
             };
         }
     };
@@ -63,6 +64,7 @@ fn read_from_file() -> SettingsTaker {
         allowed_classes: vec![],
         repeating_number: 3,
         all_repeating_number: 1,
+        number_of_max_executed_function: -1,
     };
 
     enum MODES {
@@ -73,6 +75,7 @@ fn read_from_file() -> SettingsTaker {
         AllowedClasses,
         Repeating,
         AllRepeating,
+        MaxExecutedFunction,
     }
 
     let mut current_mode: MODES = MODES::None;
@@ -90,6 +93,8 @@ fn read_from_file() -> SettingsTaker {
             current_mode = MODES::Repeating;
         } else if new_line == "all_repeating_number:" {
             current_mode = MODES::AllRepeating;
+        } else if new_line == "number_of_max_executed_function:" {
+            current_mode = MODES::MaxExecutedFunction;
         } else {
             if !new_line.is_empty() {
                 match current_mode {
@@ -105,6 +110,11 @@ fn read_from_file() -> SettingsTaker {
                     MODES::AllRepeating => {
                         if let Ok(number) = new_line.parse() {
                             st.all_repeating_number = number;
+                        }
+                    }
+                    MODES::MaxExecutedFunction => {
+                        if let Ok(number) = new_line.parse() {
+                            st.number_of_max_executed_function = number;
                         }
                     }
                     MODES::None => println!("SETTING: Missing mode for {}", new_line),
@@ -142,6 +152,7 @@ fn read_from_file() -> SettingsTaker {
         }
         println!("Repeating - {}", st.repeating_number);
         println!("All Repeating - {}", st.all_repeating_number);
+        println!("Max Executed Functions - {}", st.number_of_max_executed_function);
         println!("End settings loading");
     }
 
