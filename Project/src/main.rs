@@ -82,6 +82,10 @@ fn read_from_file() -> SettingsTaker {
     let mut current_mode: MODES = MODES::None;
     for line in string.split('\n').map(|e| e.to_string()).collect::<Vec<String>>() {
         let new_line = line.trim().to_string();
+        if new_line.starts_with("//") {
+            continue; // Comment
+        }
+
         if new_line == "ignored_functions:" {
             current_mode = MODES::IgnoredFunctions;
         } else if new_line == "allowed_functions:" {

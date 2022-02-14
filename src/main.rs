@@ -1,6 +1,7 @@
 #![allow(clippy::collapsible_else_if)]
 #![allow(clippy::type_complexity)]
 #![allow(clippy::single_char_pattern)]
+#![allow(clippy::needless_bool)]
 
 mod creating_enum;
 mod creating_functions;

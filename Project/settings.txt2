@@ -1,0 +1,18 @@
+// List of ignored functions, works only if allowed_functions are empty
+ignored_functions:
+
+// List of allowed functions
+allowed_functions:
+
+// List of ignored classes, works only if allowed_functions are empty
+ignored_classes:
+
+// List of allowed classes
+allowed_classes:
+
+// Repeating number, if class have 50 functions, then this will
+repeating_number:
+
+all_repeating_number:
+
+number_of_max_executed_function:

@@ -83,11 +83,18 @@ pub fn <<function_class_name>>(file: &mut File, st: &SettingsTaker) {
     print_and_save_to_file(file, &format!("\nlet thing = {}; // <<type>>",get_string_todo));
     let object_ref = &object;
 
-    let mut functions_to_check: Vec<(fn(&mut File, &<<type>>) -> (), &str, &str)> = Vec::new();
-    functions
-        .into_iter()
-        .filter(|e| !st.ignored_functions.contains(&e.2.to_string()))
-        .for_each(|e| functions_to_check.push(e));
+    let mut functions_to_check: Vec<(fn(&mut File, &<<type>>) -> (), &str, &str)> = Vec::new();    
+    if !st.allowed_functions.is_empty() {
+        functions
+            .into_iter()
+            .filter(|e| st.allowed_functions.contains(&e.2.to_string()))
+            .for_each(|e| functions_to_check.push(e));
+    } else {
+        functions
+            .into_iter()
+            .filter(|e| !st.ignored_functions.contains(&e.2.to_string()))
+            .for_each(|e| functions_to_check.push(e));
+    }
      
     let number_of_function = if st.number_of_max_executed_function > 0{
         st.number_of_max_executed_function as usize
@@ -97,8 +104,11 @@ pub fn <<function_class_name>>(file: &mut File, st: &SettingsTaker) {
     
     // Random by default
     for _i in 0..number_of_function {
-        let function = functions_to_check.choose(&mut rand::thread_rng()).unwrap().0;
-        function(file, object_ref);
+        // Missing some random functions
+        if rand::random::<bool>() {
+            let function = functions_to_check.choose(&mut rand::thread_rng()).unwrap().0;
+            function(file, object_ref);
+        }
     }
 }
 "#####;
@@ -200,25 +210,13 @@ pub fn <<function_name>>(file: &mut File, thing: &<<type>>) {
                                 } else if thing.starts_with("&implIsA<") && thing.ends_with(">") {
                                     let class = thing.strip_prefix("&implIsA<").unwrap().strip_suffix(">").unwrap();
 
-                                    if IGNORED_CLASSES.contains(&class) {
-                                        println!("Found argument {}", class);
-                                        if children_of_class.contains_key(class) && !children_of_class.get(class).unwrap().is_empty() {
-                                            // println!("Supported {:?}", arg);
-                                            false
-                                        } else {
-                                            // println!("NOT {:?}", arg);
-                                            true
-                                        }
-                                    } else {
+                                    // TODO maybe support e.g. Widget when using ImplAs<Widget>(currently only all children are supported)
+                                    if children_of_class.contains_key(class) && !children_of_class.get(class).unwrap().is_empty() {
                                         // println!("Supported {:?}", arg);
-                                        // false
-                                        if children_of_class.contains_key(class) && !children_of_class.get(class).unwrap().is_empty() {
-                                            // println!("Supported {:?}", arg);
-                                            false
-                                        } else {
-                                            // println!("NOT {:?}", arg);
-                                            true
-                                        }
+                                        false
+                                    } else {
+                                        // println!("NOT {:?}", arg);
+                                        true
                                     }
                                 }
                                 //
@@ -286,7 +284,6 @@ pub fn <<function_name>>(file: &mut File, thing: &<<type>>) {
                                 if !enums.contains_key(thing) {
                                     is_object = true;
                                     if is_implementation {
-                                        println!(" {} ARG", arg);
                                         format!("imple_{}", thing.to_lowercase())
                                     } else {
                                         format!("gget_{}", thing.to_lowercase())
@@ -446,9 +443,9 @@ pub fn <<function_name>>(file: &mut File, thing: &<<type>>) {
             vec_results.push(i);
         }
         vec_results.sort_by(|e, f| if e.1 > f.1 { Ordering::Greater } else { Ordering::Less });
-        for (argument, counter) in vec_results {
-            println!("{} was used {} times", argument, counter);
-        }
+        // for (argument, counter) in vec_results {
+        //     println!("{} was used {} times", argument, counter);
+        // }
     }
 
     // Implementation functions

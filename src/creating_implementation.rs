@@ -42,7 +42,6 @@ pub fn imple_<<type_lowercase>>() -> (<<type>>, &'static str) {
 "#####;
 
     for (name_of_class, children_list) in children_of_class {
-        println!("TRYING {}", name_of_class);
         if children_list.is_empty() || IGNORED_IMPLEMENTATIONS.contains(&name_of_class.as_str()) {
             continue;
         }

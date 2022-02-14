@@ -127,14 +127,14 @@ pub const IGNORED_FUNCTIONS: &[&str] = &[
     "pop",
     "insert_text", // TODO - needs mut as second argument
     "add_objects_from_string",
-    "",
-    "",
-    "",
-    "",
-    "",
-    // TODO not sure why argument number is wrong
+    // TODO not sure why argument number is wrong, maybe GTK 4.6 thing?
     "pack_end",
     "pack_start",
+    "set_child",
+    "prepend",
+    "append",
+    // TODO why this static functions were found?
+    "new_constant",
 ];
 
 pub const FUNCTIONS_TO_USE: &[&str] = &[];
