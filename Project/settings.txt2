@@ -15,4 +15,6 @@ repeating_number:
 
 all_repeating_number:
 
+// Do not allow to exceed provided here number of executed functions
+// Helpful in creating the smallest
 number_of_max_executed_function:

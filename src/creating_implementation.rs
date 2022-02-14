@@ -53,12 +53,12 @@ pub fn imple_<<type_lowercase>>() -> (<<type>>, &'static str) {
         let mut arguments = "".to_string();
         for (index, child_of_item) in children_list.iter().enumerate() {
             arguments += &format!(
-                "{} => (gget_{}().0.upcast::<{}>(), \"{}\"),",
+                "{} => {{ let (l_r, r_r) = gget_{}(); (l_r.upcast::<{}>(),r_r) }}",
                 index,
                 child_of_item.to_lowercase(),
-                name_of_class,
-                child_of_item
+                name_of_class
             );
+
             arguments += "\n";
             if index != child_of_item.len() - 1 {
                 arguments += "        ";
