@@ -17,19 +17,88 @@ const PATH_TO_GTK_RS_AUTO: &str = "/home/rafal/Downloads/gtk4-rs/gtk4/src/auto";
 
 const PATH_TO_PROJECT_FILE: &str = "/home/rafal/Projekty/Rust/gtk_rs_fuzzer/Project/src/ziemniak.rs";
 const PATH_TO_ENUM_FILE: &str = "/home/rafal/Projekty/Rust/gtk_rs_fuzzer/Project/src/enum_things.rs";
+const PATH_TO_IMPLEMENTATIONS: &str = "/home/rafal/Projekty/Rust/gtk_rs_fuzzer/Project/src/implementations.rs";
 
 fn main() {
-    let (class_info, class_functions, traits, enums) = collect_things();
-    create_enums_file(&class_info, &class_functions, &traits, &enums);
-    create_project_file(class_info, class_functions, traits, enums)
+    let (class_info, class_functions, traits, enums, children_of_class) = collect_things();
+    create_enums_file(&class_info, &class_functions, &traits, &enums, &children_of_class);
+    create_implementation_file(&class_info, &class_functions, &traits, &enums, &children_of_class);
+    create_project_file(class_info, class_functions, traits, enums, children_of_class)
+}
+fn create_implementation_file(
+    _class_info: &BTreeMap<String, Vec<String>>,
+    _class_functions: &BTreeMap<String, BTreeMap<String, Vec<String>>>,
+    _traits: &BTreeMap<String, BTreeMap<String, Vec<String>>>,
+    _enums: &BTreeMap<String, Vec<String>>,
+    children_of_class: &BTreeMap<String, Vec<String>>,
+) {
+    let _ = fs::remove_file(PATH_TO_IMPLEMENTATIONS);
+
+    let file = OpenOptions::new().write(true).truncate(true).create(true).open(PATH_TO_IMPLEMENTATIONS).unwrap();
+    let mut file = BufWriter::new(file);
+
+    let enum_start = r#####"
+use crate::create_objects::*;
+use crate::helpers::*;
+use gtk4::prelude::*;
+use gtk4::*;
+use std::fs;
+use std::fs::{File, OpenOptions};
+use rand::prelude::*;
+use std::io::Write;"#####;
+    writeln!(file, "{}", enum_start).unwrap();
+
+    // type - base type e.g. Widget (ImplAs<Widget>)
+    // type_lowercase - base type lowercase
+    // number_of_records - number of records
+    // items -
+    let single_impl_template = r#####"
+pub fn imple_<<type_lowercase>>() -> (<<type>>, &'static str) {
+    let number_of_records = <<number_of_records>>;
+
+    match thread_rng().gen_range(0 as usize..number_of_records as usize) {
+        <<items>>
+    }
+}
+"#####;
+
+    for (name_of_class, children_list) in children_of_class {
+        if children_list.is_empty() {
+            continue;
+        }
+
+        let mut to_write = single_impl_template
+            .replace("<<type>>", name_of_class)
+            .replace("<<type_lowercase>>", &name_of_class.to_lowercase())
+            .replace("<<number_of_records>>", &children_list.len().to_string());
+        let mut arguments = "".to_string();
+        for (index, child_of_item) in children_list.iter().enumerate() {
+            arguments += &format!(
+                "{} => (gget_{}().0.upcast::<{}>(), \"{}\"),",
+                index,
+                child_of_item.to_lowercase(),
+                name_of_class,
+                child_of_item
+            );
+            arguments += "\n";
+            if index != child_of_item.len() - 1 {
+                arguments += "        ";
+            }
+        }
+        arguments += "_ => panic!()";
+        to_write = to_write.replace("<<items>>", &arguments);
+        assert!(!to_write.contains("<<"));
+        writeln!(file, "{}", to_write).unwrap();
+    }
 }
 fn create_enums_file(
     _class_info: &BTreeMap<String, Vec<String>>,
     _class_functions: &BTreeMap<String, BTreeMap<String, Vec<String>>>,
     _traits: &BTreeMap<String, BTreeMap<String, Vec<String>>>,
     enums: &BTreeMap<String, Vec<String>>,
+    _children_of_class: &BTreeMap<String, Vec<String>>,
 ) {
-    let _ = fs::remove_file(PATH_TO_PROJECT_FILE);
+    let _ = fs::remove_file(PATH_TO_ENUM_FILE);
 
     let file = OpenOptions::new().write(true).truncate(true).create(true).open(PATH_TO_ENUM_FILE).unwrap();
     let mut file = BufWriter::new(file);
@@ -97,6 +166,7 @@ fn create_project_file(
     class_functions: BTreeMap<String, BTreeMap<String, Vec<String>>>,
     _traits: BTreeMap<String, BTreeMap<String, Vec<String>>>,
     enums: BTreeMap<String, Vec<String>>,
+    children_of_class: BTreeMap<String, Vec<String>>,
 ) {
     let _ = fs::remove_file(PATH_TO_PROJECT_FILE);
 
@@ -107,6 +177,7 @@ fn create_project_file(
 use crate::create_objects::*;
 use crate::helpers::*;
 use crate::enum_things::*;
+use crate::implementations::*;
 use gtk4::prelude::*;
 use gtk4::*;
 use std::fs;
@@ -268,8 +339,7 @@ pub fn <<function_name>>(file: &mut File, thing: &<<type>>) {
                 for arg in arguments {
                     let mut arg = arg.clone();
                     if arg.starts_with("Option<") {
-                        arg = arg.strip_prefix("Option<").unwrap().to_string();
-                        arg = arg.strip_suffix(">").unwrap().to_string();
+                        arg = arg.strip_prefix("Option<").unwrap().strip_suffix(">").unwrap().to_string();
                     }
 
                     found_bad_thing = match arg.as_str() {
@@ -283,10 +353,25 @@ pub fn <<function_name>>(file: &mut File, thing: &<<type>>) {
                                 if thing.chars().all(|e| e.is_alphabetic()) {
                                     // println!("Supported {:?}", arg);
                                     false
+                                } else if thing.starts_with("&implIsA<") && thing.ends_with(">") {
+                                    let class = thing.strip_prefix("&implIsA<").unwrap().strip_suffix(">").unwrap();
+
+                                    if IGNORED_CLASSES.contains(&class) {
+                                        if children_of_class.contains_key(class) && !children_of_class.get(class).unwrap().is_empty() {
+                                            // println!("Supported {:?}", arg);
+                                            false
+                                        } else {
+                                            // println!("NOT {:?}", arg);
+                                            true
+                                        }
+                                    } else {
+                                        // println!("Supported {:?}", arg);
+                                        false
+                                    }
                                 }
                                 //
                                 else if thing.contains("<") || thing.contains("[") {
-                                    println!("NOT {:?}", arg);
+                                    // println!("NOT {:?}", arg);
                                     ignored_arguments.entry(arg.clone()).or_insert(0);
                                     *ignored_arguments.get_mut(&arg).unwrap() += 1;
                                     true
@@ -311,6 +396,7 @@ pub fn <<function_name>>(file: &mut File, thing: &<<type>>) {
                     let mut to_print_arguments_variable = "".to_string();
 
                     for arg_index in 0..arguments.len() {
+                        let mut is_implementation = false;
                         let mut is_object = false;
                         let mut is_option_type = false;
                         let mut reference = "";
@@ -324,6 +410,11 @@ pub fn <<function_name>>(file: &mut File, thing: &<<type>>) {
                         if arg.starts_with("&") && arg != "&str" && arg != "&[&str]" {
                             reference = "&";
                             arg = arg[1..].to_string();
+                        }
+
+                        if arg.starts_with("implIsA<") && arg.ends_with(">") {
+                            is_implementation = true;
+                            arg = arg.strip_prefix("implIsA<").unwrap().strip_suffix(">").unwrap().to_string();
                         }
 
                         let mut stek = "";
@@ -342,8 +433,13 @@ pub fn <<function_name>>(file: &mut File, thing: &<<type>>) {
                             thing => {
                                 if !enums.contains_key(thing) {
                                     is_object = true;
-                                    format!("gget_{}", thing.to_lowercase())
+                                    if is_implementation {
+                                        format!("imple_{}", thing.to_lowercase())
+                                    } else {
+                                        format!("gget_{}", thing.to_lowercase())
+                                    }
                                 } else {
+                                    assert!(!is_implementation, "Enum cannot be implemented as.");
                                     stek = ".0";
                                     format!("stek_{}", thing.to_lowercase())
                                 }
@@ -502,6 +598,9 @@ pub fn <<function_name>>(file: &mut File, thing: &<<type>>) {
         }
     }
 
+    // Implementation functions
+    {}
+
     let end_text = r####"
     pub fn print_and_save_to_file(file: &mut File, what_to_save: &str) {
     writeln!(file, "{}", what_to_save);
@@ -514,6 +613,7 @@ fn collect_things() -> (
     BTreeMap<String, Vec<String>>,
     BTreeMap<String, BTreeMap<String, Vec<String>>>,
     BTreeMap<String, BTreeMap<String, Vec<String>>>,
+    BTreeMap<String, Vec<String>>,
     BTreeMap<String, Vec<String>>,
 ) {
     // Do not modify result of this variable
@@ -984,7 +1084,7 @@ fn collect_things() -> (
 
     count_objects(&class_functions, &traits, &enums, "End results         ");
 
-    (class_info, class_functions, traits, enums)
+    (class_info, class_functions, traits, enums, children_of_class)
 }
 
 fn count_objects(

@@ -10,4 +10,5 @@ Project/target
 Project/.idea/
 Project/src/ziemniak.rs
 Project/src/enum_things.rs
+Project/src/implementations.rs
 Project/Cargo.lock

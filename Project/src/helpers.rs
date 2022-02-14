@@ -126,7 +126,7 @@ pub fn stek_glib_type() -> (glib::Type, String) {
     return to_return;
 }
 
-pub fn get_vector_str_from_string<'a>(fff: &'a Vec<String>) -> Vec<&'a str> {
+pub fn get_vector_str_from_string(fff: &Vec<String>) -> Vec<&str> {
     let mut vec: Vec<&str> = Vec::new();
     for i in fff {
         vec.push(i);
