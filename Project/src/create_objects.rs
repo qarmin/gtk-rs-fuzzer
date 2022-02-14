@@ -9,6 +9,45 @@ use rand::{thread_rng, Rng};
 // pub fn gget_listbase() -> (ListBase, &'static str) {
 //     (ListBase::new(), r###"AboutDialog::new()"###)
 // }
+// pub fn gget_range() -> (Range, &'static str) {
+//     (Range::new(), r###"Range::new()"###)
+// }
+// pub fn gget_cellarea() -> (CellArea, &'static str) {
+//     (CellArea::def(), r###"CellArea::new()"###)
+// }
+// pub fn gget_multifilter() -> (MultiFilter, &'static str) {
+//     (MultiFilter::new(), r###"MultiFilter::new()"###)
+// }
+// pub fn gget_gesture() -> (Gesture, &'static str) {
+//     (Gesture::def(), r###"Gesture::new()"###)
+// }
+// pub fn gget_gesturesingle() -> (GestureSingle, &'static str) {
+//     (GestureSingle::def(), r###"GestureSingle::new()"###)
+// }
+// pub fn gget_constraintlayoutchild() -> (ConstraintLayoutChild, &'static str) {
+//     (ConstraintLayoutChild::new(), r###"ConstraintLayoutChild::new()"###)
+// }
+// pub fn gget_callbackaction() -> (CallbackAction, &'static str) {
+//     (CallbackAction::default(), r###"CallbackAction::default()"###)
+// }
+// pub fn gget_treemodelfilter() -> (TreeModelFilter, &'static str) {
+//     (TreeModelFilter::default(), r###"TreeModelFilter::default()"###)
+// }
+// pub fn gget_dialogflags() -> (DialogFlags, &'static str) {
+//     (DialogFlags::default(), r###"DialogFlags::default()"###)
+// }
+pub fn gget_customfilter() -> (CustomFilter, &'static str) {
+    (CustomFilter::default(), r###"CustomFilter::default()"###)
+}
+pub fn gget_signallistitemfactory() -> (SignalListItemFactory, &'static str) {
+    (SignalListItemFactory::default(), r###"SignalListItemFactory::default()"###)
+}
+pub fn gget_customsorter() -> (CustomSorter, &'static str) {
+    (CustomSorter::default(), r###"CustomSorter::default()"###)
+}
+pub fn gget_eventcontrollerlegacy() -> (EventControllerLegacy, &'static str) {
+    (EventControllerLegacy::new(), r###"EventControllerLegacy::new()"###)
+}
 pub fn gget_aboutdialog() -> (AboutDialog, &'static str) {
     (AboutDialog::new(), r###"AboutDialog::new()"###)
 }

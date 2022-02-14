@@ -1,10 +1,17 @@
 use std::ops::Range;
 
+pub const PATH_TO_GTK_RS: &str = "/home/rafal/Downloads/gtk4-rs/gtk4/src";
+pub const PATH_TO_GTK_RS_AUTO: &str = "/home/rafal/Downloads/gtk4-rs/gtk4/src/auto";
+
+pub const PATH_TO_PROJECT_FILE: &str = "/home/rafal/Projekty/Rust/gtk_rs_fuzzer/Project/src/ziemniak.rs";
+pub const PATH_TO_ENUM_FILE: &str = "/home/rafal/Projekty/Rust/gtk_rs_fuzzer/Project/src/enum_things.rs";
+pub const PATH_TO_IMPLEMENTATIONS: &str = "/home/rafal/Projekty/Rust/gtk_rs_fuzzer/Project/src/implementations.rs";
+
 pub const USE_PARENT_ITEMS: bool = true;
 pub const USE_TRAIT_ITEMS: bool = true;
 // pub const NUMBER_OF_REPEATS: u32 = 2; // How many time repeat function executing to be sure that this function cause problems
 
-pub const RANGE_OF_USED_CLASSES: Range<usize> = 0..1;
+pub const RANGE_OF_USED_CLASSES: Range<usize> = 0..200;
 
 pub const IGNORED_FUNCTIONS: &[&str] = &[
     // Non existent functions(probably bug in parsing files or this will be available in 4.6 + versions)
@@ -125,7 +132,9 @@ pub const IGNORED_FUNCTIONS: &[&str] = &[
     "",
     "",
     "",
-    "",
+    // TODO not sure why argument number is wrong
+    "pack_end",
+    "pack_start",
 ];
 
 pub const FUNCTIONS_TO_USE: &[&str] = &[];
@@ -144,7 +153,10 @@ pub const IGNORED_ENUMS: &[&str] = &[
     "PickFlags",                  // Bitflags
     "FontChooserLevel",           // Bitflags
     "IconLookupFlags",            // BitFlags
+    "DialogFlags",                // Bitflags
 ];
+
+pub const IGNORED_IMPLEMENTATIONS: &[&str] = &["SymbolicPaintable"];
 
 pub const IGNORED_CLASSES: &[&str] = &[
     // Classes, which objects I can't create
@@ -176,6 +188,15 @@ pub const IGNORED_CLASSES: &[&str] = &[
     "Allocation",
     "TreeIter",
     "ListBase",
+    "SymbolicPaintable",
+    "CellArea",
+    "Range",
+    "MultiFilter",
+    "Gesture",
+    "GestureSingle",
+    "ConstraintLayoutChild",
+    "CallbackAction",
+    "TreeModelFilter",
     // Other
     "ApplicationWindow", // Only one ApplicationWindows can be created
     "FileChooserWidget", // Create a lot of warnings(and possibly also crashes) "Too many open files"
