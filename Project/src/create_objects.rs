@@ -381,9 +381,9 @@ pub fn gget_padcontroller() -> (PadController, &'static str) {
 pub fn gget_pagesetup() -> (PageSetup, &'static str) {
     (PageSetup::new(), r###"PageSetup::new()"###)
 }
-pub fn gget_pagesetupunixdialog() -> (PageSetupUnixDialog, &'static str) {
-    (PageSetupUnixDialog::default(), r###"PageSetupUnixDialog::default()"###)
-}
+//pub fn gget_pagesetupunixdialog() -> (PageSetupUnixDialog, &'static str) {
+//    (PageSetupUnixDialog::default(), r###"PageSetupUnixDialog::default()"###)
+//}
 pub fn gget_paned() -> (Paned, &'static str) {
     (Paned::default(), r###"Paned::default()"###)
 }
@@ -405,9 +405,9 @@ pub fn gget_printoperation() -> (PrintOperation, &'static str) {
 pub fn gget_printsettings() -> (PrintSettings, &'static str) {
     (PrintSettings::new(), r###"PrintSettings::new()"###)
 }
-pub fn gget_printunixdialog() -> (PrintUnixDialog, &'static str) {
-    (PrintUnixDialog::default(), r###"PrintUnixDialog::default()"###)
-}
+//pub fn gget_printunixdialog() -> (PrintUnixDialog, &'static str) {
+//    (PrintUnixDialog::default(), r###"PrintUnixDialog::default()"###)
+//}
 pub fn gget_progressbar() -> (ProgressBar, &'static str) {
     (ProgressBar::new(), r###"ProgressBar::new()"###)
 }

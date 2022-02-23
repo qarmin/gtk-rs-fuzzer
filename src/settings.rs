@@ -175,6 +175,8 @@ pub const IGNORED_ENUMS: &[&str] = &[
 pub const IGNORED_IMPLEMENTATIONS: &[&str] = &["SymbolicPaintable"];
 
 pub const IGNORED_CLASSES: &[&str] = &[
+    "PageSetupUnixDialog", // Not works on Windows
+    "PrintUnixDialog",     // Not works on Windows
     // Classes, which objects I can't create
     "ATContext",
     "AssistantPage",

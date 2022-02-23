@@ -96,7 +96,7 @@ pub fn <<function_class_name>>(file: &mut File, st: &SettingsTaker) {
             .for_each(|e| functions_to_check.push(e));
     }
      
-    let number_of_function = if st.number_of_max_executed_function > 0{
+    let number_of_function = if st.number_of_max_executed_function >= 0 {
         st.number_of_max_executed_function as usize
     } else {
         functions_to_check.len() * st.repeating_number as usize
